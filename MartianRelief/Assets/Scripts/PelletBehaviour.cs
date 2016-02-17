@@ -17,6 +17,7 @@ public class PelletBehaviour : MonoBehaviour {
         {
             Debug.Log("Pocisk trafił");
             Destroy(other.gameObject);
+            Destroy(this.gameObject);
         }
     }
 }
