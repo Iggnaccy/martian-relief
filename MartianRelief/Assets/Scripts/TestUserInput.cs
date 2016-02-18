@@ -3,7 +3,6 @@ using System.Collections;
 
 public class TestUserInput : MonoBehaviour {
 
-    public float speed;
     public GameObject myPelletPrefab;
 
     private Rigidbody2D myBody;
@@ -15,6 +14,8 @@ public class TestUserInput : MonoBehaviour {
 
     void Shoot(int direction) // 1 - prawo, 2 - lewo, 3 - góra, 4 - dół
     {
+		if (GetComponent<BasicStats> ().tryToShoot () == false)
+			return;
         GameObject clone;
         clone = Instantiate(myPelletPrefab, transform.position, Quaternion.Euler(0,0,0)) as GameObject;
         if (direction == 1)
@@ -54,6 +55,6 @@ public class TestUserInput : MonoBehaviour {
 
 	void FixedUpdate () 
 	{
-        myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * speed, Input.GetAxis("Vertical") * Time.deltaTime * speed);
+		myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed);
     }
 }
