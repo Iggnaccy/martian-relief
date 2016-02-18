@@ -4,7 +4,7 @@ using System.Collections;
 public class PelletBehaviour : MonoBehaviour {
 
     public int shotVertical, shotHorizontal;
-    public float missileSpeed;
+    public float missileSpeed, damage, knockback;
     
 	void Update ()
     {
@@ -15,8 +15,9 @@ public class PelletBehaviour : MonoBehaviour {
     {
         if (other.tag == "Enemy")
         {
-            Debug.Log("Pocisk trafił");
-            Destroy(other.gameObject);
+            Debug.Log("Pocisk trafił, życie przed obrażeniami: " + other.GetComponent<BasicEnemyStats>().health.ToString());
+            other.GetComponent<BasicEnemyStats>().health -= damage;
+            Debug.Log("Po obrażeniach: " + Mathf.Max(0, other.GetComponent<BasicEnemyStats>().health).ToString());
             Destroy(this.gameObject);
         }
     }

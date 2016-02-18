@@ -17,7 +17,7 @@ public class TestUserInput : MonoBehaviour {
 		if (GetComponent<BasicStats> ().tryToShoot () == false)
 			return;
         GameObject clone;
-        clone = Instantiate(myPelletPrefab, transform.position, Quaternion.Euler(0,0,0)) as GameObject;
+        clone = Instantiate(myPelletPrefab, new Vector3(transform.position.x, transform.position.y - 0.35f, transform.position.z), Quaternion.Euler(0,0,0)) as GameObject;
         if (direction == 1)
             clone.GetComponent<PelletBehaviour>().shotHorizontal = 1;
         else
@@ -30,6 +30,7 @@ public class TestUserInput : MonoBehaviour {
         if (direction == 4)
             clone.GetComponent<PelletBehaviour>().shotVertical = -1;
         else clone.GetComponent<PelletBehaviour>().shotVertical = 0;
+        clone.GetComponent<PelletBehaviour>().damage = GetComponent<BasicStats>().damage;
 
     }
 
