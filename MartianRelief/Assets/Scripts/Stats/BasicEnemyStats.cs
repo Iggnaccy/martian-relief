@@ -27,7 +27,7 @@ public class BasicEnemyStats : MonoBehaviour {
         Destroy(this.gameObject);
     }
 
-    void OnCollision2DEnter(Collision2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.tag == "Player")
         {

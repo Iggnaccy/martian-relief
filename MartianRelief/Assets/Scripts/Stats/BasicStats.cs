@@ -22,6 +22,7 @@ public class BasicStats : MonoBehaviour{
 
 	void Update(){
 		timerAttack.update (Time.deltaTime);
+		timerInvoulnerable.update (Time.deltaTime);
 	}
 
 	public bool tryToShoot(){
@@ -43,6 +44,10 @@ public class BasicStats : MonoBehaviour{
         {
             timerInvoulnerable.reset();
             hp -= damageToTake;
+			Debug.Log ("dmg " + hp.ToString() );
+			if(hp <= 0){
+				OnDeath();
+			}
         }
     }
 }
