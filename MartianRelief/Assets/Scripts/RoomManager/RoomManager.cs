@@ -11,16 +11,15 @@ public class RoomManager : MonoBehaviour
     public Transform missileHolder;
     GameObject clear;
 	public float minX, maxX, minY, maxY;
-	float padding = 0.1f;
 
 	enum RoomState{FIGHT,ROOM_CLEAR, LOAD_NEW_LEVEL};
 
 	RoomState actualState = RoomState.LOAD_NEW_LEVEL;
 
+	Room roomToLoad;
+
 	void Start ()
     {
-        //spawnDoors (2);
-        //spawnEnemies (5);
         clear = GameObject.FindWithTag("Clear").transform.GetChild(0).gameObject;
     }
 	
@@ -28,10 +27,11 @@ public class RoomManager : MonoBehaviour
     {
 		if (actualState == RoomState.LOAD_NEW_LEVEL)
         {
-            clearMissiles();
-			spawnDoors (2);
-			spawnEnemies (5);
 			actualState = RoomState.FIGHT;
+            clearMissiles();
+			spawnObjectsFromVectors();
+			//GetComponent<WorldGenerator>().goToRoom(1, 0);
+
             clear.SetActive(false);
 		}
 		else if (actualState == RoomState.FIGHT)
@@ -39,6 +39,7 @@ public class RoomManager : MonoBehaviour
 			if (enemyHolder.transform.childCount == 0)
             {
                 clear.SetActive(true);
+				roomToLoad.vecEnemies.Clear();
 				actualState = RoomState.ROOM_CLEAR;
 			}
 		}
@@ -48,9 +49,20 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	void loadNewLevel()
+	public void loadNewRoom(Room room)
     {
-	
+		roomToLoad = room;
+		actualState = RoomState.LOAD_NEW_LEVEL;
+	}
+
+	void spawnObjectsFromVectors(){
+		if (roomToLoad == null) {
+			actualState = RoomState.LOAD_NEW_LEVEL;
+			return;
+		}
+		clearDoors();
+		roomToLoad.spawnEnemies ();
+		roomToLoad.spawnDoors (GameObject.Find ("PrefabHolder").GetComponent<PrefabHolder>().testDoors);
 	}
 
 	void openTheGates()
@@ -61,11 +73,23 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	public void tryDoors(GameObject doors)
+	public void tryDoors(GameObject doors, int side)
     {
 		if (actualState == RoomState.ROOM_CLEAR)
         {
-			actualState = RoomState.LOAD_NEW_LEVEL;
+			//actualState = RoomState.LOAD_NEW_LEVEL;
+			if(side == 0){
+				GetComponent<WorldGenerator>().goToRoom(-1, 0, side);
+			}
+			if(side == 1){
+				GetComponent<WorldGenerator>().goToRoom(0, 1, side);
+			}
+			if(side == 2){
+				GetComponent<WorldGenerator>().goToRoom(1, 0, side);
+			}
+			if(side == 3){
+				GetComponent<WorldGenerator>().goToRoom(0, -1, side);
+			}
 		}
 	}
 
@@ -77,35 +101,11 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-	void spawnEnemies(int numb)
+	void clearDoors()
     {
-		for (int i = 0; i < numb; i++)
-        {
-			//GameObject go = Instantiate(enemyPrefab, new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0), Quaternion.identity) as GameObject;
-			//Debug.Log ("asdf: " + go.name);
-			Vector3 position = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
-			(Instantiate (enemyPrefab.gameObject, position, Quaternion.identity) as GameObject).transform.parent = enemyHolder.transform;
-		}
-	}
-
-	void spawnDoors(int counter)
-    {
-		foreach(Transform child in doorsHolder.transform)
+		foreach(Transform child in GameObject.Find ("DoorsHolder").transform)
         {
             Destroy(child.gameObject);
-		}
-
-		for (int i = 0; i < counter; i++)
-        {
-			int side = (int)Mathf.Ceil(Random.Range(0, 4));     //1->lewo, 2->góra, 3->prawo, 4->dół
-			float randX = Random.Range (minX, maxX);
-			float randY = Random.Range (minY, maxY);
-			if(side <= 1){randX=minX+padding;}
-			if(side == 2){randY=minY+padding;}
-			if(side == 3){randX=maxX-padding;}
-			if(side >= 4){randY=maxY-padding;}
-			Vector3 position = new Vector3(randX, randY, 0);
-			(Instantiate (doorsPrefab.gameObject, position, Quaternion.identity) as GameObject).transform.parent = doorsHolder.transform;
 		}
 	}
 }
