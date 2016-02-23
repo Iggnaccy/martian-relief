@@ -6,7 +6,7 @@ public class Room{
 
 	int x, y;
 	public List <Vector3> vecEnemies;                      //Vector[x,y,rotacja]
-	List <Vector3> vecDoors;
+	public List <Vector3> vecDoors;
 	//List <Vector3> vecObstacles;
 	public bool isGenerated = false;                //czy to jest pokój?
 	int minX, maxX, minY, maxY;

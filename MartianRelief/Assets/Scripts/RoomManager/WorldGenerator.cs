@@ -25,6 +25,28 @@ public class WorldGenerator : MonoBehaviour {
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				rooms[i,j].Generate();
+				//Debug.Log (i + " " + j);
+			}
+		}
+
+		for (int i = 0; i < width; i++) {
+			for(int j = 0; j < height; j++){
+				/*if(i > 0){
+					rooms[i-1,j].doors[2] = rooms[i,j].doors[0];
+					rooms[i-1,j].vecDoors[2] = new Vector3(rooms[i-1,j].vecDoors[2].x, rooms[i,j].doors[0], 0);
+				}*/
+				if(j > 0){
+					rooms[i,j-1].doors[1] = rooms[i,j].doors[3];
+					rooms[i,j-1].vecDoors[1] = new Vector3(rooms[i,j].doors[3], rooms[i,j-1].vecDoors[1].y, 0);
+				}
+				if(i < width-1){
+					rooms[i+1,j].doors[0] = rooms[i,j].doors[2];
+					rooms[i+1,j].vecDoors[0] = new Vector3(rooms[i+1,j].vecDoors[0].x, rooms[i,j].doors[2], 0);
+				}
+				/*if(j < height-1){
+					rooms[i,j+1].doors[3] = rooms[i,j].doors[1];
+					rooms[i,j+1].vecDoors[3] = new Vector3(rooms[i,j].doors[1], rooms[i,j+1].vecDoors[1].y, 0);
+				}*/
 			}
 		}
 
