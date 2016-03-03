@@ -15,14 +15,13 @@ public class Room{
 
 	int width, height;
 	int maxDoors = 4;
-	public Room(int _x, int _y, Vector4 minmax, Room[,] _allRooms, int _width, int _height, bool _isGenerated){
+	public Room(int _x, int _y, Vector4 minmax, Room[,] _allRooms, int _width, int _height){
 		x = _x;
 		y = _y;
 		width = _width;
 		height = _height;
 		vecEnemies = new List<Vector3>();
 		vecDoors = new List<Vector3>();
-		isGenerated = _isGenerated;
 		//vecObstacles = new List<Vector3>();
 
 		doors = new float[4];
@@ -40,6 +39,7 @@ public class Room{
 	}
 
 	public void Generate(){
+		isGenerated = true;
 		int maxiEnemies = 1;
 		for (int i = 0; i < maxiEnemies; i++) {
 			generateEnemy();
@@ -70,6 +70,7 @@ public class Room{
 	public void spawnDoors(GameObject doorsPrefab){
 		for (int i = 0; i < vecDoors.Count; i++) {
 			Vector3 position = new Vector3(vecDoors[i].x, vecDoors[i].y, 0);
+			if(position.x < -1000 || position.y < -1000)continue;
 			GameObject tmpDoors = (GameObject.Instantiate (doorsPrefab.gameObject, position, Quaternion.identity) as GameObject);//
 			tmpDoors.GetComponent<DoorsAsTrigger>().side = i;
 			tmpDoors.transform.parent = GameObject.Find ("DoorsHolder").transform;
@@ -85,7 +86,7 @@ public class Room{
 			if(doors[0] < -1000){
 				randY=Random.Range(minY+padding, maxY-padding);
 				doors[side]=randY;
-				if(x > 0) 
+				if(x > 0 && allRooms[x-1,y].isGenerated) 
 					allRooms[x-1,y].doors[2] = randY;
 			}
 			else{
@@ -109,7 +110,7 @@ public class Room{
 			if(doors[1] < -1000){
 				randX=Random.Range(minX+padding, maxX-padding);
 				doors[side]=randX;
-				if(y < height-1) 
+				if(y < height-1 && allRooms[x,y+1].isGenerated) 
 					allRooms[x,y+1].doors[3] = randX;
 			}
 			else{
@@ -128,7 +129,7 @@ public class Room{
 			if(doors[2] < -1000){
 				randY=Random.Range(minY+padding, maxY-padding);
 				doors[side]=randY;
-				if(x < width-1) 
+				if(x < width-1 && allRooms[x+1,y].isGenerated) 
 					allRooms[x+1,y].doors[0] = randY;
 			}
 			else{
@@ -147,7 +148,7 @@ public class Room{
 			if(doors[3] < -1000){
 				randX=Random.Range(minX+padding, maxX-padding);
 				doors[side]=randX;
-				if(y > 0) 
+				if(y > 0 && allRooms[x,y-1].isGenerated) 
 					allRooms[x,y-1].doors[1] = randX;
 			}
 			else{
