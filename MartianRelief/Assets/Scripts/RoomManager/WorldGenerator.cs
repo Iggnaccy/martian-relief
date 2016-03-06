@@ -16,81 +16,34 @@ public class WorldGenerator : MonoBehaviour {
 	void Start () {
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
-		/*dfsArray = new bool[width, height] { 
-			{ true, true, true, true, true }, 
-			{ true, true, true, true, true }, 
-			{ true, true, true, true, true }, 
-			{ true, true, true, true, true },
-			{ true, true, true, true, true } 
-		};*/
 		actX = width  / 2;
 		actY = height / 2;
-
-		//dfsArray [actX, actY] = true;
-		//dfsArray [actX - 1, actY] = true;
 
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				constructRoom (i, j);
 			}
 		}
-
-		dfsGenerate (actX, actY);
-
+		dfsGenerate (actX, actY);                           
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				if(dfsArray[i, j])
-				rooms[i,j].Generate();
+				rooms[i,j].Generate(dfsArray);
 			}
 		}
 
-		for (int i = 0; i < width; i++) {
-			for(int j = 0; j < height; j++){
-				/*if(i > 0){
-					rooms[i-1,j].doors[2] = rooms[i,j].doors[0];
-					rooms[i-1,j].vecDoors[2] = new Vector3(rooms[i-1,j].vecDoors[2].x, rooms[i,j].doors[0], 0);
-				}*/
-				if(j > 0){
-					if(rooms[i,j-1].isGenerated){
-						rooms[i,j-1].doors[1] = rooms[i,j].doors[3];
-						rooms[i,j-1].vecDoors[1] = new Vector3(rooms[i,j].doors[3], rooms[i,j-1].vecDoors[1].y, 0);
-					}
-					else{
-						rooms[i,j].doors[3]=-90000;
-						rooms[i,j-1].doors[1]=-90000;
-					}
-				}
-				if(i < width-1){
-					if(rooms[i+1,j].isGenerated){
-						rooms[i+1,j].doors[0] = rooms[i,j].doors[2];
-						rooms[i+1,j].vecDoors[0] = new Vector3(rooms[i+1,j].vecDoors[0].x, rooms[i,j].doors[2], 0);
-					}
-					else{
-						rooms[i,j].doors[2]=-90000;
-						rooms[i+1,j].doors[0]=-90000;
-					}
-				}
-				/*if(j < height-1){
-					rooms[i,j+1].doors[3] = rooms[i,j].doors[1];
-					rooms[i,j+1].vecDoors[3] = new Vector3(rooms[i,j].doors[1], rooms[i,j+1].vecDoors[1].y, 0);
-				}*/
-			}
-		}
-
+		mergeDoors ();
 		loadRoom ();
-
-
-
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				Debug.Log (i + " " + j + " " + rooms[i,j].isGenerated);
-			}
-		}
-		//Debug.Log ("bazowy: " + rooms.GetHashCode());
 	}
 	
 	void Update () {
-	
+		if (Input.GetKeyDown(KeyCode.Q)){
+			Debug.Log("Debug neighbors:");
+			if(dfsArray[actX-1,actY] == true) Debug.Log("x-1, y   = true");
+			if(dfsArray[actX,actY-1] == true) Debug.Log("x,   y-1 = true");
+			if(dfsArray[actX+1,actY] == true) Debug.Log("x+1, y   = true");
+			if(dfsArray[actX,actY+1] == true) Debug.Log("x,   y+1 = true");
+		}
 	}
 
 	public bool goToRoom(int deltaX, int deltaY, int side){
@@ -118,7 +71,8 @@ public class WorldGenerator : MonoBehaviour {
 		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
 	}
 	void constructRoom(int x, int y){
-		rooms [x, y] = new Room (actX, actY, new Vector4(minX, maxX, minY, maxY), rooms, width, height);
+		//rooms [x, y] = new Room (actX, actY, new Vector4(minX, maxX, minY, maxY), rooms, width, height);     kappa
+		rooms [x, y] = new Room (x, y, new Vector4(minX, maxX, minY, maxY), rooms, width, height);
 	}
 
 	void OnGUI() {
@@ -134,7 +88,7 @@ public class WorldGenerator : MonoBehaviour {
 			for(int i = 0; i < height;i++){
 				if(i==actX && j==actY)toRender+="x";
 				else if(dfsArray[i,j])
-					toRender += " ";
+					toRender += "_";
 				else
 					toRender += "#";
 			}
@@ -154,51 +108,57 @@ public class WorldGenerator : MonoBehaviour {
 	void dfsGenerate(int x, int y){
 		dfsArray [x, y] = true;
 
-		dfsArray[x,y]=true;
-		if(x - 2 >= 0 && dfsArray[x-2,y]==false){
-			dfsArray[x-1,y]=true;
-			dfsGenerate(x-2,y);
-		}
-		if(y - 2 >= 0 && dfsArray[x,y-2]==false){
-			dfsArray[x,y-1]=true;
-			dfsGenerate(x,y-2);
-		}
-		if(x + 2 < width && dfsArray[x+2,y]==false){
-			dfsArray[x+1,y]=true;
-			dfsGenerate(x+2,y);
-		}
-		if(y + 2 < height && dfsArray[x,y+2]==false){
-			dfsArray[x,y+1]=true;
-			dfsGenerate(x,y+2);
-		}
+		List<int> vDirections = new List<int> ();
+		vDirections.Add (0);
+		vDirections.Add (1);
+		vDirections.Add (2);
+		vDirections.Add (3);
 
-		/*List<int> sides = new List<int>(){1, 2, 3, 4};
-		randomShuffle (sides);
-		for(int i = 0; i < sides.Count; i++){
-			if(sides[i] == 1){
-				if(x>1)dfsArray[x-1,y]=true;
-				if(x>2 && !dfsArray[x-2,y]){
-					dfsGenerate(x-2,y);
+		randomShuffle (vDirections);
+		for (int i = 0; i < vDirections.Count; i++) {
+			if (vDirections[i] == 0 && x - 2 >= 0 && dfsArray [x - 2, y] == false) {
+				dfsArray [x - 1, y] = true;
+				dfsGenerate (x - 2, y);
+			}
+			if (vDirections[i] == 1 && y - 2 >= 0 && dfsArray [x, y - 2] == false) {
+				dfsArray [x, y - 1] = true;
+				dfsGenerate (x, y - 2);
+			}
+			if (vDirections[i] == 2 && x + 2 < width && dfsArray [x + 2, y] == false) {
+				dfsArray [x + 1, y] = true;
+				dfsGenerate (x + 2, y);
+			}
+			if (vDirections[i] == 3 && y + 2 < height && dfsArray [x, y + 2] == false) {
+				dfsArray [x, y + 1] = true;
+				dfsGenerate (x, y + 2);
+			}
+		}
+	}
+
+	void mergeDoors(){
+		for (int i = 0; i < width; i++) {
+			for(int j = 0; j < height; j++){
+				if(j > 0){
+					if(rooms[i,j-1].isGenerated){
+						rooms[i,j-1].doors[1] = rooms[i,j].doors[3];
+						rooms[i,j-1].vecDoors[1] = new Vector3(rooms[i,j].doors[3], rooms[i,j-1].vecDoors[1].y, 0);
+					}
+					else{
+						rooms[i,j].doors[3]=-90000;
+						rooms[i,j-1].doors[1]=-90000;
+					}
+				}
+				if(i < width-1){
+					if(rooms[i+1,j].isGenerated){
+						rooms[i+1,j].doors[0] = rooms[i,j].doors[2];
+						rooms[i+1,j].vecDoors[0] = new Vector3(rooms[i+1,j].vecDoors[0].x, rooms[i,j].doors[2], 0);
+					}
+					else{
+						rooms[i,j].doors[2]=-90000;
+						rooms[i+1,j].doors[0]=-90000;
+					}
 				}
 			}
-			if(sides[i] == 2){
-				if(y>1)dfsArray[x,y-1]=true;
-				if(y>2 && !dfsArray[x,y-2]){
-					dfsGenerate(x,y-2);
-				}
-			}
-			if(sides[i] == 3){
-				if(x+1<width)dfsArray[x+1,y]=true;
-				if(x+2<width && !dfsArray[x+2,y]){
-					dfsGenerate(x+2,y);
-				}
-			}
-			if(sides[i] == 4){
-				if(y+1<height)dfsArray[x,y+1]=true;
-				if(y+2<height && !dfsArray[x,y+2]){
-					dfsGenerate(x,y+2);
-				}
-			}
-		}*/
+		}
 	}
 }

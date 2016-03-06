@@ -30,7 +30,6 @@ public class RoomManager : MonoBehaviour
 			actualState = RoomState.FIGHT;
             clearMissiles();
 			spawnObjectsFromVectors();
-			//GetComponent<WorldGenerator>().goToRoom(1, 0);
 
             clear.SetActive(false);
 		}
