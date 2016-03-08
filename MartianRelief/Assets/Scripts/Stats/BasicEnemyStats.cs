@@ -11,7 +11,7 @@ public class BasicEnemyStats : MonoBehaviour {
 
 	void Start ()
     {
-        collisionDamage = 1;
+        
 	}
 
     void Update ()

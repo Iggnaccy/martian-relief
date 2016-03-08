@@ -10,12 +10,14 @@ public class WorldGenerator : MonoBehaviour {
 	const int height = 11;
 	int actX;
 	int actY;
+    List<Vector2> edges;
 
 	public float minX, maxX, minY, maxY;
 	
 	void Start () {
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
+        edges = new List<Vector2>();
 		actX = width  / 2;
 		actY = height / 2;
 
@@ -24,7 +26,8 @@ public class WorldGenerator : MonoBehaviour {
 				constructRoom (i, j);
 			}
 		}
-		dfsGenerate (actX, actY);                           
+        dfsArray[width / 2, height / 2] = true;
+        Generation();
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				if(dfsArray[i, j])
@@ -161,4 +164,28 @@ public class WorldGenerator : MonoBehaviour {
 			}
 		}
 	}
+    void Generation()
+    {
+        int posX = width/2, posY = height/2;
+        for (int i = 0; i < 18; i++)
+        {
+            edges.Add(new Vector2((int)posX, (int)(posY + 1)));
+            edges.Add(new Vector2((int)(posX + 1), (int)posY));
+            edges.Add(new Vector2((int)posX, (int)(posY - 1)));
+            edges.Add(new Vector2((int)(posX - 1), (int)posY));
+            while (true)
+            {
+                int z = Random.Range(0, edges.Count - 1);
+                if (!dfsArray[(int)edges[z].x, (int)edges[z].y])
+                {
+                    dfsArray[(int)edges[z].x, (int)edges[z].y] = true;
+                    posX = (int)edges[z].x;
+                    posY = (int)edges[z].y;
+                    edges.RemoveAt(z);
+                    break;
+                }
+                else edges.RemoveAt(z);
+            }
+        }
+    }
 }
