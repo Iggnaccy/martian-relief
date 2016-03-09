@@ -11,7 +11,7 @@ public class BasicEnemyStats : MonoBehaviour {
 
 	void Start ()
     {
-        collisionDamage = 1;
+        
 	}
 
     void Update ()
@@ -27,7 +27,7 @@ public class BasicEnemyStats : MonoBehaviour {
         Destroy(this.gameObject);
     }
 
-    void OnCollision2DEnter(Collision2D other)
+    void OnCollisionStay2D(Collision2D other)
     {
         if(other.gameObject.tag == "Player")
         {

@@ -22,6 +22,8 @@ public class BasicStats : MonoBehaviour{
 
 	void Update(){
 		timerAttack.update (Time.deltaTime);
+		timerInvoulnerable.update (Time.deltaTime);
+        if (hp <= 0) OnDeath();
 	}
 
 	public bool tryToShoot(){
@@ -34,6 +36,7 @@ public class BasicStats : MonoBehaviour{
 
     public void OnDeath()
     {
+        Debug.Log("Umarłeś!");
         Destroy(this.gameObject);
     }
 
@@ -43,6 +46,10 @@ public class BasicStats : MonoBehaviour{
         {
             timerInvoulnerable.reset();
             hp -= damageToTake;
+			Debug.Log ("dmg " + hp.ToString() );
+			if(hp <= 0){
+				OnDeath();
+			}
         }
     }
 }

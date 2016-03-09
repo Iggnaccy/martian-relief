@@ -31,6 +31,7 @@ public class TestUserInput : MonoBehaviour {
             clone.GetComponent<PelletBehaviour>().shotVertical = -1;
         else clone.GetComponent<PelletBehaviour>().shotVertical = 0;
         clone.GetComponent<PelletBehaviour>().damage = GetComponent<BasicStats>().damage;
+        clone.transform.parent = GameObject.Find("MissileHolder").transform;
 
     }
 
