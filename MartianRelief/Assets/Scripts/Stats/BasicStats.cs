@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BasicStats : MonoBehaviour{
 
@@ -9,6 +10,7 @@ public class BasicStats : MonoBehaviour{
 	public float attackSpeed;     //ile razy na sekunde? [Hz]
 	public float damage;
     public float invoulnerabilityTime;
+    public Slider healthSlider;
 
 	Timer timerAttack;
     Timer timerInvoulnerable;
@@ -18,6 +20,8 @@ public class BasicStats : MonoBehaviour{
 		timerAttack = new Timer ();
         timerInvoulnerable = new Timer();
         invoulnerabilityTime = 1.5f;
+        healthSlider.maxValue = maxHp;
+        healthSlider.value = hp;
 	}
 
 	void Update(){
@@ -50,6 +54,7 @@ public class BasicStats : MonoBehaviour{
 			if(hp <= 0){
 				OnDeath();
 			}
+            healthSlider.value = hp;
         }
     }
 }

@@ -72,6 +72,7 @@ public class WorldGenerator : MonoBehaviour {
 
 	void loadRoom(){
 		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
+        rooms[actX, actY].wasVisited = true;
 	}
 	void constructRoom(int x, int y){
 		//rooms [x, y] = new Room (actX, actY, new Vector4(minX, maxX, minY, maxY), rooms, width, height);     kappa
@@ -108,7 +109,7 @@ public class WorldGenerator : MonoBehaviour {
 		}
 	}
 
-	void dfsGenerate(int x, int y){
+	/*void dfsGenerate(int x, int y){
 		dfsArray [x, y] = true;
 
 		List<int> vDirections = new List<int> ();
@@ -136,7 +137,7 @@ public class WorldGenerator : MonoBehaviour {
 				dfsGenerate (x, y + 2);
 			}
 		}
-	}
+	}*/
 
 	void mergeDoors(){
 		for (int i = 0; i < width; i++) {
@@ -175,7 +176,7 @@ public class WorldGenerator : MonoBehaviour {
             edges.Add(new Vector2((int)(posX - 1), (int)posY));
             while (true)
             {
-                int z = Random.Range(0, edges.Count - 1);
+                int z = Random.Range(1, edges.Count - 2);
                 if (!dfsArray[(int)edges[z].x, (int)edges[z].y])
                 {
                     dfsArray[(int)edges[z].x, (int)edges[z].y] = true;

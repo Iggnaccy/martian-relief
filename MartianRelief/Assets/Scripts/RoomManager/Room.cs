@@ -9,6 +9,7 @@ public class Room{
 	public List <Vector3> vecDoors;
 	//List <Vector3> vecObstacles;
 	public bool isGenerated = false;                //czy to jest pokój?
+    public bool wasVisited = false;
 	int minX, maxX, minY, maxY;
 	public float [] doors; //lewo, góra, prawo, dół,       jeżeli doors[x] < -1000 to doors[x] nie istnieje
 	Room [,] allRooms;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BasicEnemyStats : MonoBehaviour {
 
@@ -8,10 +9,12 @@ public class BasicEnemyStats : MonoBehaviour {
     public float movespeed;
     public int damage;
     public int collisionDamage;
+	public Slider slider;
 
 	void Start ()
     {
-        
+		slider.maxValue = healthMax;
+		slider.value = health;
 	}
 
     void Update ()
@@ -20,6 +23,7 @@ public class BasicEnemyStats : MonoBehaviour {
         {
             OnDeath();
         }
+		slider.value = health;
 	}
 
     public void OnDeath()
