@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class WorldGenerator : MonoBehaviour {
 
@@ -13,8 +14,11 @@ public class WorldGenerator : MonoBehaviour {
     List<Vector2> edges;
 
 	public float minX, maxX, minY, maxY;
-	
+
+	Text textDebugMiniMapRenderer;
+
 	void Start () {
+		textDebugMiniMapRenderer = GameObject.Find ("MiniMapDebug").GetComponent<Text>();;
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
         edges = new List<Vector2>();
@@ -47,6 +51,25 @@ public class WorldGenerator : MonoBehaviour {
 			if(dfsArray[actX+1,actY] == true) Debug.Log("x+1, y   = true");
 			if(dfsArray[actX,actY+1] == true) Debug.Log("x,   y+1 = true");
 		}
+
+		renderDebugMiniMap ();
+	}
+
+	public void renderDebugMiniMap(){
+		string toRender="";
+		for (int j = width-1; j >= 0; j--) {
+			for(int i = 0; i < height;i++){
+				if(i==actX && j==actY)toRender+="<color=blue>x</color>";
+				else if(dfsArray[i,j])
+					toRender += "<color=green>_</color>";
+				else
+					toRender += "<color=red>#</color>";
+			}
+			toRender += "\n";
+			//GUI.Label (new Rect (25, 75+25+15*(width-j), 200, 50),toRender);
+		}
+		toRender += "pos = (" + actX.ToString() + "," + actY.ToString () + ")\n";
+		textDebugMiniMapRenderer.text = toRender;
 	}
 
 	public bool goToRoom(int deltaX, int deltaY, int side){
@@ -79,7 +102,7 @@ public class WorldGenerator : MonoBehaviour {
 		rooms [x, y] = new Room (x, y, new Vector4(minX, maxX, minY, maxY), rooms, width, height);
 	}
 
-	void OnGUI() {
+	/*void OnGUI() {
 		GUI.contentColor = Color.red;
 		GUI.Label (new Rect (25, 25, 200, 50), "actPos=(x="+actX.ToString()+", y="+actY.ToString ()+")");
 		if (rooms [actX,actY].isGenerated) {
@@ -98,7 +121,7 @@ public class WorldGenerator : MonoBehaviour {
 			}
 			GUI.Label (new Rect (25, 75+25+15*(width-j), 200, 50),toRender);
 		}
-	}
+	}*/
 
 	void randomShuffle(List<int> _list){
 		for (int i = 0; i < _list.Count; i++) {
