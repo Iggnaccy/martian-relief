@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Room{
 
@@ -13,6 +14,8 @@ public class Room{
 	int minX, maxX, minY, maxY;
 	public float [] doors; //lewo, góra, prawo, dół,       jeżeli doors[x] < -1000 to doors[x] nie istnieje
 	Room [,] allRooms;
+    public Image minimapImage;
+
 
 	int width, height;
 	int maxDoors = 4;
@@ -23,11 +26,10 @@ public class Room{
 		height = _height;
 		vecEnemies = new List<Vector3>();
 		vecDoors = new List<Vector3>();
-		//vecObstacles = new List<Vector3>();
-
+        //vecObstacles = new List<Vector3>();
+        minimapImage = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>().minimapRoomImage.GetComponent<Image>();
 		doors = new float[4];
 		allRooms = _allRooms;
-
 		minX = (int)minmax.x;
 		maxX = (int)minmax.y;
 		minY = (int)minmax.z;
@@ -38,7 +40,7 @@ public class Room{
 
 	public void Generate(bool [,] dfsArray){
 		isGenerated = true;
-		int maxiEnemies = 5;
+		int maxiEnemies = 1;
 		for (int i = 0; i < maxiEnemies; i++) {
 			generateEnemy();
 		}
@@ -64,7 +66,7 @@ public class Room{
 
 	public void spawnDoors(GameObject doorsPrefab){
 		for (int i = 0; i < vecDoors.Count; i++) {
-			if(vecDoors[i] == null)continue;
+			//if(vecDoors[i] == null)continue;
 			Vector3 position = new Vector3(vecDoors[i].x, vecDoors[i].y, 0);
 			if(position.x < -1000 || position.y < -1000)continue;
 			GameObject tmpDoors = (GameObject.Instantiate (doorsPrefab.gameObject, position, Quaternion.identity) as GameObject);//

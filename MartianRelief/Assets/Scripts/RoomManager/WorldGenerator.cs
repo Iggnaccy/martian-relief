@@ -5,26 +5,25 @@ using UnityEngine.UI;
 
 public class WorldGenerator : MonoBehaviour {
 
+    GameObject minimapPanel;
 	Room [,] rooms;
 	bool [,] dfsArray;
 	const int width = 11;
 	const int height = 11;
 	int actX;
 	int actY;
+    int deltaMap = 26;
     List<Vector2> edges;
 
 	public float minX, maxX, minY, maxY;
 
-	Text textDebugMiniMapRenderer;
-
 	void Start () {
-		textDebugMiniMapRenderer = GameObject.Find ("MiniMapDebug").GetComponent<Text>();;
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
         edges = new List<Vector2>();
 		actX = width  / 2;
 		actY = height / 2;
-
+        minimapPanel = GameObject.Find("MinimapPanel");
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				constructRoom (i, j);
@@ -40,7 +39,7 @@ public class WorldGenerator : MonoBehaviour {
 		}
 
 		mergeDoors ();
-		loadRoom ();
+        loadRoom(0, 0);
 	}
 	
 	void Update () {
@@ -51,27 +50,8 @@ public class WorldGenerator : MonoBehaviour {
 			if(dfsArray[actX+1,actY] == true) Debug.Log("x+1, y   = true");
 			if(dfsArray[actX,actY+1] == true) Debug.Log("x,   y+1 = true");
 		}
-
-		renderDebugMiniMap ();
 	}
-
-	public void renderDebugMiniMap(){
-		string toRender="";
-		for (int j = width-1; j >= 0; j--) {
-			for(int i = 0; i < height;i++){
-				if(i==actX && j==actY)toRender+="<color=blue>x</color>";
-				else if(dfsArray[i,j])
-					toRender += "<color=green>_</color>";
-				else
-					toRender += "<color=red>#</color>";
-			}
-			toRender += "\n";
-			//GUI.Label (new Rect (25, 75+25+15*(width-j), 200, 50),toRender);
-		}
-		toRender += "pos = (" + actX.ToString() + "," + actY.ToString () + ")\n";
-		textDebugMiniMapRenderer.text = toRender;
-	}
-
+	
 	public bool goToRoom(int deltaX, int deltaY, int side){
 		int newX = actX + deltaX;
 		int newY = actY + deltaY;
@@ -87,15 +67,31 @@ public class WorldGenerator : MonoBehaviour {
 			Vector3 actPos = GameObject.Find ("Player").transform.position;
 			GameObject.Find ("Player").transform.position = new Vector3(actPos.x, actPos.y*-1, actPos.z);
 		}
+        
 		actX = newX;
 		actY = newY;
-		loadRoom();
+		loadRoom(deltaX, deltaY);
 		return true;
 	}
 
-	void loadRoom(){
+	void loadRoom(int deltaX, int deltaY){
 		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
+        foreach (RectTransform child in minimapPanel.transform)
+        {
+            child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
+            child.GetComponent<Image>().color = Color.red;
+        }
+        if (rooms[actX, actY].wasVisited == false)
+        {
+            Image temp;
+            temp = Instantiate(rooms[actX, actY].minimapImage) as Image;
+            rooms[actX, actY].minimapImage = temp;
+            temp.transform.SetParent(minimapPanel.transform);
+            temp.rectTransform.localPosition = new Vector3(-75, -75, 0);
+        }
         rooms[actX, actY].wasVisited = true;
+        rooms[actX, actY].minimapImage.color = Color.yellow;
+
 	}
 	void constructRoom(int x, int y){
 		//rooms [x, y] = new Room (actX, actY, new Vector4(minX, maxX, minY, maxY), rooms, width, height);     kappa
