@@ -11,4 +11,10 @@ public class DoorsAsTrigger : MonoBehaviour {
 			GameObject.Find ("RoomManager").GetComponent<RoomManager>().tryDoors(gameObject, side);
 		}
 	}
+
+    void Start()
+    {
+        if (side == 0 || side == 2)
+            transform.eulerAngles = new Vector3(0, 0, 90);
+    }
 }

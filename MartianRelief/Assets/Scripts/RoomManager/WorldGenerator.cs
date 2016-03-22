@@ -12,7 +12,7 @@ public class WorldGenerator : MonoBehaviour {
 	const int height = 11;
 	int actX;
 	int actY;
-    int deltaMap = 26;
+    float deltaMap = 14.5f;
     List<Vector2> edges;
 
 	public float minX, maxX, minY, maxY;
@@ -78,8 +78,11 @@ public class WorldGenerator : MonoBehaviour {
 		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
         foreach (RectTransform child in minimapPanel.transform)
         {
-            child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
-            child.GetComponent<Image>().color = Color.red;
+            if (child.tag == "MinimapRoom")
+            {
+                child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
+                child.GetComponent<Image>().color = Color.grey;
+            }
         }
         if (rooms[actX, actY].wasVisited == false)
         {
@@ -90,7 +93,7 @@ public class WorldGenerator : MonoBehaviour {
             temp.rectTransform.localPosition = new Vector3(-75, -75, 0);
         }
         rooms[actX, actY].wasVisited = true;
-        rooms[actX, actY].minimapImage.color = Color.yellow;
+        rooms[actX, actY].minimapImage.color = Color.green;
 
 	}
 	void constructRoom(int x, int y){
@@ -187,7 +190,7 @@ public class WorldGenerator : MonoBehaviour {
     void Generation()
     {
         int posX = width/2, posY = height/2;
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < 12; i++)
         {
             edges.Add(new Vector2((int)posX, (int)(posY + 1)));
             edges.Add(new Vector2((int)(posX + 1), (int)posY));
