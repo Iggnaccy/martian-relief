@@ -12,7 +12,6 @@ public class WorldGenerator : MonoBehaviour {
 	const int height = 11;
 	int actX;
 	int actY;
-    float deltaMap = 14.5f;
     List<Vector2> edges;
 
 	public float minX, maxX, minY, maxY;
@@ -80,7 +79,8 @@ public class WorldGenerator : MonoBehaviour {
         {
             if (child.tag == "MinimapRoom")
             {
-                child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
+                child.localPosition -= new Vector3((child.sizeDelta.x + 1.5f) * deltaX, (child.sizeDelta.y + 1.5f) * deltaY , 0);
+                //child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
                 child.GetComponent<Image>().color = Color.grey;
             }
         }
@@ -89,10 +89,11 @@ public class WorldGenerator : MonoBehaviour {
             Image temp;
             temp = Instantiate(rooms[actX, actY].minimapImage) as Image;
             rooms[actX, actY].minimapImage = temp;
-            temp.transform.SetParent(minimapPanel.transform);
+            temp.rectTransform.SetParent(minimapPanel.transform);
             temp.rectTransform.localPosition = new Vector3(-75, -75, 0);
+            temp.rectTransform.localScale = Vector3.one;
+            rooms[actX, actY].wasVisited = true;
         }
-        rooms[actX, actY].wasVisited = true;
         rooms[actX, actY].minimapImage.color = Color.green;
 
 	}
