@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class BasicEnemyStats : MonoBehaviour {
 
-    public float health;
-    public float healthMax;
+	public float health;
+	public float healthMax;
     public float movespeed;
     public int damage;
     public int collisionDamage;
@@ -13,6 +13,7 @@ public class BasicEnemyStats : MonoBehaviour {
 
 	void Start ()
     {
+		loadStatsFromStatic ();
 		slider.maxValue = healthMax;
 		slider.value = health;
 	}
@@ -38,4 +39,9 @@ public class BasicEnemyStats : MonoBehaviour {
             other.gameObject.GetComponent<BasicStats>().OnDamageTaking(collisionDamage);
         }
     }
+
+	public void loadStatsFromStatic(){
+		health = Static.enemyHp;
+		healthMax = Static.enemyHp;
+	}
 }

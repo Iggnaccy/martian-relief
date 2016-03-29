@@ -23,10 +23,6 @@ public class PauseManager : MonoBehaviour
         {
             Pause();
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Quit();
-        }
     }
 
     public void Pause()
@@ -39,14 +35,5 @@ public class PauseManager : MonoBehaviour
         else
             myRect.sizeDelta = new Vector2(150, 150);
         Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-    }
-
-    public void Quit()
-    {
-#if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
     }
 }

@@ -99,7 +99,7 @@ public class WorldGenerator : MonoBehaviour {
 	}
 	void constructRoom(int x, int y){
 		//rooms [x, y] = new Room (actX, actY, new Vector4(minX, maxX, minY, maxY), rooms, width, height);     kappa
-		rooms [x, y] = new Room (x, y, new Vector4(minX, maxX, minY, maxY), rooms, width, height);
+		rooms [x, y] = new Room (x, y, new Vector4(minX, maxX, minY, maxY), width, height);
 	}
 
 	/*void OnGUI() {

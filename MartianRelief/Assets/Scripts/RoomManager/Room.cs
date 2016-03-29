@@ -13,13 +13,13 @@ public class Room{
     public bool wasVisited = false;
 	int minX, maxX, minY, maxY;
 	public float [] doors; //lewo, góra, prawo, dół,       jeżeli doors[x] < -1000 to doors[x] nie istnieje
-	Room [,] allRooms;
+
     public Image minimapImage;
 
 
 	int width, height;
 	int maxDoors = 4;
-	public Room(int _x, int _y, Vector4 minmax, Room[,] _allRooms, int _width, int _height){
+	public Room(int _x, int _y, Vector4 minmax, int _width, int _height){
 		x = _x;
 		y = _y;
 		width = _width;
@@ -29,7 +29,6 @@ public class Room{
         //vecObstacles = new List<Vector3>();
         minimapImage = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>().minimapRoomImage.GetComponent<Image>();
 		doors = new float[4];
-		allRooms = _allRooms;
 		minX = (int)minmax.x;
 		maxX = (int)minmax.y;
 		minY = (int)minmax.z;

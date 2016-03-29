@@ -4,19 +4,23 @@ using UnityEngine.UI;
 
 public class BasicStats : MonoBehaviour{
 
+
+	//[UWAGA!] żeby ktos sie nie dziwil
+	//[UWAGA!] że zmienia a tam żadnej reakcji, to jest napisywane przez loadFromStatic()
 	public int hp;
 	public int maxHp;
 	public float moveSpeed;
 	public float attackSpeed;     //ile razy na sekunde? [Hz]
 	public float damage;
-    public float invoulnerabilityTime;
-    public Slider healthSlider;
+	public float invoulnerabilityTime;
+	public Slider healthSlider;
 
 	Timer timerAttack;
     Timer timerInvoulnerable;
 
 	void Start()
 	{
+		loadStatsFromStatic ();
 		timerAttack = new Timer ();
         timerInvoulnerable = new Timer();
         invoulnerabilityTime = 1.5f;
@@ -57,4 +61,12 @@ public class BasicStats : MonoBehaviour{
             healthSlider.value = hp;
         }
     }
+
+	public void loadStatsFromStatic(){
+		hp = Static.playerHp;
+		maxHp = Static.playerHp;
+		moveSpeed = Static.playerMoveSpeed;
+		attackSpeed = Static.playerAttackSpeed;     //ile razy na sekunde? [Hz]
+		damage = Static.playerDmg;
+	}
 }
