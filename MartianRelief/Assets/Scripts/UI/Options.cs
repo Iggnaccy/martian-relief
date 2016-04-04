@@ -69,7 +69,8 @@ public class Options : MonoBehaviour {
 	}
 
 	public void onButtonGoBack(){
-		Application.LoadLevel("MainMenuScene");
+		//Application.LoadLevel("MainMenuScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenuScene");
 	}
 }
 
