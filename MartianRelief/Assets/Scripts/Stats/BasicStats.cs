@@ -45,6 +45,7 @@ public class BasicStats : MonoBehaviour{
     public void OnDeath()
     {
         Debug.Log("Umarłeś!");
+        Application.LoadLevel("MainMenuScene");
         Destroy(this.gameObject);
     }
 
