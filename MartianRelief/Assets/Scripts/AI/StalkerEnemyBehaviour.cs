@@ -30,6 +30,7 @@ public class StalkerEnemyBehaviour : MonoBehaviour
     void FindEnemy()
     {
         GameObject[] possibleTargets = GameObject.FindGameObjectsWithTag(toSearch);
+        if (possibleTargets.Length == 0) return;
         int randomTarget = Random.Range(0, possibleTargets.GetLength(0) - 1);
         while (possibleTargets[randomTarget] == this.gameObject)
         {
