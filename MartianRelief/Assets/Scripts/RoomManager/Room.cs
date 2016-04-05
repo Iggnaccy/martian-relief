@@ -15,6 +15,7 @@ public class Room{
 	public float [] doors; //lewo, góra, prawo, dół,       jeżeli doors[x] < -1000 to doors[x] nie istnieje
 
     public Image minimapImage;
+    PrefabHolder prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
 
 
 	int width, height;
@@ -27,7 +28,7 @@ public class Room{
 		vecEnemies = new List<Vector3>();
 		vecDoors = new List<Vector3>();
         //vecObstacles = new List<Vector3>();
-        minimapImage = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>().minimapRoomImage.GetComponent<Image>();
+        minimapImage = prefabHolder.minimapRoomImage.GetComponent<Image>();
 		doors = new float[4];
 		minX = (int)minmax.x;
 		maxX = (int)minmax.y;
@@ -39,23 +40,23 @@ public class Room{
 
 	public void Generate(bool [,] dfsArray){
 		isGenerated = true;
-		int maxiEnemies = 1;
+		int maxiEnemies = 3;
 		for (int i = 0; i < maxiEnemies; i++) {
 			generateEnemy();
 		}
 		for(int i = 0; i < maxDoors; i++){
-			generateDoors(i, GameObject.Find ("PrefabHolder").GetComponent<PrefabHolder>().testDoors, dfsArray);
+			generateDoors(i,prefabHolder.testDoors, dfsArray);
 		}
 	}
 
 	public void spawnEnemies(){
 		for(int i = 0; i < vecEnemies.Count; i++){
-			spawnEnemy(GameObject.Find ("PrefabHolder").GetComponent<PrefabHolder>().testEnemy, new Vector2(vecEnemies[i].x, vecEnemies[i].y));
+			spawnEnemy(prefabHolder.enemies[Random.Range(0,prefabHolder.enemies.Length)], new Vector2(vecEnemies[i].x, vecEnemies[i].y));
 		}
 	}
 
 	public void spawnEnemy(GameObject enemyPrefab, Vector2 pos){
-		Vector3 position = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
+		Vector3 position = new Vector3(pos.x, pos.y, 0);
 		(GameObject.Instantiate (enemyPrefab, position, Quaternion.identity) as GameObject).transform.parent = GameObject.Find ("EnemyHolder").transform;
 	}
 
