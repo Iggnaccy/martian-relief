@@ -5,13 +5,14 @@ using UnityEngine.UI;
 
 public class WorldGenerator : MonoBehaviour {
 
-    GameObject minimapPanel;
-	Room [,] rooms;
+    public GameObject minimapPanel;
+	public Room [,] rooms;
 	bool [,] dfsArray;
-	const int width = 11;
-	const int height = 11;
-	int actX;
-	int actY;
+	public int width = 11;
+	public int height = 11;
+    public int roomCount = 16;
+	public int actX;
+	public int actY;
     List<Vector2> edges;
 
 	public float minX, maxX, minY, maxY;
@@ -191,7 +192,7 @@ public class WorldGenerator : MonoBehaviour {
     void Generation()
     {
         int posX = width/2, posY = height/2;
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < roomCount; i++)
         {
             edges.Add(new Vector2((int)posX, (int)(posY + 1)));
             edges.Add(new Vector2((int)(posX + 1), (int)posY));
