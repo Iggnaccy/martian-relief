@@ -22,6 +22,7 @@ public class SaveExecutioner : MonoBehaviour{
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/martianRelief/" + saveFileName + ".dat");
+        Debug.Log(Application.persistentDataPath + "/martianRelief/" + saveFileName + ".dat");
         CombinedSave data = new CombinedSave(roomCount, sizeX, sizeY, minimapElementsCount);
         data.playerSave.hp = playerStats.hp;
         data.playerSave.maxHp = playerStats.maxHp;

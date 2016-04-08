@@ -12,7 +12,7 @@ public class LoadExecutioner : MonoBehaviour {
         if (loader == null)
         {
             DontDestroyOnLoad(gameObject);
-            loader = this;
+            loader = gameObject;
         }
         else if (loader != this) Destroy(gameObject);
     }
@@ -23,6 +23,5 @@ public class LoadExecutioner : MonoBehaviour {
         FileStream file = File.Open(Application.persistentDataPath + "/martianrelief/" + saveFileName + ".dat", FileMode.Open);
         CombinedSave data = (CombinedSave)bf.Deserialize(file);
         Application.LoadLevel("GameScene");
-
     }
 }
