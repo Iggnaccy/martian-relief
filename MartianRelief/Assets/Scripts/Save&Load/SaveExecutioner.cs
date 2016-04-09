@@ -10,35 +10,40 @@ public class SaveExecutioner : MonoBehaviour{
 
     void Start()
     {
+        
+    }
+
+    public void Save(string saveFileName)
+    {
         worldGenerator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<BasicStats>();
         sizeX = worldGenerator.width;
         sizeY = worldGenerator.height;
         roomCount = worldGenerator.roomCount;
         minimapElementsCount = worldGenerator.minimapPanel.transform.childCount;
-    }
-
-    public void Save(string saveFileName)
-    {
+        Debug.Log(minimapElementsCount + "elementów minimapy");
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/martianRelief/" + saveFileName + ".dat");
+        FileStream file = File.Open(Application.persistentDataPath + "/martianRelief/" + saveFileName + ".dat",FileMode.OpenOrCreate);
         Debug.Log(Application.persistentDataPath + "/martianRelief/" + saveFileName + ".dat");
-        CombinedSave data = new CombinedSave(roomCount, sizeX, sizeY, minimapElementsCount);
-        data.playerSave.hp = playerStats.hp;
-        data.playerSave.maxHp = playerStats.maxHp;
-        data.playerSave.movespeed = playerStats.moveSpeed;
-        data.playerSave.attackspeed = playerStats.attackSpeed;
-        data.playerSave.damage = playerStats.damage;
-        data.playerSave.invoulnerabilityTime = playerStats.invoulnerabilityTime;
-        data.playerSave.posX = playerStats.transform.position.x;
-        data.playerSave.posY = playerStats.transform.position.y;
-        data.playerSave.posZ = playerStats.transform.position.z;
-        data.playerSave.scaleX = playerStats.transform.localScale.x;
-        data.playerSave.scaleY = playerStats.transform.localScale.y;
-        data.playerSave.scaleZ = playerStats.transform.localScale.z;
-        data.worldSave.seed = Random.seed;
-        data.worldSave.activeRoomX = worldGenerator.actX;
-        data.worldSave.activeRoomY = worldGenerator.actY;
+        PlayerSave playerSave = new PlayerSave();
+        WorldSave worldSave = new WorldSave(sizeX, sizeY);
+        RoomSave[] roomSave = new RoomSave[roomCount];
+        MinimapElementSave[] minimapElementSave = new MinimapElementSave[minimapElementsCount];
+        playerSave.hp = playerStats.hp;
+        playerSave.maxHp = playerStats.maxHp;
+        playerSave.movespeed = playerStats.moveSpeed;
+        playerSave.attackspeed = playerStats.attackSpeed;
+        playerSave.damage = playerStats.damage;
+        playerSave.invulnerabilityTime = playerStats.invulnerabilityTime;
+        playerSave.posX = playerStats.transform.position.x;
+        playerSave.posY = playerStats.transform.position.y;
+        playerSave.posZ = playerStats.transform.position.z;
+        playerSave.scaleX = playerStats.transform.localScale.x;
+        playerSave.scaleY = playerStats.transform.localScale.y;
+        playerSave.scaleZ = playerStats.transform.localScale.z;
+        worldSave.seed = Random.seed;
+        worldSave.activeRoomX = worldGenerator.actX;
+        worldSave.activeRoomY = worldGenerator.actY;
         int roomSaveNumber = 0;
         int minimapSaveNumber = 0;
         for (int x = 0; x < sizeX; x++)
@@ -47,32 +52,40 @@ public class SaveExecutioner : MonoBehaviour{
             {
                 if (worldGenerator.rooms[x, y].isGenerated)
                 {
-                    data.worldSave.visitedRooms[x, y] = worldGenerator.rooms[x, y].wasVisited;
-                    data.roomSave[roomSaveNumber].myX = x;
-                    data.roomSave[roomSaveNumber].myY = y;
-                    data.roomSave[roomSaveNumber].wasVisited = worldGenerator.rooms[x, y].wasVisited;
-                    data.roomSave[roomSaveNumber].myEnemies = new EnemySave[worldGenerator.rooms[x, y].maxiEnemies];
-                    for(int i=0;i< data.roomSave[roomSaveNumber].myEnemies.Length;i++)
+                    if (worldGenerator.rooms[x, y].minimapImage != null)
                     {
-                        data.roomSave[roomSaveNumber].myEnemies[i].enemyID = (int)worldGenerator.rooms[x, y].vecEnemies[i].w;
-                        data.roomSave[roomSaveNumber].myEnemies[i].x = worldGenerator.rooms[x, y].vecEnemies[i].x;
-                        data.roomSave[roomSaveNumber].myEnemies[i].y = worldGenerator.rooms[x, y].vecEnemies[i].y;
+                        if (worldGenerator.rooms[x, y].minimapImage.tag == "MinimapRoom")
+                        {
+                            Debug.Log(minimapSaveNumber + " ustawienie obiektu minimapy");
+                            minimapElementSave[minimapSaveNumber].x = x;
+                            minimapElementSave[minimapSaveNumber].y = y;
+                            minimapElementSave[minimapSaveNumber].posX = worldGenerator.rooms[x, y].minimapImage.rectTransform.localPosition.x;
+                            minimapElementSave[minimapSaveNumber].posY = worldGenerator.rooms[x, y].minimapImage.rectTransform.localPosition.y;
+                            minimapElementSave[minimapSaveNumber].posZ = worldGenerator.rooms[x, y].minimapImage.rectTransform.localPosition.z;
+                            minimapElementSave[minimapSaveNumber].width = worldGenerator.rooms[x, y].minimapImage.rectTransform.sizeDelta.x;
+                            minimapElementSave[minimapSaveNumber].height = worldGenerator.rooms[x, y].minimapImage.rectTransform.sizeDelta.y;
+                            minimapSaveNumber++;
+                        }
+                    }
+                    worldSave.visitedRooms[x, y] = worldGenerator.rooms[x, y].wasVisited;
+                    roomSave[roomSaveNumber].myEnemies = new EnemySave[worldGenerator.rooms[x, y].vecEnemies.Count];
+                    roomSave[roomSaveNumber].myX = x;
+                    roomSave[roomSaveNumber].myY = y;
+                    roomSave[roomSaveNumber].wasVisited = worldGenerator.rooms[x, y].wasVisited;
+                    for(int i=0;i< roomSave[roomSaveNumber].myEnemies.Length;i++)
+                    {
+                        roomSave[roomSaveNumber].myEnemies[i].enemyID = (int)worldGenerator.rooms[x, y].vecEnemies[i].w;
+                        roomSave[roomSaveNumber].myEnemies[i].x = worldGenerator.rooms[x, y].vecEnemies[i].x;
+                        roomSave[roomSaveNumber].myEnemies[i].y = worldGenerator.rooms[x, y].vecEnemies[i].y;
                     }
                     roomSaveNumber++;
+                    
                 }
-                if(worldGenerator.rooms[x, y].minimapImage != null)
-                {
-                    data.minimapElementSave[minimapSaveNumber].x = x;
-                    data.minimapElementSave[minimapSaveNumber].y = y;
-                    data.minimapElementSave[minimapSaveNumber].posX = worldGenerator.rooms[x, y].minimapImage.rectTransform.localPosition.x;
-                    data.minimapElementSave[minimapSaveNumber].posY = worldGenerator.rooms[x, y].minimapImage.rectTransform.localPosition.y;
-                    data.minimapElementSave[minimapSaveNumber].posZ = worldGenerator.rooms[x, y].minimapImage.rectTransform.localPosition.z;
-                    data.minimapElementSave[minimapSaveNumber].width = worldGenerator.rooms[x, y].minimapImage.rectTransform.sizeDelta.x;
-                    data.minimapElementSave[minimapSaveNumber].height = worldGenerator.rooms[x, y].minimapImage.rectTransform.sizeDelta.y;
-                    minimapSaveNumber++;
-                }
+                
             }
         }
+        CombinedSave data = new CombinedSave(roomSave, worldSave, playerSave, minimapElementSave);
         bf.Serialize(file, data);
+        file.Close();
     }
 }

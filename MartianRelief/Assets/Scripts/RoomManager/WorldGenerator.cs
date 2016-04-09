@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class WorldGenerator : MonoBehaviour {
+public class WorldGenerator : MonoBehaviour
+{
 
     public GameObject minimapPanel;
 	public Room [,] rooms;
@@ -17,7 +18,8 @@ public class WorldGenerator : MonoBehaviour {
 
 	public float minX, maxX, minY, maxY;
 
-	void Start () {
+	void Start ()
+    {
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
         edges = new List<Vector2>();
@@ -42,7 +44,8 @@ public class WorldGenerator : MonoBehaviour {
         loadRoom(0, 0);
 	}
 	
-	void Update () {
+	void Update ()
+    {
 		if (Input.GetKeyDown(KeyCode.Q)){
 			Debug.Log("Debug neighbors:");
 			if(dfsArray[actX-1,actY] == true) Debug.Log("x-1, y   = true");
@@ -82,7 +85,7 @@ public class WorldGenerator : MonoBehaviour {
             {
                 child.localPosition -= new Vector3((child.sizeDelta.x + 1.5f) * deltaX, (child.sizeDelta.y + 1.5f) * deltaY , 0);
                 //child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
-                child.GetComponent<Image>().color = Color.grey;
+                child.GetComponent<Image>().color = Color.cyan;
             }
         }
         if (rooms[actX, actY].wasVisited == false)
@@ -200,7 +203,7 @@ public class WorldGenerator : MonoBehaviour {
             edges.Add(new Vector2((int)(posX - 1), (int)posY));
             while (true)
             {
-                int z = Random.Range(1, edges.Count - 2);
+                int z = Random.Range(0, edges.Count - 1);
                 if (!dfsArray[(int)edges[z].x, (int)edges[z].y])
                 {
                     dfsArray[(int)edges[z].x, (int)edges[z].y] = true;

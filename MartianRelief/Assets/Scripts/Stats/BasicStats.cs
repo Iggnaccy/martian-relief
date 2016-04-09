@@ -12,7 +12,7 @@ public class BasicStats : MonoBehaviour{
 	public float moveSpeed;
 	public float attackSpeed;     //ile razy na sekunde? [Hz]
 	public float damage;
-	public float invoulnerabilityTime;
+	public float invulnerabilityTime;
 	public Slider healthSlider;
 
 	Timer timerAttack;
@@ -23,7 +23,7 @@ public class BasicStats : MonoBehaviour{
 		loadStatsFromStatic ();
 		timerAttack = new Timer ();
         timerInvoulnerable = new Timer();
-        invoulnerabilityTime = 1.5f;
+        invulnerabilityTime = 1.5f;
         healthSlider.maxValue = maxHp;
         healthSlider.value = hp;
 	}
@@ -50,7 +50,7 @@ public class BasicStats : MonoBehaviour{
 
     public void OnDamageTaking(int damageToTake)
     {
-        if(timerInvoulnerable.getTime() >= invoulnerabilityTime)
+        if(timerInvoulnerable.getTime() >= invulnerabilityTime)
         {
             timerInvoulnerable.reset();
             hp -= damageToTake;
