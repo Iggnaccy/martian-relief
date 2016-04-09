@@ -15,6 +15,7 @@ public class WorldGenerator : MonoBehaviour
 	public int actX;
 	public int actY;
     List<Vector2> edges;
+    bool didIGenerateYet = false;
 
 	public float minX, maxX, minY, maxY;
 
@@ -32,13 +33,8 @@ public class WorldGenerator : MonoBehaviour
 			}
 		}
         dfsArray[width / 2, height / 2] = true;
-        Generation();
-		for (int i = 0; i < width; i++) {
-			for(int j = 0; j < height; j++){
-				if(dfsArray[i, j])
-				rooms[i,j].Generate(dfsArray);
-			}
-		}
+
+        if (!didIGenerateYet) Generation();
 
 		mergeDoors ();
         loadRoom(0, 0);
@@ -192,7 +188,7 @@ public class WorldGenerator : MonoBehaviour
 			}
 		}
 	}
-    void Generation()
+    public void Generation()
     {
         int posX = width/2, posY = height/2;
         for (int i = 0; i < roomCount; i++)
@@ -215,5 +211,14 @@ public class WorldGenerator : MonoBehaviour
                 else edges.RemoveAt(z);
             }
         }
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (dfsArray[i, j])
+                    rooms[i, j].Generate(dfsArray);
+            }
+        }
+        didIGenerateYet = true;
     }
 }

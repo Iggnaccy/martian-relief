@@ -8,6 +8,7 @@ public class TestSaveIdea : MonoBehaviour {
 
     public void Save(string name)
     {
+        Time.timeScale = 0;
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(Application.persistentDataPath + "/martianRelief/" + name + ".dat", FileMode.OpenOrCreate);
         WorldGenerator realGenerator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
@@ -15,7 +16,9 @@ public class TestSaveIdea : MonoBehaviour {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerInfoSave playerInfo = new PlayerInfoSave(player.GetComponent<BasicStats>(), player.transform);
         MultipleInfoSave myInfo = new MultipleInfoSave(playerInfo, gameInfo);
+        Debug.Log("Save zakończony");
         bf.Serialize(file, myInfo);
+        Time.timeScale = 1;
         file.Close();
     }
 

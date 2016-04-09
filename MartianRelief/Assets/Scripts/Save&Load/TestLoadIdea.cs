@@ -22,14 +22,28 @@ public class TestLoadIdea : MonoBehaviour {
 
     public void Load(string name)
     {
+        Debug.Log("Rozpoczynam Load");
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(Application.persistentDataPath + "/martianRelief/" + name + ".dat", FileMode.Open);
         MultipleInfoSave allInfo = (MultipleInfoSave)bf.Deserialize(file);
         Random.seed = allInfo.gameInfo.seed;
         Application.LoadLevel("GameScene");
         WorldGenerator generator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
+        generator.Generation();
+        Debug.Log("Generacja z Load");
+        Time.timeScale = 0;
         generator.actX = allInfo.gameInfo.actX;
         generator.actY = allInfo.gameInfo.actY;
+        BasicStats player = GameObject.FindWithTag("Player").GetComponent<BasicStats>();
+        player.damage = allInfo.playerInfo.damage;
+        player.hp = allInfo.playerInfo.hp;
+        player.maxHp = allInfo.playerInfo.maxHp;
+        player.moveSpeed = allInfo.playerInfo.moveSpeed;
+        player.invulnerabilityTime = allInfo.playerInfo.invulnerabilityTime;
+        player.attackSpeed = allInfo.playerInfo.attackSpeed;
+        player.GetComponent<Transform>().position = new Vector3(allInfo.playerInfo.transformSave.x, allInfo.playerInfo.transformSave.y, allInfo.playerInfo.transformSave.z);
+        player.GetComponent<Transform>().eulerAngles = new Vector3(allInfo.playerInfo.transformSave.rotX, allInfo.playerInfo.transformSave.rotY, allInfo.playerInfo.transformSave.rotZ);
+        player.GetComponent<Transform>().localScale = new Vector3(allInfo.playerInfo.transformSave.sizeX, allInfo.playerInfo.transformSave.sizeY, allInfo.playerInfo.transformSave.sizeZ);
         for (int i = 0; i < allInfo.gameInfo.wasVisited.GetLength(0); i++)
         {
             for(int j = 0; j < allInfo.gameInfo.wasVisited.GetLength(1); j++)
@@ -51,11 +65,13 @@ public class TestLoadIdea : MonoBehaviour {
                     if (i == generator.actX && j == generator.actY)
                         temp.color = Color.green;
                     else temp.color = Color.cyan;
-                    
+                    generator.rooms[i, j].minimapImage = temp;
                 }
             }
         }
+        Time.timeScale = 1;
         file.Close();
+        Debug.Log("Zakończono ładowanie");
     }
 
 }
