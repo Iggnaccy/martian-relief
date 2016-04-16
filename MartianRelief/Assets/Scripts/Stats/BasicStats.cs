@@ -20,7 +20,7 @@ public class BasicStats : MonoBehaviour{
 
 	void Start()
 	{
-		loadStatsFromStatic ();
+		//loadStatsFromStatic ();
 		timerAttack = new Timer ();
         timerInvoulnerable = new Timer();
         invulnerabilityTime = 1.5f;

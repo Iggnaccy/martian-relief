@@ -40,10 +40,10 @@ public class Room{
 
 	public void Generate(bool [,] dfsArray){
 		isGenerated = true;
-		for (int i = 0; i < maxiEnemies; i++) {
+		for (int i = vecEnemies.Count; i < maxiEnemies; i++) {
 			generateEnemy();
 		}
-		for(int i = 0; i < maxDoors; i++){
+		for(int i = vecDoors.Count; i < maxDoors; i++){
 			generateDoors(i,prefabHolder.testDoors, dfsArray);
 		}
 	}

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+
 public class WorldGenerator : MonoBehaviour
 {
 
@@ -19,27 +20,34 @@ public class WorldGenerator : MonoBehaviour
 
 	public float minX, maxX, minY, maxY;
 
-	void Start ()
+	void Awake ()
     {
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
+        dfsArray[width / 2, height / 2] = true;
         edges = new List<Vector2>();
-		actX = width  / 2;
-		actY = height / 2;
         minimapPanel = GameObject.Find("MinimapPanel");
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				constructRoom (i, j);
 			}
 		}
-        dfsArray[width / 2, height / 2] = true;
 
-        if (!didIGenerateYet) Generation();
-
-		mergeDoors ();
-        loadRoom(0, 0);
 	}
 	
+    void Start()
+    {
+        if (!didIGenerateYet)
+        {
+            actX = width / 2;
+            actY = height / 2;
+            Generation();
+        }
+
+        mergeDoors();
+        loadRoom(0, 0);
+    }
+
 	void Update ()
     {
 		if (Input.GetKeyDown(KeyCode.Q)){
@@ -75,11 +83,17 @@ public class WorldGenerator : MonoBehaviour
 
 	void loadRoom(int deltaX, int deltaY){
 		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
+        MinimapManagement(deltaX, deltaY);
+
+	}
+
+    void MinimapManagement(int deltaX, int deltaY)
+    {
         foreach (RectTransform child in minimapPanel.transform)
         {
             if (child.tag == "MinimapRoom")
             {
-                child.localPosition -= new Vector3((child.sizeDelta.x + 1.5f) * deltaX, (child.sizeDelta.y + 1.5f) * deltaY , 0);
+                child.localPosition -= new Vector3((child.sizeDelta.x + 1.5f) * deltaX, (child.sizeDelta.y + 1.5f) * deltaY, 0);
                 //child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
                 child.GetComponent<Image>().color = Color.cyan;
             }
@@ -95,8 +109,8 @@ public class WorldGenerator : MonoBehaviour
             rooms[actX, actY].wasVisited = true;
         }
         rooms[actX, actY].minimapImage.color = Color.green;
+    }
 
-	}
 	void constructRoom(int x, int y){
 		//rooms [x, y] = new Room (actX, actY, new Vector4(minX, maxX, minY, maxY), rooms, width, height);     kappa
 		rooms [x, y] = new Room (x, y, new Vector4(minX, maxX, minY, maxY), width, height);
@@ -191,6 +205,8 @@ public class WorldGenerator : MonoBehaviour
     public void Generation()
     {
         int posX = width/2, posY = height/2;
+        dfsArray = new bool[width, height];
+        edges.Clear();
         for (int i = 0; i < roomCount; i++)
         {
             edges.Add(new Vector2((int)posX, (int)(posY + 1)));

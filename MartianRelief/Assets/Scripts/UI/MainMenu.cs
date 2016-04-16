@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 public class MainMenu : MonoBehaviour {
 
 	public void newGame(){
-		Application.LoadLevel ("GameScene");
+        NewGameOrLoad.LoadName = null;
+		SceneManager.LoadScene("GameScene");
 	}
 
 	public void options(){
-		Application.LoadLevel ("OptionsScene");
+        SceneManager.LoadScene("OptionsScene");
 	}
 		
 	public void exit(){

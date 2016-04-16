@@ -5,29 +5,26 @@ using UnityEngine.UI;
 
 public class TestLoadIdea : MonoBehaviour {
 
-    public static GameObject loader;
-
-    void Start()
+    void OnLevelWasLoaded()
     {
-        if(loader == null)
+        Debug.Log(NewGameOrLoad.LoadName + "Debug z Loada");
+        if (NewGameOrLoad.LoadName != null)
         {
-            loader = gameObject;
-            DontDestroyOnLoad(gameObject);
+            Debug.Log("Wchodzę w Load");
+            Load(NewGameOrLoad.LoadName);
         }
-        else if(loader != gameObject)
-        {
-            Destroy(gameObject);
-        }
+        else Debug.Log("Nie wchodzę w Load");
     }
 
     public void Load(string name)
     {
         Debug.Log("Rozpoczynam Load");
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/martianRelief/" + name + ".dat", FileMode.Open);
+        FileStream file = File.Open(Application.persistentDataPath + name + ".dat", FileMode.Open);
         MultipleInfoSave allInfo = (MultipleInfoSave)bf.Deserialize(file);
+        Debug.Log(Random.seed + "przed zmianą");
         Random.seed = allInfo.gameInfo.seed;
-        Application.LoadLevel("GameScene");
+        Debug.Log(Random.seed + "po zmianie");
         WorldGenerator generator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
         generator.Generation();
         Debug.Log("Generacja z Load");

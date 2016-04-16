@@ -10,9 +10,11 @@ public class TestSaveIdea : MonoBehaviour {
     {
         Time.timeScale = 0;
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/martianRelief/" + name + ".dat", FileMode.OpenOrCreate);
+        FileStream file = File.Open(Application.persistentDataPath + name + ".dat", FileMode.OpenOrCreate);
         WorldGenerator realGenerator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
+        Debug.Log(UnityEngine.Random.seed + "Przed savem");
         BasicGameInfoSave gameInfo = new BasicGameInfoSave(UnityEngine.Random.seed,realGenerator.actX,realGenerator.actY, TableCreation(realGenerator.rooms).value);
+        Debug.Log(UnityEngine.Random.seed + "Po save, unity" + gameInfo.seed + "Po save, save");
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerInfoSave playerInfo = new PlayerInfoSave(player.GetComponent<BasicStats>(), player.transform);
         MultipleInfoSave myInfo = new MultipleInfoSave(playerInfo, gameInfo);
