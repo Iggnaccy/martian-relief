@@ -41,6 +41,7 @@ public class WorldGenerator : MonoBehaviour
 		Random.seed = Static.randomSeed;
         if (!didIGenerateYet)    //new game only
         {
+			Static.randomSeed = Static.getUnixTime ();
             actX = width / 2;
             actY = height / 2;
             Generation();
@@ -156,6 +157,7 @@ public class WorldGenerator : MonoBehaviour
 	}
     public void Generation()
     {
+		Random.seed = Static.randomSeed;
 		Debug.Log ("WorldGenerator::Generation() seed=" + Random.seed);
         int posX = width/2, posY = height/2;
         dfsArray = new bool[width, height];

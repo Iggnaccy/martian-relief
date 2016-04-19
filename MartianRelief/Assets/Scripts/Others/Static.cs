@@ -11,5 +11,9 @@ public static class Static {
 
 	public static float enemyHp = 11.5f;
 
-	public static int randomSeed = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+	public static int randomSeed = (int)(DateTime.UtcNow.Subtract (new DateTime (1970, 1, 1))).TotalSeconds;
+
+	public static int getUnixTime(){
+		return (int)(DateTime.UtcNow.Subtract (new DateTime (1970, 1, 1))).TotalSeconds;
+	}
 }
