@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -8,11 +7,11 @@ public class MainMenu : MonoBehaviour {
 
 	public void newGame(){
         NewGameOrLoad.LoadName = null;
-		SceneManager.LoadScene("GameScene");
+		Application.LoadLevel("GameScene");
 	}
 
 	public void options(){
-        SceneManager.LoadScene("OptionsScene");
+		Application.LoadLevel("OptionsScene");
 	}
 		
 	public void exit(){

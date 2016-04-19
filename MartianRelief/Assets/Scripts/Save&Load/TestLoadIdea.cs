@@ -13,7 +13,7 @@ public class TestLoadIdea : MonoBehaviour {
             Debug.Log("Wchodzę w Load");
             Load(NewGameOrLoad.LoadName);
         }
-        else Debug.Log("Nie wchodzę w Load");
+        else Debug.Log("Nie wchodzę w Load");        //nowa gra
     }
 
     public void Load(string name)
@@ -57,8 +57,12 @@ public class TestLoadIdea : MonoBehaviour {
                     generator.rooms[i, j].vecEnemies.Clear();
                     Image temp = Instantiate(generator.rooms[i, j].minimapImage) as Image;
                     temp.rectTransform.SetParent(generator.minimapPanel.transform);
-                    temp.rectTransform.localPosition = new Vector3((-generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.x / 2) + ((temp.rectTransform.sizeDelta.x + 1.5f) * generator.actX - i), (-generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.y / 2) + ((temp.rectTransform.sizeDelta.y + 1.5f) * generator.actY - j), 0);
-                    temp.rectTransform.localScale = Vector3.one;
+					float x, y;
+					//temp.rectTransform.localPosition = new Vector3((-generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.x / 2) + ((temp.rectTransform.sizeDelta.x + 1.5f) * generator.actX - i), (-generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.y / 2) + ((temp.rectTransform.sizeDelta.y + 1.5f) * generator.actY - j), 0);
+					x = -((temp.rectTransform.sizeDelta.x + 1.5f) * (generator.actX - i))-(generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.x / 2);
+					y = -((temp.rectTransform.sizeDelta.y + 1.5f) * (generator.actY - j))-(generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.y / 2);
+					temp.rectTransform.localPosition = new Vector3(x, y, 0);
+					temp.rectTransform.localScale = Vector3.one;
                     if (i == generator.actX && j == generator.actY)
                         temp.color = Color.green;
                     else temp.color = Color.cyan;

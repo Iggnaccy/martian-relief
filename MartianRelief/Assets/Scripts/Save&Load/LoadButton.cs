@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class LoadButton : MonoBehaviour {
+	//main menu + gra
 	public void LoadLoadScene()
     {
-        SceneManager.LoadScene("LoadScene");
+        Application.LoadLevel("LoadScene");
     }
 }
