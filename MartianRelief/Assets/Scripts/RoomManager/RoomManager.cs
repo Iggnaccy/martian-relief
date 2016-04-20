@@ -4,7 +4,7 @@ using UnityEngine;
 public class RoomManager : MonoBehaviour
 {
 
-	public Transform enemyPrefab;
+	//public Transform enemyPrefab;
 	public Transform enemyHolder;
 	public Transform doorsPrefab;
 	public Transform doorsHolder;

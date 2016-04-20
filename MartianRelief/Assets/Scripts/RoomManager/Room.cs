@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public class Room{
 
-	int x, y;
-	public List <Vector3> vecEnemies;                      //Vector[x,y,rotacja]
+	public int x, y;
+	public List <Vector4> vecEnemies;                      //Vector[x,y,rotacja,id]
 	public List <Vector3> vecDoors;
 	//List <Vector3> vecObstacles;
 	public bool isGenerated = false;                //czy to jest pokój?
     public bool wasVisited = false;
-	int minX, maxX, minY, maxY;
+	public int minX, maxX, minY, maxY;
 	public float [] doors; //lewo, góra, prawo, dół,       jeżeli doors[x] < -1000 to doors[x] nie istnieje
-
+    public int maxiEnemies = 3;
     public Image minimapImage;
     PrefabHolder prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
 
@@ -25,7 +25,7 @@ public class Room{
 		y = _y;
 		width = _width;
 		height = _height;
-		vecEnemies = new List<Vector3>();
+		vecEnemies = new List<Vector4>();
 		vecDoors = new List<Vector3>();
         //vecObstacles = new List<Vector3>();
         minimapImage = prefabHolder.minimapRoomImage.GetComponent<Image>();
@@ -40,18 +40,17 @@ public class Room{
 
 	public void Generate(bool [,] dfsArray){
 		isGenerated = true;
-		int maxiEnemies = 3;
-		for (int i = 0; i < maxiEnemies; i++) {
+		for (int i = vecEnemies.Count; i < maxiEnemies; i++) {
 			generateEnemy();
 		}
-		for(int i = 0; i < maxDoors; i++){
+		for(int i = vecDoors.Count; i < maxDoors; i++){
 			generateDoors(i,prefabHolder.testDoors, dfsArray);
 		}
 	}
 
 	public void spawnEnemies(){
 		for(int i = 0; i < vecEnemies.Count; i++){
-			spawnEnemy(prefabHolder.enemies[Random.Range(0,prefabHolder.enemies.Length)], new Vector2(vecEnemies[i].x, vecEnemies[i].y));
+			spawnEnemy(prefabHolder.enemies[(int)vecEnemies[i].w], new Vector2(vecEnemies[i].x, vecEnemies[i].y));
 		}
 	}
 
@@ -61,7 +60,7 @@ public class Room{
 	}
 
 	public void generateEnemy(){
-		vecEnemies.Add(new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0));
+		vecEnemies.Add(new Vector4(Random.Range(minX, maxX), Random.Range(minY, maxY), 0,Random.Range(0,prefabHolder.enemies.Length)));
 	}
 
 	public void spawnDoors(GameObject doorsPrefab){

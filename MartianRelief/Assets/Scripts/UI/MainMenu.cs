@@ -6,11 +6,12 @@ using UnityEditor;
 public class MainMenu : MonoBehaviour {
 
 	public void newGame(){
-		Application.LoadLevel ("GameScene");
+        NewGameOrLoad.LoadName = null;
+		Application.LoadLevel("GameScene");
 	}
 
 	public void options(){
-		Application.LoadLevel ("OptionsScene");
+		Application.LoadLevel("OptionsScene");
 	}
 		
 	public void exit(){

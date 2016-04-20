@@ -1,47 +1,60 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class WorldGenerator : MonoBehaviour {
 
-    GameObject minimapPanel;
-	Room [,] rooms;
+public class WorldGenerator : MonoBehaviour
+{
+
+    public GameObject minimapPanel;
+	public Room [,] rooms;
 	bool [,] dfsArray;
-	const int width = 11;
-	const int height = 11;
-	int actX;
-	int actY;
+	public int width = 11;
+	public int height = 11;
+    public int roomCount = 16;
+	public int actX;
+	public int actY;
     List<Vector2> edges;
+    bool didIGenerateYet = false;
 
 	public float minX, maxX, minY, maxY;
 
-	void Start () {
+	void Awake ()
+    {
+		Random.seed = Static.randomSeed;
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
+        dfsArray[width / 2, height / 2] = true;
         edges = new List<Vector2>();
-		actX = width  / 2;
-		actY = height / 2;
         minimapPanel = GameObject.Find("MinimapPanel");
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				constructRoom (i, j);
 			}
 		}
-        dfsArray[width / 2, height / 2] = true;
-        Generation();
-		for (int i = 0; i < width; i++) {
-			for(int j = 0; j < height; j++){
-				if(dfsArray[i, j])
-				rooms[i,j].Generate(dfsArray);
-			}
-		}
-
-		mergeDoors ();
-        loadRoom(0, 0);
+		Debug.Log ("WorldGenerator::Awake() seed=" + Random.seed);
+		Debug.Log("Static::randomSeed " + Static.randomSeed);
 	}
 	
-	void Update () {
+    void Start()
+    {
+		Random.seed = Static.randomSeed;
+        if (!didIGenerateYet)    //new game only
+        {
+			Static.randomSeed = Static.getUnixTime ();
+            actX = width / 2;
+            actY = height / 2;
+            Generation();
+        }
+		Debug.Log ("WorldGenerator::Start() seed=" + Random.seed);
+		//load game & new game
+        mergeDoors();
+        loadRoom(0, 0);
+
+    }
+
+	void Update ()
+    {
 		if (Input.GetKeyDown(KeyCode.Q)){
 			Debug.Log("Debug neighbors:");
 			if(dfsArray[actX-1,actY] == true) Debug.Log("x-1, y   = true");
@@ -75,13 +88,19 @@ public class WorldGenerator : MonoBehaviour {
 
 	void loadRoom(int deltaX, int deltaY){
 		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
+        MinimapManagement(deltaX, deltaY);
+
+	}
+
+    void MinimapManagement(int deltaX, int deltaY)
+    {
         foreach (RectTransform child in minimapPanel.transform)
         {
             if (child.tag == "MinimapRoom")
             {
-                child.localPosition -= new Vector3((child.sizeDelta.x + 1.5f) * deltaX, (child.sizeDelta.y + 1.5f) * deltaY , 0);
+                child.localPosition -= new Vector3((child.sizeDelta.x + 1.5f) * deltaX, (child.sizeDelta.y + 1.5f) * deltaY, 0);
                 //child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
-                child.GetComponent<Image>().color = Color.grey;
+                child.GetComponent<Image>().color = Color.cyan;
             }
         }
         if (rooms[actX, actY].wasVisited == false)
@@ -95,33 +114,11 @@ public class WorldGenerator : MonoBehaviour {
             rooms[actX, actY].wasVisited = true;
         }
         rooms[actX, actY].minimapImage.color = Color.green;
+    }
 
-	}
 	void constructRoom(int x, int y){
-		//rooms [x, y] = new Room (actX, actY, new Vector4(minX, maxX, minY, maxY), rooms, width, height);     kappa
 		rooms [x, y] = new Room (x, y, new Vector4(minX, maxX, minY, maxY), width, height);
 	}
-
-	/*void OnGUI() {
-		GUI.contentColor = Color.red;
-		GUI.Label (new Rect (25, 25, 200, 50), "actPos=(x="+actX.ToString()+", y="+actY.ToString ()+")");
-		if (rooms [actX,actY].isGenerated) {
-			GUI.Label (new Rect (25, 75, 200, 50), "is generated");
-		} else {
-			GUI.Label (new Rect (25, 75, 200, 50), "not generated");
-		}
-		for (int j = 0; j < width; j++) {
-			string toRender="";
-			for(int i = 0; i < height;i++){
-				if(i==actX && j==actY)toRender+="x";
-				else if(dfsArray[i,j])
-					toRender += "_";
-				else
-					toRender += "#";
-			}
-			GUI.Label (new Rect (25, 75+25+15*(width-j), 200, 50),toRender);
-		}
-	}*/
 
 	void randomShuffle(List<int> _list){
 		for (int i = 0; i < _list.Count; i++) {
@@ -131,37 +128,7 @@ public class WorldGenerator : MonoBehaviour {
 			_list[randomIndex] = temp;
 		}
 	}
-
-	/*void dfsGenerate(int x, int y){
-		dfsArray [x, y] = true;
-
-		List<int> vDirections = new List<int> ();
-		vDirections.Add (0);
-		vDirections.Add (1);
-		vDirections.Add (2);
-		vDirections.Add (3);
-
-		randomShuffle (vDirections);
-		for (int i = 0; i < vDirections.Count; i++) {
-			if (vDirections[i] == 0 && x - 2 >= 0 && dfsArray [x - 2, y] == false) {
-				dfsArray [x - 1, y] = true;
-				dfsGenerate (x - 2, y);
-			}
-			if (vDirections[i] == 1 && y - 2 >= 0 && dfsArray [x, y - 2] == false) {
-				dfsArray [x, y - 1] = true;
-				dfsGenerate (x, y - 2);
-			}
-			if (vDirections[i] == 2 && x + 2 < width && dfsArray [x + 2, y] == false) {
-				dfsArray [x + 1, y] = true;
-				dfsGenerate (x + 2, y);
-			}
-			if (vDirections[i] == 3 && y + 2 < height && dfsArray [x, y + 2] == false) {
-				dfsArray [x, y + 1] = true;
-				dfsGenerate (x, y + 2);
-			}
-		}
-	}*/
-
+	
 	void mergeDoors(){
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
@@ -188,10 +155,14 @@ public class WorldGenerator : MonoBehaviour {
 			}
 		}
 	}
-    void Generation()
+    public void Generation()
     {
+		Random.seed = Static.randomSeed;
+		Debug.Log ("WorldGenerator::Generation() seed=" + Random.seed);
         int posX = width/2, posY = height/2;
-        for (int i = 0; i < 12; i++)
+        dfsArray = new bool[width, height];
+        edges.Clear();
+        for (int i = 0; i < roomCount; i++)
         {
             edges.Add(new Vector2((int)posX, (int)(posY + 1)));
             edges.Add(new Vector2((int)(posX + 1), (int)posY));
@@ -199,7 +170,8 @@ public class WorldGenerator : MonoBehaviour {
             edges.Add(new Vector2((int)(posX - 1), (int)posY));
             while (true)
             {
-                int z = Random.Range(1, edges.Count - 2);
+                int z = Random.Range(0, edges.Count - 1);
+				Debug.Log ("WorldGenerator::Generation() after Random.Range seed=" + Random.seed);
                 if (!dfsArray[(int)edges[z].x, (int)edges[z].y])
                 {
                     dfsArray[(int)edges[z].x, (int)edges[z].y] = true;
@@ -211,5 +183,14 @@ public class WorldGenerator : MonoBehaviour {
                 else edges.RemoveAt(z);
             }
         }
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (dfsArray[i, j])
+                    rooms[i, j].Generate(dfsArray);
+            }
+        }
+        didIGenerateYet = true;
     }
 }
