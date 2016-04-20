@@ -3,8 +3,9 @@ using System.Collections;
 
 public class LoadButton : MonoBehaviour {
 	//main menu + gra
-	public void LoadLoadScene()
+	public void LoadLoadScene(string name)
     {
-        Application.LoadLevel("LoadScene");
+        NewGameOrLoad.LoadName = name;
+        Application.LoadLevel("GameScene");
     }
 }

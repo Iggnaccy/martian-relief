@@ -24,6 +24,7 @@ public class TestLoadIdea : MonoBehaviour {
         MultipleInfoSave allInfo = (MultipleInfoSave)bf.Deserialize(file);
         Debug.Log(Random.seed + "przed zmianą");
         Random.seed = allInfo.gameInfo.seed;
+        Static.randomSeed = Random.seed;
         Debug.Log(Random.seed + "po zmianie");
         WorldGenerator generator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
         generator.Generation();
