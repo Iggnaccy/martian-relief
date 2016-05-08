@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RoomManager : MonoBehaviour
@@ -9,8 +10,9 @@ public class RoomManager : MonoBehaviour
 	public Transform doorsPrefab;
 	public Transform doorsHolder;
     public Transform missileHolder;
-    GameObject clear;
+    public Transform prefabHolder;
 	public float minX, maxX, minY, maxY;
+    public List<Item> itemPool;
 
 	enum RoomState{FIGHT,ROOM_CLEAR, LOAD_NEW_LEVEL};
 
@@ -20,7 +22,8 @@ public class RoomManager : MonoBehaviour
 
 	void Start ()
     {
-        clear = GameObject.FindWithTag("Clear").transform.GetChild(0).gameObject;
+        generateItemPool();
+        prefabHolder = GameObject.Find("PrefabHolder").transform;
     }
 	
 	void Update ()
@@ -30,15 +33,20 @@ public class RoomManager : MonoBehaviour
 			actualState = RoomState.FIGHT;
             clearMissiles();
 			spawnObjectsFromVectors();
-
-            clear.SetActive(false);
 		}
 		else if (actualState == RoomState.FIGHT)
         {
 			if (enemyHolder.transform.childCount == 0)
             {
-                clear.SetActive(true);
-				roomToLoad.vecEnemies.Clear();
+                if(roomToLoad.vecEnemies.Count == 0)
+                {
+                    if(Random.value < 0.2f)
+                    {
+                        generateItem();
+                    }
+                }
+                else
+                    roomToLoad.vecEnemies.Clear();
 				actualState = RoomState.ROOM_CLEAR;
 			}
 		}
@@ -47,6 +55,24 @@ public class RoomManager : MonoBehaviour
 			openTheGates();
 		}
 	}
+
+    public void generateItem()
+    {
+        int rand = (int)(Random.value * 149);
+        ItemBehaviour temp = (Instantiate(prefabHolder.GetComponent<PrefabHolder>().itemObject, new Vector3(Random.value * 4 - 2, Random.value * 4 - 2, 0), Quaternion.identity)) as ItemBehaviour;
+        temp.itemID = rand;
+        itemPool.RemoveAt(rand);
+    }
+
+    void generateItemPool()
+    {
+        ItemStats player = GameObject.Find("Player").GetComponent<ItemStats>();
+        // Dodać typy pokoi, dla których bazowy itemPool będzie różny
+        for(int i = 0; i < player.items.GetLength (0); i++)
+        {
+            itemPool.Add(player.items[i]);
+        }
+    }
 
 	public void loadNewRoom(Room room)
     {

@@ -4,14 +4,11 @@ using UnityEngine.UI;
 
 public class BasicStats : MonoBehaviour{
 
-
-	//[UWAGA!] żeby ktos sie nie dziwil
-	//[UWAGA!] że zmienia a tam żadnej reakcji, to jest napisywane przez loadFromStatic()
-	public int hp;
+    public int hp;
 	public int maxHp;
-	public float moveSpeed;
-	public float attackSpeed;     //ile razy na sekunde? [Hz]
-	public float damage;
+	public Statistic moveSpeed;
+	public Statistic attackSpeed;     //ile razy na sekunde? [Hz]
+	public Statistic damage;
 	public float invulnerabilityTime;
 	public Slider healthSlider;
 
@@ -20,12 +17,17 @@ public class BasicStats : MonoBehaviour{
 
 	void Start()
 	{
-		//loadStatsFromStatic ();
 		timerAttack = new Timer ();
         timerInvoulnerable = new Timer();
         invulnerabilityTime = 1.5f;
         healthSlider.maxValue = maxHp;
         healthSlider.value = hp;
+        if (NewGameOrLoad.LoadName == null)
+        {
+            moveSpeed = new Statistic(350f);
+            attackSpeed = new Statistic(4f);
+            damage = new Statistic(7.5f);
+        }
 	}
 
 	void Update(){
@@ -35,7 +37,7 @@ public class BasicStats : MonoBehaviour{
 	}
 
 	public bool tryToShoot(){
-		if (timerAttack.getTime () >= (1f / attackSpeed) ) {
+		if (timerAttack.getTime () >= (1f / attackSpeed.GetValue()) ) {
 			timerAttack.reset();
 			return true;
 		}
@@ -45,7 +47,7 @@ public class BasicStats : MonoBehaviour{
     public void OnDeath()
     {
         Debug.Log("Umarłeś!");
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
     public void OnDamageTaking(int damageToTake)
@@ -61,7 +63,7 @@ public class BasicStats : MonoBehaviour{
             healthSlider.value = hp;
         }
     }
-
+    /*
 	public void loadStatsFromStatic(){
 		hp = Static.playerHp;
 		maxHp = Static.playerHp;
@@ -69,4 +71,5 @@ public class BasicStats : MonoBehaviour{
 		attackSpeed = Static.playerAttackSpeed;     //ile razy na sekunde? [Hz]
 		damage = Static.playerDmg;
 	}
+    */
 }

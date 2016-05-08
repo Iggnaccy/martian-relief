@@ -30,7 +30,7 @@ public class TestUserInput : MonoBehaviour {
         if (direction == 4)
             clone.GetComponent<PelletBehaviour>().shotVertical = -1;
         else clone.GetComponent<PelletBehaviour>().shotVertical = 0;
-        clone.GetComponent<PelletBehaviour>().damage = GetComponent<BasicStats>().damage;
+        clone.GetComponent<PelletBehaviour>().damage = GetComponent<BasicStats>().damage.GetValue();
         clone.transform.parent = GameObject.Find("MissileHolder").transform;
 
     }
@@ -57,6 +57,6 @@ public class TestUserInput : MonoBehaviour {
 
 	void FixedUpdate () 
 	{
-		myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed);
+		myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue(), Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue());
     }
 }

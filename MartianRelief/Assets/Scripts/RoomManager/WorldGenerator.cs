@@ -50,10 +50,16 @@ public class WorldGenerator : MonoBehaviour
 		//load game & new game
         mergeDoors();
         loadRoom(0, 0);
-
+        Image temp;
+        temp = Instantiate(rooms[actX, actY].minimapImage) as Image;
+        rooms[actX, actY].minimapImage = temp;
+        temp.rectTransform.SetParent(minimapPanel.transform);
+        temp.rectTransform.localPosition = new Vector3(-75, -75, 0);
+        temp.rectTransform.localScale = Vector3.one;
+        rooms[actX, actY].minimapImage.color = Color.green;
     }
 
-	void Update ()
+    void Update ()
     {
 		if (Input.GetKeyDown(KeyCode.Q)){
 			Debug.Log("Debug neighbors:");
@@ -72,24 +78,24 @@ public class WorldGenerator : MonoBehaviour
 			return false;
 		}
 		if (side == 0 || side == 2) {
-			Vector3 actPos = GameObject.Find ("Player").transform.position;
-			GameObject.Find ("Player").transform.position = new Vector3(actPos.x*-1, actPos.y, actPos.z);
+			Transform actPos = GameObject.Find ("Player").transform;
+			actPos.position = new Vector3(actPos.position.x*-1, actPos.position.y, 0);
 		}
 		if (side == 1 || side == 3) {
-			Vector3 actPos = GameObject.Find ("Player").transform.position;
-			GameObject.Find ("Player").transform.position = new Vector3(actPos.x, actPos.y*-1, actPos.z);
+			Transform actPos = GameObject.Find ("Player").transform;
+			actPos.position = new Vector3(actPos.position.x, actPos.position.y*-1, 0);
 		}
-        
-		actX = newX;
+
+        MinimapManagement(deltaX, deltaY);
+        rooms[actX, actY].wasVisited = true;
+        actX = newX;
 		actY = newY;
 		loadRoom(deltaX, deltaY);
 		return true;
 	}
 
 	void loadRoom(int deltaX, int deltaY){
-		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
-        MinimapManagement(deltaX, deltaY);
-
+        GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
 	}
 
     void MinimapManagement(int deltaX, int deltaY)
@@ -111,7 +117,6 @@ public class WorldGenerator : MonoBehaviour
             temp.rectTransform.SetParent(minimapPanel.transform);
             temp.rectTransform.localPosition = new Vector3(-75, -75, 0);
             temp.rectTransform.localScale = Vector3.one;
-            rooms[actX, actY].wasVisited = true;
         }
         rooms[actX, actY].minimapImage.color = Color.green;
     }

@@ -7,13 +7,10 @@ public class TestLoadIdea : MonoBehaviour {
 
     void OnLevelWasLoaded()
     {
-        Debug.Log(NewGameOrLoad.LoadName + "Debug z Loada");
         if (NewGameOrLoad.LoadName != null)
         {
-            Debug.Log("Wchodzę w Load");
             Load(NewGameOrLoad.LoadName);
         }
-        else Debug.Log("Nie wchodzę w Load");        //nowa gra
     }
 
     public void Load(string name)

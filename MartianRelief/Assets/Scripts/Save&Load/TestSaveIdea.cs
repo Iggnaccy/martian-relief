@@ -87,7 +87,8 @@ public class BasicGameInfoSave
 public class PlayerInfoSave
 {
     public int hp, maxHp;
-    public float damage, attackSpeed, moveSpeed, invulnerabilityTime;
+    public Statistic damage, attackSpeed, moveSpeed;
+    public float invulnerabilityTime;
     public TransformSave transformSave;
 
     public PlayerInfoSave(BasicStats stats, Transform transform)
