@@ -49,7 +49,7 @@ public class WorldGenerator : MonoBehaviour
 		Debug.Log ("WorldGenerator::Start() seed=" + Random.seed);
 		//load game & new game
         mergeDoors();
-        loadRoom(0, 0);
+        loadRoom();
         Image temp;
         temp = Instantiate(rooms[actX, actY].minimapImage) as Image;
         rooms[actX, actY].minimapImage = temp;
@@ -88,13 +88,16 @@ public class WorldGenerator : MonoBehaviour
 
         MinimapManagement(deltaX, deltaY);
         rooms[actX, actY].wasVisited = true;
+		if (rooms [actX, actY].vecEnemies.Count == 0) {
+			rooms[actX,actY].wasCleared = true;
+		}
         actX = newX;
 		actY = newY;
-		loadRoom(deltaX, deltaY);
+		loadRoom();
 		return true;
 	}
 
-	void loadRoom(int deltaX, int deltaY){
+	void loadRoom(){
         GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
 	}
 
@@ -163,7 +166,7 @@ public class WorldGenerator : MonoBehaviour
     public void Generation()
     {
 		Random.seed = Static.randomSeed;
-		Debug.Log ("WorldGenerator::Generation() seed=" + Random.seed);
+		//Debug.Log ("WorldGenerator::Generation() seed=" + Random.seed);
         int posX = width/2, posY = height/2;
         dfsArray = new bool[width, height];
         edges.Clear();
@@ -176,7 +179,7 @@ public class WorldGenerator : MonoBehaviour
             while (true)
             {
                 int z = Random.Range(0, edges.Count - 1);
-				Debug.Log ("WorldGenerator::Generation() after Random.Range seed=" + Random.seed);
+				//Debug.Log ("WorldGenerator::Generation() after Random.Range seed=" + Random.seed);
                 if (!dfsArray[(int)edges[z].x, (int)edges[z].y])
                 {
                     dfsArray[(int)edges[z].x, (int)edges[z].y] = true;
