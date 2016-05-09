@@ -4,6 +4,7 @@ using System.Collections;
 public class DoorsAsTrigger : MonoBehaviour {
 
 	public int side;           
+	public bool open=false;
 
 	void OnTriggerEnter2D(Collider2D other){
 		//Debug.Log ("Collision with doors! " + other.gameObject.name);

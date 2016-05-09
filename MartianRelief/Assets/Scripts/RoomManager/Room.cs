@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class Room{
 
 	public int x, y;
-	public List <Vector4> vecEnemies;                      //Vector[x,y,rotacja,id]
-	public List <Vector3> vecDoors;
+	public List <Vector4> 	vecEnemies;                      	//Vector[x,y,rotacja,id]
+	public List <Vector3> 	vecDoors;
+	public List <Vector3> 	vecItems; 							//[x,y,id]
 	//List <Vector3> vecObstacles;
 	public bool isGenerated = false;                //czy to jest pokój?
     public bool wasVisited = false;					//czy byl juz odwiedzony?
@@ -28,6 +29,7 @@ public class Room{
 		height = _height;
 		vecEnemies = new List<Vector4>();
 		vecDoors = new List<Vector3>();
+		vecItems = new List<Vector3>();
         //vecObstacles = new List<Vector3>();
         minimapImage = prefabHolder.minimapRoomImage.GetComponent<Image>();
 		doors = new float[4];

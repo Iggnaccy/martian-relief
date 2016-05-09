@@ -12,8 +12,8 @@ public class BasicStats : MonoBehaviour{
 	public float invulnerabilityTime;
 	public Slider healthSlider;
 
-	Timer timerAttack;
-    Timer timerInvoulnerable;
+	public Timer timerAttack;
+    public Timer timerInvoulnerable;
 
 	void Start()
 	{

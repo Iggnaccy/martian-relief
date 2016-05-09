@@ -9,6 +9,7 @@ public class RoomManager : MonoBehaviour
 	public Transform enemyHolder;
 	public Transform doorsHolder;
 	public Transform missileHolder;
+	public Transform itemHolder;
 	public Transform prefabHolder;
 	public float minX, maxX, minY, maxY;
 	public List<Item> itemPool;
@@ -18,9 +19,12 @@ public class RoomManager : MonoBehaviour
 	RoomState actualState = RoomState.LOAD_NEW_LEVEL;
 	
 	Room roomToLoad;
-	
+
+	Timer timeElapsed;
+
 	void Start ()
 	{
+		timeElapsed = new Timer ();
 		itemPool = new List<Item>();
 		generateItemPool();
 		prefabHolder = GameObject.Find("PrefabHolder").transform;
@@ -28,10 +32,18 @@ public class RoomManager : MonoBehaviour
 	
 	void Update ()
 	{
+		timeElapsed.update (Time.deltaTime);
 		if (actualState == RoomState.LOAD_NEW_LEVEL)
 		{
+			GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
+			foreach(GameObject obj in objs){
+				obj.GetComponent<BasicStats>().timerInvoulnerable.reset();
+			}
 			if(roomToLoad.wasCleared){
-				actualState = RoomState.ROOM_CLEAR;
+				if (timeElapsed.getTime () > 0.5f) {	
+					Debug.Log("asd");
+					actualState = RoomState.ROOM_CLEAR;
+				}
 			}
 			else {
 				actualState = RoomState.FIGHT;
@@ -59,7 +71,21 @@ public class RoomManager : MonoBehaviour
 		int rand = (int)(Random.value * (itemPool.Count-1));
 		GameObject temp = (Instantiate(prefabHolder.GetComponent<PrefabHolder>().itemObject, new Vector3(Random.value * 4 - 2, Random.value * 4 - 2, 0), Quaternion.identity)) as GameObject;
 		temp.GetComponent<ItemBehaviour>().itemID = rand;
+		temp.transform.parent = itemHolder;
 		itemPool.RemoveAt(rand);
+		addItemToRoom (temp.transform.position.x, temp.transform.position.y, rand);
+	}
+
+	public void addItemToRoom(float x, float y, int id){
+		roomToLoad.vecItems.Add (new Vector3 (x, y, id)); 
+	}
+
+	public void buildItemsFromRoom(List<Vector3> vecIt){
+		foreach(Vector3 v in vecIt){
+			GameObject temp = (Instantiate(prefabHolder.GetComponent<PrefabHolder>().itemObject, new Vector3(v.x, v.y, 0), Quaternion.identity)) as GameObject;
+			temp.transform.parent = itemHolder.transform;
+			temp.GetComponent<ItemBehaviour>().itemID = (int)v.z;
+		}
 	}
 	
 	void generateItemPool()
@@ -75,6 +101,8 @@ public class RoomManager : MonoBehaviour
 	public void loadNewRoom(Room room)
 	{
 		roomToLoad = room;
+		timeElapsed.reset ();
+		timeElapsed.start ();
 		actualState = RoomState.LOAD_NEW_LEVEL;
 	}
 	
@@ -84,8 +112,10 @@ public class RoomManager : MonoBehaviour
 			return;
 		}
 		clearDoors();
+		clearItems ();
 		roomToLoad.spawnEnemies ();
 		roomToLoad.spawnDoors (GameObject.Find ("PrefabHolder").GetComponent<PrefabHolder>().testDoors);
+		buildItemsFromRoom (roomToLoad.vecItems);
 	}
 	
 	void openTheGates()
@@ -127,6 +157,13 @@ public class RoomManager : MonoBehaviour
 	void clearDoors()
 	{
 		foreach(Transform child in GameObject.Find ("DoorsHolder").transform)
+		{
+			Destroy(child.gameObject);
+		}
+	}
+
+	void clearItems(){
+		foreach(Transform child in GameObject.Find ("ItemHolder").transform)
 		{
 			Destroy(child.gameObject);
 		}

@@ -11,6 +11,7 @@ public class ItemBehaviour : MonoBehaviour
         {
             ItemStats pickUpPlayer = other.GetComponent<ItemStats>();
             pickUpPlayer.PickUp(itemID);
+			GameObject.FindGameObjectWithTag("RoomManager").GetComponent<WorldGenerator>().removeItemFromList(itemID);
            /* Debug.Log("Podnoszę");*/
             Destroy(gameObject);
         }
