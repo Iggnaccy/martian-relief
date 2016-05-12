@@ -21,6 +21,7 @@ public class WorldGenerator : MonoBehaviour
 	
 	void Awake ()
 	{
+		Static.generateGlobalItemPool ();
 		Random.seed = Static.randomSeed;
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
@@ -201,6 +202,7 @@ public class WorldGenerator : MonoBehaviour
 		foreach (Vector3 vec in rooms[actX, actY].vecItems) {
 			if(vec.z == id){
 				rooms[actX,actY].vecItems.Remove(vec);
+				rooms[actX,actY].itemPool.Remove((int)vec.z);
 				return;
 			}
 		}

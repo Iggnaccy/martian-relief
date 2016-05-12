@@ -18,7 +18,8 @@ public class Room{
     public int maxiEnemies = 3;
     public Image minimapImage;
     PrefabHolder prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
-
+	public int roomType;  //1->normaly, 2->sklep, 3->boss, 4->final boss (powinien byc tylko jeden pokoj z 4)
+	public List<int> itemPool;
 
 	int width, height;
 	int maxDoors = 4;
@@ -38,7 +39,10 @@ public class Room{
 		minY = (int)minmax.z;
 		maxY = (int)minmax.w;
 		doors [0] = doors [1] = doors [2] = doors [3] = -9000;
-
+		roomType = (int)(Random.value * 5);
+		itemPool = new List<int> ();
+		Static.setRoomItemPool (itemPool, roomType);
+		itemPool = Static.listIntersect (itemPool, Static.itemPoolGlobal);
 	}
 
 	public void Generate(bool [,] dfsArray){

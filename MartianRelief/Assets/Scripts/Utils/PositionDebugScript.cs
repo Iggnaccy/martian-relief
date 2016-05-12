@@ -9,6 +9,7 @@ public class PositionDebugScript : MonoBehaviour {
 
 	void Start () {
         worldGenerator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
+		Debug.Log ("wololo");
 	}
 
 	void Update () {
@@ -17,7 +18,14 @@ public class PositionDebugScript : MonoBehaviour {
         text += worldGenerator.actX.ToString();
         text += "   y: ";
         text += worldGenerator.actY.ToString();
-        //Debug.Log(text);
+		text += "\n";
+		text += "rt: " + worldGenerator.rooms[worldGenerator.actX,worldGenerator.actY].roomType.ToString();
+		text += "\n";
+		foreach (int it in worldGenerator.rooms[worldGenerator.actX,worldGenerator.actY].itemPool) {
+			text += it.ToString ();
+			text += " ";
+		} 
+		//Debug.Log(text);
         GetComponent<Text>().text = text;
 	}
 }

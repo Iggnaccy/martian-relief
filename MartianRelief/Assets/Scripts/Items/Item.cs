@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Item
 {
-    int myID;
+    public int myID;
     GameObject myPlayer;
 
     public Item(int id)
