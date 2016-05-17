@@ -3,10 +3,10 @@
 [Serializable]
 public class Statistic
 {
-    float baseValue;
-    float bonusValue;
-    float mult;
-    float flatBonus;
+    public float baseValue;
+    public float bonusValue;
+    public float mult;
+    public float flatBonus;
 
     public Statistic(float baseV, float bonusV, float multV, float flatV)
     {
@@ -21,6 +21,11 @@ public class Statistic
         baseValue = baseV;
         bonusValue = flatBonus = 0;
         mult = 1.0f;
+    }
+
+    public static Statistic operator +(Statistic a, Statistic b)
+    {
+        return new Statistic(a.baseValue, a.bonusValue + b.bonusValue, a.mult * b.mult, a.flatBonus + b.flatBonus);
     }
 
     public float GetValue()

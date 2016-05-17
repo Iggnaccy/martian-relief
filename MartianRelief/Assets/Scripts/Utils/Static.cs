@@ -18,7 +18,7 @@ public static class Static {
 
 	public static void generateGlobalItemPool(){
 		itemPoolGlobal = new List<int>();
-		for(int i = 2; i <= 100; i+=2){
+		for(int i = 2; i <= 12; i+=2){
 			itemPoolGlobal.Add (i);
 		}
 	}

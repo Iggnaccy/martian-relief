@@ -4,6 +4,7 @@ using System.Collections;
 public class TestUserInput : MonoBehaviour {
 
     public GameObject myPelletPrefab;
+    public float speedStatMultiplier;
 
     private Rigidbody2D myBody;
 
@@ -57,6 +58,6 @@ public class TestUserInput : MonoBehaviour {
 
 	void FixedUpdate () 
 	{
-		myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue(), Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue());
+		myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier);
     }
 }
