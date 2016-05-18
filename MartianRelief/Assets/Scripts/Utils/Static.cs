@@ -16,16 +16,19 @@ public static class Static {
 
 	public static List<int> itemPoolGlobal;
 
+	public static int itemCount = 12;
+	public static int itemTypesCount = 4;      //opisane w 21 linijce Room.cs
+
 	public static void generateGlobalItemPool(){
 		itemPoolGlobal = new List<int>();
-		for(int i = 2; i <= 12; i+=2){
+		for(int i = 1; i <= itemCount; i++){
 			itemPoolGlobal.Add (i);
 		}
 	}
-	public static void setRoomItemPool(List<int> pool, int roomType){
+	public static void setRoomItemPool(List<int> pool, int roomType /*od 1 do 4*/){
 		pool.Clear ();
-		for (int i = 0; i < 20; i++) {
-			pool.Add (roomType*20+i);
+		for (int i = 0; i < itemCount/itemTypesCount; i++) {
+			pool.Add ((roomType-1)*(itemCount/itemTypesCount)+i);
 		}
 	}
 

@@ -39,9 +39,9 @@ public class Room{
 		minY = (int)minmax.z;
 		maxY = (int)minmax.w;
 		doors [0] = doors [1] = doors [2] = doors [3] = -9000;
-		roomType = (int)(Random.value * 5);
+		roomType = (int)(Random.value * 3.999)+1;
 		itemPool = new List<int> ();
-		//Static.setRoomItemPool (itemPool, roomType);
+		Static.setRoomItemPool (itemPool, roomType);
 		itemPool = Static.listIntersect (itemPool, Static.itemPoolGlobal);
 	}
 

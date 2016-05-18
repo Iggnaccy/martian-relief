@@ -22,6 +22,9 @@ public class WorldGenerator : MonoBehaviour
 	void Awake ()
 	{
 		Static.generateGlobalItemPool ();
+		for(int i = 0; i < Static.itemPoolGlobal.Count; i++){
+			Debug.Log (Static.itemPoolGlobal[i]);
+		}
 		Random.seed = Static.randomSeed;
 		rooms = new Room[width,height];
 		dfsArray = new bool[width, height];
