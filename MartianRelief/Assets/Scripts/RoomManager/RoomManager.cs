@@ -74,14 +74,8 @@ public class RoomManager : MonoBehaviour
 		addItemToRoom (temp.transform.position.x, temp.transform.position.y, itemPool[rand].id);
 
 		//koniecznie na koncu zeby nie zaburzac kolejnosci listy (inaczej kolejne 30 minut debugowania)
-
-		Debug.Log (rand + " " + itemPool [rand].id);
-		for (int i = 0; i < itemPool.Count; i++) {
-			Debug.Log (itemPool[i].id);
-		}
 		roomToLoad.itemPool.Remove (itemPool [rand].id);
-		//itemPool.Remove (itemPool[rand]);
-		//rooms[actX,actY].itemPool.Remove((int)vec.z);
+		itemPool.Remove (itemPool[rand]);
 	}
 
 	public void addItemToRoom(float x, float y, int id){

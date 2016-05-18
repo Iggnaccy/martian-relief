@@ -67,6 +67,11 @@ public static class Static {
 	}
 	
 	public static int randomIdxFromList<T>(List<T> vec){
-		return (int)(UnityEngine.Random.value * (vec.Count-1));
+		Debug.Log (UnityEngine.Random.value);
+		int valToReturn = (int)(UnityEngine.Random.value * vec.Count);
+		if (valToReturn < 0 || valToReturn >= vec.Count) {     //Random.value -> [0,1] inclusive!!
+			return 0;
+		}
+		return valToReturn;
 	}
 }
