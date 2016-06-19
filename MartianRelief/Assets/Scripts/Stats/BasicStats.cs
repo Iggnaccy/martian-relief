@@ -56,20 +56,10 @@ public class BasicStats : MonoBehaviour{
         {
             timerInvoulnerable.reset();
             hp -= damageToTake;
-			//Debug.Log ("dmg " + hp.ToString() );
 			if(hp <= 0){
 				OnDeath();
 			}
             healthSlider.value = hp;
         }
     }
-    /*
-	public void loadStatsFromStatic(){
-		hp = Static.playerHp;
-		maxHp = Static.playerHp;
-		moveSpeed = Static.playerMoveSpeed;
-		attackSpeed = Static.playerAttackSpeed;     //ile razy na sekunde? [Hz]
-		damage = Static.playerDmg;
-	}
-    */
 }
