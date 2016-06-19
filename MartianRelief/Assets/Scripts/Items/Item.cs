@@ -23,9 +23,4 @@ public class Item
         attackSpeed = new Statistic(0);
         moveSpeed = new Statistic(0);
     }
-
-	void OnCreation ()
-    {
-	    
-	}
 }

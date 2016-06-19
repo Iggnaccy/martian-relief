@@ -3,9 +3,13 @@ using System.Collections.Generic;
 
 public class ItemStats : MonoBehaviour
 {
-    public List<Item> myItems;
-    public Item[] items;
-    BasicStats myStats;
+	/*
+		zawiera informacje o itemach gracza
+	 */
+
+    public List<Item> myItems;    	//itemy gracza
+    public Item[] items;			//wszystkie istniejace itemy pula
+    BasicStats myStats;				//statsy gracza
 
     void Awake()
     {

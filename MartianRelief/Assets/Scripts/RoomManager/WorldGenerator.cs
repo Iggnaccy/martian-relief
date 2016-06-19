@@ -30,23 +30,26 @@ public class WorldGenerator : MonoBehaviour
 		minimapPanel = GameObject.Find("MinimapPanel");
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
-				constructRoom (i, j);
+				rooms [i, j] = new Room (i, j, new Vector4(minX, maxX, minY, maxY), width, height);
 			}
 		}
+		//Random.seed = -1402559560;
 		Debug.Log ("WorldGenerator::Awake() seed=" + Random.seed);
+		//Static.randomSeed = 1466330462;
 		Debug.Log("Static::randomSeed " + Static.randomSeed);
 	}
-	
+
 	void Start()
 	{
 		Random.seed = Static.randomSeed;
 		if (!didIGenerateYet)    //new game only
 		{
-			Static.randomSeed = Static.getUnixTime ();
+			//Static.randomSeed = Static.getUnixTime ();
 			actX = width / 2;
 			actY = height / 2;
 			Generation();
 		}
+		//Random.seed = -1986870875;
 		Debug.Log ("WorldGenerator::Start() seed=" + Random.seed);
 		//load game & new game
 		mergeDoors();
@@ -54,7 +57,7 @@ public class WorldGenerator : MonoBehaviour
 		
 	}
 	
-	void Update ()
+	/*void Update ()
 	{
 		if (Input.GetKeyDown(KeyCode.Q)){
 			Debug.Log("Debug neighbors:");
@@ -63,7 +66,7 @@ public class WorldGenerator : MonoBehaviour
 			if(dfsArray[actX+1,actY] == true) Debug.Log("x+1, y   = true");
 			if(dfsArray[actX,actY+1] == true) Debug.Log("x,   y+1 = true");
 		}
-	}
+	}*/
 	
 	public bool goToRoom(int deltaX, int deltaY, int side){
 		int newX = actX + deltaX;
@@ -120,10 +123,6 @@ public class WorldGenerator : MonoBehaviour
 		rooms[actX, actY].minimapImage.color = Color.green;
 	}
 	
-	void constructRoom(int x, int y){
-		rooms [x, y] = new Room (x, y, new Vector4(minX, maxX, minY, maxY), width, height);
-	}
-	
 	void randomShuffle(List<int> _list){
 		for (int i = 0; i < _list.Count; i++) {
 			int temp = _list[i];
@@ -165,16 +164,25 @@ public class WorldGenerator : MonoBehaviour
 		//Debug.Log ("WorldGenerator::Generation() seed=" + Random.seed);
 		int posX = width/2, posY = height/2;
 		dfsArray = new bool[width, height];
+		dfsArray [posX, posY] = true;
 		edges.Clear();
 		for (int i = 0; i < roomCount; i++)
 		{
-			edges.Add(new Vector2((int)posX, (int)(posY + 1)));
-			edges.Add(new Vector2((int)(posX + 1), (int)posY));
-			edges.Add(new Vector2((int)posX, (int)(posY - 1)));
-			edges.Add(new Vector2((int)(posX - 1), (int)posY));
+			if(posX >= 0 && posX < width && posY + 1 >= 0 && posY + 1 < height)
+				edges.Add(new Vector2((int)posX, (int)(posY + 1)));
+
+			if(posX + 1>= 0 && posX + 1 < width && posY >= 0 && posY < height)
+				edges.Add(new Vector2((int)(posX + 1), (int)posY));
+
+			if(posX >= 0 && posX < width && posY - 1>= 0 && posY -1 < height)
+				edges.Add(new Vector2((int)posX, (int)(posY - 1)));
+
+			if(posX - 1 >= 0 && posX -1 < width && posY >= 0 && posY < height)
+				edges.Add(new Vector2((int)(posX - 1), (int)posY));
 			while (true)
 			{
-				int z = Random.Range(0, edges.Count - 1);
+				int z = Random.Range(0, edges.Count - 1);           //integery
+				//Debug.Log ("zzz " + z);
 				//Debug.Log ("WorldGenerator::Generation() after Random.Range seed=" + Random.seed);
 				if (!dfsArray[(int)edges[z].x, (int)edges[z].y])
 				{

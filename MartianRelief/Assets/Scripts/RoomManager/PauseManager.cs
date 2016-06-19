@@ -30,10 +30,10 @@ public class PauseManager : MonoBehaviour
         isFullscreen = isFullscreen == false ? true : false;
         if (isFullscreen)
         {
-            myRect.sizeDelta = new Vector2(800, 450);
+			myRect.sizeDelta = new Vector2(Static.CANVAS_WIDTH, Static.CANVAS_HEIGHT);
         }
         else
-            myRect.sizeDelta = new Vector2(150, 150);
+            myRect.sizeDelta = new Vector2(Static.MINIMAP_WIDTH, Static.MINIMAP_HEIGHT);
         Time.timeScale = Time.timeScale == 0 ? 1 : 0;
     }
 }

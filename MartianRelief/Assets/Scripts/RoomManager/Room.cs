@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class Room{
-
 	public int x, y;
 	public List <Vector4> 	vecEnemies;                      	//Vector[x,y,rotacja,id]
 	public List <Vector3> 	vecDoors;
@@ -19,9 +18,9 @@ public class Room{
     public Image minimapImage;
     PrefabHolder prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
 	public int roomType;  //1->normaly, 2->sklep, 3->boss, 4->final boss (powinien byc tylko jeden pokoj z 4)
-	public List<int> itemPool;
+	public List<int> itemPool;     //pula itemów dla danego pokoju
 
-	int width, height;
+	int width, height;           //szer i  wys całego levelu (domyślnie 11x11)
 	int maxDoors = 4;
 	public Room(int _x, int _y, Vector4 minmax, int _width, int _height){
 		x = _x;
@@ -41,8 +40,8 @@ public class Room{
 		doors [0] = doors [1] = doors [2] = doors [3] = -9000;
 		roomType = (int)(Random.value * 3.999)+1;
 		itemPool = new List<int> ();
-		Static.setRoomItemPool (itemPool, roomType);
-		itemPool = Static.listIntersect (itemPool, Static.itemPoolGlobal);
+		Static.setRoomItemPool (itemPool, roomType);                        	  	//ogarnąć to jakoś sensowniej
+		itemPool = Static.listIntersect (itemPool, Static.itemPoolGlobal);				
 	}
 
 	public void Generate(bool [,] dfsArray){

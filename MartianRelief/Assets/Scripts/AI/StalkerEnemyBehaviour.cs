@@ -3,7 +3,6 @@ using System.Collections;
 
 public class StalkerEnemyBehaviour : MonoBehaviour
 {
-
     Rigidbody2D myBody;
     Transform toStalk;
     string toSearch;

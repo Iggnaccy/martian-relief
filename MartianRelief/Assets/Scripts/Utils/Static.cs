@@ -14,10 +14,16 @@ public static class Static {
 
 	public static int randomSeed = (int)(DateTime.UtcNow.Subtract (new DateTime (1970, 1, 1))).TotalSeconds;
 
-	public static List<int> itemPoolGlobal;
+	public static List<int> itemPoolGlobal;			//itemy odblokowane przez gracza
 
 	public static int itemCount = 12;
 	public static int itemTypesCount = 4;      //opisane w 21 linijce Room.cs
+
+	public static int CANVAS_WIDTH = 800;
+	public static int CANVAS_HEIGHT = 600;
+	public static int MINIMAP_HEIGHT = 150;
+	public static int MINIMAP_WIDTH = 150;
+
 
 	public static void generateGlobalItemPool(){
 		itemPoolGlobal = new List<int>();
