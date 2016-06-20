@@ -25,6 +25,8 @@ public class PositionDebugScript : MonoBehaviour {
 			text += it.ToString ();
 			text += " ";
 		} 
+		text += "\n";
+		text += "roomType: " + worldGenerator.rooms [worldGenerator.actX, worldGenerator.actY].roomType.ToString ();
 		//Debug.Log(text);
         GetComponent<Text>().text = text;
 	}

@@ -1,0 +1,50 @@
+#puste linie oraz te zawierające '#' na początku nie są interpretowane 
+#asd: (na początku linijki) => identyfikator=asd
+#damage,attackSpeed,moveSpeed => bonusValue,mult,flatBonus, mult powinien być >= 1
+#roomTypes: 1->normalny, 2->sklep, 3->boss, 4->final boss
+#* -> name->"unknown item",icon->"unknown.png",Statistic->(0,1,0) (mult=1)
+#wszystkie spacje poza otwartymi nawiasami sa pomijane
+#tylko " liczą się do napisów (ratują białe znaki), ' nic nie robią
+#każda interpretowana linijka musi zawierać ':'
+
+item:"Kalashnikov","kalashnikov.png"
+damage: 0.5, 1.01, 0
+attackSpeed: 0.25, 1.01, 0
+moveSpeed: *
+roomType: 1,2
+
+item:"Shotgun","shotgun.png"
+damage: 0.75, 1.02, 0
+attackSpeed: 0.1, 1.01, 0
+moveSpeed: *
+roomType: 2,3
+
+item:"Pistol","pistol.png"
+damage: 0.15, 1.001, 0
+attackSpeed: *
+moveSpeed: *
+roomType: 1
+
+item:"Rocket launcher","rocketlauncher.png"
+damage: 0.5, 1.05, 0
+attackSpeed: *
+moveSpeed: *
+roomType: 3,4
+
+item:"Flame thrower","flamethrower.png"
+damage: 0.2, 1.02, 0
+attackSpeed: *
+moveSpeed: *
+roomType: 3,4
+
+item:"Adihash","adihash.png"
+damage: *
+attackSpeed: 0.5, 1.05, 0
+moveSpeed: 1, 1.1, 0
+roomType: 4
+
+item:"trainers +30","trainers.png"
+damage: *
+attackSpeed: *
+moveSpeed: 0.3, 1.03, 0
+roomType: 1,2

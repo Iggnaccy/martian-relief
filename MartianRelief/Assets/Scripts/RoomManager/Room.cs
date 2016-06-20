@@ -17,7 +17,7 @@ public class Room{
     public int maxiEnemies = 3;
     public Image minimapImage;
     PrefabHolder prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
-	public int roomType;  //1->normaly, 2->sklep, 3->boss, 4->final boss (powinien byc tylko jeden pokoj z 4)
+	public int roomType;  //1->normalny, 2->sklep, 3->boss, 4->final boss (powinien byc tylko jeden pokoj z 4)
 	public List<int> itemPool;     //pula itemów dla danego pokoju
 
 	int width, height;           //szer i  wys całego levelu (domyślnie 11x11)
