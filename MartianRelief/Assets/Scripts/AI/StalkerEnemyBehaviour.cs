@@ -38,11 +38,18 @@ public class StalkerEnemyBehaviour : MonoBehaviour
         toStalk = possibleTargets[randomTarget].transform;
     }
 
-    void AdjustVelocity()
+    /*void AdjustVelocity()
     {
         if (toStalk != null)
             myBody.velocity = (toStalk.position - transform.position).normalized * GetComponent<BasicEnemyStats>().movespeed * Time.deltaTime;
         else
             myBody.velocity = new Vector3(myBody.velocity.x * 0.9f, myBody.velocity.y * 0.9f, 0);
-    }
+    }*/
+	// ==> velocity fix
+	void AdjustVelocity()
+	{
+		if (toStalk != null)
+			myBody.velocity = myBody.velocity+(Vector2)((toStalk.position - transform.position).normalized) * GetComponent<BasicEnemyStats>().movespeed * Time.deltaTime*0.25f;
+		
+	}
 }

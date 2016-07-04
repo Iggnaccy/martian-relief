@@ -19,17 +19,27 @@ public class TestUserInput : MonoBehaviour {
 			return;
         GameObject clone;
         clone = Instantiate(myPelletPrefab, new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z), Quaternion.Euler(0,0,0)) as GameObject;
-        if (direction == 1)
-            clone.GetComponent<PelletBehaviour>().shotHorizontal = 1;
-        else
-        if (direction == 2)
-            clone.GetComponent<PelletBehaviour>().shotHorizontal = -1;
+        if (direction == 1) {
+			clone.GetComponent<PelletBehaviour> ().shotHorizontal = 1;
+			// ===> velocity fix
+			myBody.velocity += new Vector2 (-10, 0);
+		} else
+        if (direction == 2) {
+			clone.GetComponent<PelletBehaviour> ().shotHorizontal = -1;
+			// ===> velocity fix
+			myBody.velocity += new Vector2 (10, 0);
+		}
         else clone.GetComponent<PelletBehaviour>().shotHorizontal = 0;
-        if (direction == 3)
-            clone.GetComponent<PelletBehaviour>().shotVertical = 1;
-        else
-        if (direction == 4)
-            clone.GetComponent<PelletBehaviour>().shotVertical = -1;
+        if (direction == 3) {
+			clone.GetComponent<PelletBehaviour> ().shotVertical = 1;
+			// ===> velocity fix
+			myBody.velocity += new Vector2 (0, -10);
+		} else
+        if (direction == 4) {
+			clone.GetComponent<PelletBehaviour> ().shotVertical = -1;
+			// ===> velocity fix
+			myBody.velocity+=new Vector2(0,10);
+		}
         else clone.GetComponent<PelletBehaviour>().shotVertical = 0;
         clone.GetComponent<PelletBehaviour>().damage = GetComponent<BasicStats>().damage.GetValue();
         clone.transform.parent = GameObject.Find("MissileHolder").transform;
@@ -58,6 +68,9 @@ public class TestUserInput : MonoBehaviour {
 
 	void FixedUpdate () 
 	{
-		myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier);
-    }
+		//myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier);
+    	// ===> velocity fix
+		myBody.velocity = myBody.velocity+new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier*0.25f, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier*0.25f);
+
+	}
 }

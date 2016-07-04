@@ -15,10 +15,10 @@ public class PelletBehaviour : MonoBehaviour {
     {
         if (other.tag == "Enemy")
         {
-            //Debug.Log("Pocisk trafił, życie przed obrażeniami: " + other.GetComponent<BasicEnemyStats>().health.ToString());
             other.GetComponent<BasicEnemyStats>().health -= damage;
-            //Debug.Log("Po obrażeniach: " + Mathf.Max(0, other.GetComponent<BasicEnemyStats>().health).ToString());
-            Destroy(this.gameObject);
+			// ==> velocity fix
+			other.attachedRigidbody.velocity+=GetComponent<Rigidbody2D>().velocity*2;
+			Destroy(this.gameObject);
         }
     }
 }
