@@ -7,6 +7,7 @@ public class WorldGenerator : MonoBehaviour
 {
 	
 	public GameObject minimapPanel;
+    public PrefabHolder prefabHolder;
 	public Room [,] rooms;
 	bool [,] dfsArray;
 	public int width = 11;
@@ -28,9 +29,11 @@ public class WorldGenerator : MonoBehaviour
 		dfsArray[width / 2, height / 2] = true;
 		edges = new List<Vector2>();
 		minimapPanel = GameObject.Find("MinimapPanel");
+        prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
 		for (int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++){
 				rooms [i, j] = new Room (i, j, new Vector4(minX, maxX, minY, maxY), width, height);
+                rooms[i, j].minimapImage = null;
 			}
 		}
 		//Random.seed = -1402559560;
@@ -115,22 +118,22 @@ public class WorldGenerator : MonoBehaviour
             if (rooms[actX, actY].minimapImage == null)
             {
                 Image temp;
-                temp = Instantiate(rooms[actX, actY].minimapImage) as Image;
+                temp = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
                 rooms[actX, actY].minimapImage = temp;
                 temp.rectTransform.SetParent(minimapPanel.transform);
                 temp.rectTransform.localPosition = new Vector3(-75, -75, 0);
                 temp.rectTransform.localScale = Vector3.one;
             }
-			rooms[actX, actY].wasVisited = true;
+			rooms[actX, actY].wasVisited = true; 
             try
             {
                 if (rooms[actX, actY + 1].wasVisited == false && rooms[actX,actY + 1].isGenerated)
                 {
                     Image tempU;
-                    tempU = Instantiate(rooms[actX, actY].minimapImage) as Image;
+                    tempU = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
                     rooms[actX, actY + 1].minimapImage = tempU;
                     tempU.rectTransform.SetParent(minimapPanel.transform);
-                    tempU.rectTransform.localPosition = new Vector3(-75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.x, -75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.y + rooms[actX, actY].minimapImage.rectTransform.sizeDelta.y + 1.5f, 0);
+                    tempU.rectTransform.localPosition = new Vector3(rooms[actX, actY].minimapImage.rectTransform.localPosition.x, rooms[actX, actY].minimapImage.rectTransform.localPosition.y + rooms[actX, actY].minimapImage.rectTransform.sizeDelta.y + 1.5f, 0);
                     tempU.rectTransform.localScale = Vector3.one;
                     tempU.color = Color.gray;
                 }
@@ -141,10 +144,10 @@ public class WorldGenerator : MonoBehaviour
                 if (rooms[actX, actY - 1].wasVisited == false && rooms[actX, actY - 1].isGenerated)
                 {
                     Image tempD;
-                    tempD = Instantiate(rooms[actX, actY].minimapImage) as Image;
+                    tempD = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
                     rooms[actX, actY - 1].minimapImage = tempD;
                     tempD.rectTransform.SetParent(minimapPanel.transform);
-                    tempD.rectTransform.localPosition = new Vector3(-75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.x, -75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.y - rooms[actX, actY].minimapImage.rectTransform.sizeDelta.y - 1.5f, 0);
+                    tempD.rectTransform.localPosition = new Vector3(rooms[actX, actY].minimapImage.rectTransform.localPosition.x, rooms[actX, actY].minimapImage.rectTransform.localPosition.y - rooms[actX, actY].minimapImage.rectTransform.sizeDelta.y - 1.5f, 0);
                     tempD.rectTransform.localScale = Vector3.one;
                     tempD.color = Color.gray;
                 }
@@ -155,10 +158,10 @@ public class WorldGenerator : MonoBehaviour
                 if (rooms[actX + 1, actY].wasVisited == false && rooms[actX + 1, actY].isGenerated)
                 {
                     Image tempR;
-                    tempR = Instantiate(rooms[actX, actY].minimapImage) as Image;
+                    tempR = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
                     rooms[actX, actY + 1].minimapImage = tempR;
                     tempR.rectTransform.SetParent(minimapPanel.transform);
-                    tempR.rectTransform.localPosition = new Vector3(-75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.x + rooms[actX, actY].minimapImage.rectTransform.sizeDelta.x + 1.5f, -75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.y, 0);
+                    tempR.rectTransform.localPosition = new Vector3(rooms[actX, actY].minimapImage.rectTransform.localPosition.x + rooms[actX, actY].minimapImage.rectTransform.sizeDelta.x + 1.5f, rooms[actX, actY].minimapImage.rectTransform.localPosition.y, 0);
                     tempR.rectTransform.localScale = Vector3.one;
                     tempR.color = Color.gray;
                 }
@@ -169,10 +172,10 @@ public class WorldGenerator : MonoBehaviour
                 if (rooms[actX - 1, actY].wasVisited == false && rooms[actX - 1, actY].isGenerated)
                 {
                     Image tempL;
-                    tempL = Instantiate(rooms[actX, actY].minimapImage) as Image;
+                    tempL = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
                     rooms[actX, actY + 1].minimapImage = tempL;
                     tempL.rectTransform.SetParent(minimapPanel.transform);
-                    tempL.rectTransform.localPosition = new Vector3(-75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.x - rooms[actX, actY].minimapImage.rectTransform.sizeDelta.x - 1.5f, -75 + rooms[actX, actY].minimapImage.rectTransform.localPosition.y, 0);
+                    tempL.rectTransform.localPosition = new Vector3(rooms[actX, actY].minimapImage.rectTransform.localPosition.x - rooms[actX, actY].minimapImage.rectTransform.sizeDelta.x - 1.5f, rooms[actX, actY].minimapImage.rectTransform.localPosition.y, 0);
                     tempL.rectTransform.localScale = Vector3.one;
                     tempL.color = Color.gray;
                 }
