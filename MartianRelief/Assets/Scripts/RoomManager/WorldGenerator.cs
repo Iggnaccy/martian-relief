@@ -116,7 +116,7 @@ public class WorldGenerator : MonoBehaviour
 		if(rooms[actX - deltaX, actY - deltaY].minimapImage != null){
 			rooms[actX - deltaX, actY - deltaY].minimapImage.color = Color.cyan;
 		}
-		//if (rooms[actX, actY].wasVisited == false)
+		if (rooms[actX, actY].wasVisited == false)
 		{
             if (rooms[actX, actY].minimapImage == null)
             {
