@@ -124,7 +124,6 @@ public class WorldGenerator : MonoBehaviour
                 temp.rectTransform.localPosition = new Vector3(-75, -75, 0);
                 temp.rectTransform.localScale = Vector3.one;
             }
-			rooms[actX, actY].wasVisited = true; 
             try
             {
                 if (rooms[actX, actY + 1].wasVisited == false && rooms[actX,actY + 1].isGenerated)
@@ -183,8 +182,10 @@ public class WorldGenerator : MonoBehaviour
             catch { }
 
         }
+        Debug.Log("Ustawiam " + actX + ", " + actY + " na zielony");
 		rooms[actX, actY].minimapImage.color = Color.green;
-	}
+        rooms[actX, actY].wasVisited = true;
+    }
 	
 	void randomShuffle(List<int> _list){
 		for (int i = 0; i < _list.Count; i++) {
