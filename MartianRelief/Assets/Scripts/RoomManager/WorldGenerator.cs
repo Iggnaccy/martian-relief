@@ -110,10 +110,13 @@ public class WorldGenerator : MonoBehaviour
 			{
 				child.localPosition -= new Vector3((child.sizeDelta.x + 1.5f) * deltaX, (child.sizeDelta.y + 1.5f) * deltaY, 0);
                 //child.transform.localPosition = new Vector3(child.transform.localPosition.x - deltaMap * deltaX, child.transform.localPosition.y - deltaMap * deltaY, 0);
-                rooms[actX - deltaX, actY - deltaY].minimapImage.color = Color.cyan;
+
 			}
 		}
-		if (rooms[actX, actY].wasVisited == false)
+		if(rooms[actX - deltaX, actY - deltaY].minimapImage != null){
+			rooms[actX - deltaX, actY - deltaY].minimapImage.color = Color.cyan;
+		}
+		//if (rooms[actX, actY].wasVisited == false)
 		{
             if (rooms[actX, actY].minimapImage == null)
             {
@@ -158,7 +161,7 @@ public class WorldGenerator : MonoBehaviour
                 {
                     Image tempR;
                     tempR = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
-                    rooms[actX, actY + 1].minimapImage = tempR;
+                    rooms[actX+1, actY].minimapImage = tempR;
                     tempR.rectTransform.SetParent(minimapPanel.transform);
                     tempR.rectTransform.localPosition = new Vector3(rooms[actX, actY].minimapImage.rectTransform.localPosition.x + rooms[actX, actY].minimapImage.rectTransform.sizeDelta.x + 1.5f, rooms[actX, actY].minimapImage.rectTransform.localPosition.y, 0);
                     tempR.rectTransform.localScale = Vector3.one;
@@ -172,7 +175,7 @@ public class WorldGenerator : MonoBehaviour
                 {
                     Image tempL;
                     tempL = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
-                    rooms[actX, actY + 1].minimapImage = tempL;
+                    rooms[actX-1, actY].minimapImage = tempL;
                     tempL.rectTransform.SetParent(minimapPanel.transform);
                     tempL.rectTransform.localPosition = new Vector3(rooms[actX, actY].minimapImage.rectTransform.localPosition.x - rooms[actX, actY].minimapImage.rectTransform.sizeDelta.x - 1.5f, rooms[actX, actY].minimapImage.rectTransform.localPosition.y, 0);
                     tempL.rectTransform.localScale = Vector3.one;
