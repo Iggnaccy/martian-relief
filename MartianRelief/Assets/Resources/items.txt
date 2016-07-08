@@ -1,6 +1,6 @@
 #puste linie oraz te zawierające '#' na początku nie są interpretowane 
 #asd: (na początku linijki) => identyfikator=asd
-#damage,attackSpeed,moveSpeed => bonusValue,mult,flatBonus, mult powinien być >= 1
+#damage,attackSpeed,moveSpeed => bonusValue,mult,flatBonus, mult powinien być >= 1 <- NIEPRAWDA! Powinien być tylko >0
 #roomTypes: 1->normalny, 2->sklep, 3->boss, 4->final boss
 #* -> name->"unknown item",icon->"unknown.png",Statistic->(0,1,0) (mult=1)
 #wszystkie spacje poza otwartymi nawiasami sa pomijane
