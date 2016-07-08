@@ -64,7 +64,7 @@ public class TestLoadIdea : MonoBehaviour {
 					y = -((temp.rectTransform.sizeDelta.y + 1.5f) * (generator.actY - j))-(generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.y / 2);
 					temp.rectTransform.localPosition = new Vector3(x, y, 0);
 					temp.rectTransform.localScale = Vector3.one;
-                    if (i == generator.actX && j == j)
+                    if (i == generator.actX && j == generator.actY)
                         temp.color = Color.green;
                     else temp.color = Color.cyan;
                     generator.rooms[i, j].minimapImage = temp;
