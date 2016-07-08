@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 public class TestLoadIdea : MonoBehaviour {
 
+    public PrefabHolder prefabHolder;
+
     void OnLevelWasLoaded()
     {
+        prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
         if (NewGameOrLoad.LoadName != null)
         {
             Load(NewGameOrLoad.LoadName);
@@ -53,7 +56,7 @@ public class TestLoadIdea : MonoBehaviour {
                 if(allInfo.gameInfo.wasVisited[i, j])
                 {
                     generator.rooms[i, j].vecEnemies.Clear();
-                    Image temp = Instantiate(generator.rooms[i, j].minimapImage) as Image;
+                    Image temp = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
                     temp.rectTransform.SetParent(generator.minimapPanel.transform);
 					float x, y;
 					//temp.rectTransform.localPosition = new Vector3((-generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.x / 2) + ((temp.rectTransform.sizeDelta.x + 1.5f) * generator.actX - i), (-generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.y / 2) + ((temp.rectTransform.sizeDelta.y + 1.5f) * generator.actY - j), 0);
@@ -61,10 +64,68 @@ public class TestLoadIdea : MonoBehaviour {
 					y = -((temp.rectTransform.sizeDelta.y + 1.5f) * (generator.actY - j))-(generator.minimapPanel.GetComponent<RectTransform>().sizeDelta.y / 2);
 					temp.rectTransform.localPosition = new Vector3(x, y, 0);
 					temp.rectTransform.localScale = Vector3.one;
-                    if (i == generator.actX && j == generator.actY)
+                    if (i == generator.actX && j == j)
                         temp.color = Color.green;
                     else temp.color = Color.cyan;
                     generator.rooms[i, j].minimapImage = temp;
+                    Debug.Log("Zaczynam ladowanie sasiadow na minimapie");
+                    try
+                    {
+                        if (generator.rooms[i, j + 1].wasVisited == false && generator.rooms[i, j + 1].isGenerated && generator.rooms[i, j + 1].minimapImage == null)
+                        {
+                            Image tempU;
+                            tempU = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
+                            generator.rooms[i, j + 1].minimapImage = tempU;
+                            tempU.rectTransform.SetParent(generator.minimapPanel.transform);
+                            tempU.rectTransform.localPosition = new Vector3(generator.rooms[i, j].minimapImage.rectTransform.localPosition.x, generator.rooms[i, j].minimapImage.rectTransform.localPosition.y + generator.rooms[i, j].minimapImage.rectTransform.sizeDelta.y + 1.5f, 0);
+                            tempU.rectTransform.localScale = Vector3.one;
+                            tempU.color = Color.gray;
+                        }
+                    }
+                    catch { }
+                    try
+                    {
+                        if (generator.rooms[i, j - 1].wasVisited == false && generator.rooms[i, j - 1].isGenerated && generator.rooms[i, j - 1].minimapImage == null)
+                        {
+                            Image tempD;
+                            tempD = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
+                            generator.rooms[i, j - 1].minimapImage = tempD;
+                            tempD.rectTransform.SetParent(generator.minimapPanel.transform);
+                            tempD.rectTransform.localPosition = new Vector3(generator.rooms[i, j].minimapImage.rectTransform.localPosition.x, generator.rooms[i, j].minimapImage.rectTransform.localPosition.y - generator.rooms[i, j].minimapImage.rectTransform.sizeDelta.y - 1.5f, 0);
+                            tempD.rectTransform.localScale = Vector3.one;
+                            tempD.color = Color.gray;
+                        }
+                    }
+                    catch { }
+                    try
+                    {
+                        if (generator.rooms[i + 1, j].wasVisited == false && generator.rooms[i + 1, j].isGenerated && generator.rooms[i + 1, j].minimapImage == null)
+                        {
+                            Image tempR;
+                            tempR = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
+                            generator.rooms[i + 1, j].minimapImage = tempR;
+                            tempR.rectTransform.SetParent(generator.minimapPanel.transform);
+                            tempR.rectTransform.localPosition = new Vector3(generator.rooms[i, j].minimapImage.rectTransform.localPosition.x + generator.rooms[i, j].minimapImage.rectTransform.sizeDelta.x + 1.5f, generator.rooms[i, j].minimapImage.rectTransform.localPosition.y, 0);
+                            tempR.rectTransform.localScale = Vector3.one;
+                            tempR.color = Color.gray;
+                        }
+                    }
+                    catch { }
+                    try
+                    {
+                        if (generator.rooms[i - 1, j].wasVisited == false && generator.rooms[i - 1, j].isGenerated && generator.rooms[i - 1, j].minimapImage == null)
+                        {
+                            Image tempL;
+                            tempL = Instantiate(prefabHolder.minimapRoomImage).GetComponent<Image>();
+                            generator.rooms[i - 1, j].minimapImage = tempL;
+                            tempL.rectTransform.SetParent(generator.minimapPanel.transform);
+                            tempL.rectTransform.localPosition = new Vector3(generator.rooms[i, j].minimapImage.rectTransform.localPosition.x - generator.rooms[i, j].minimapImage.rectTransform.sizeDelta.x - 1.5f, generator.rooms[i, j].minimapImage.rectTransform.localPosition.y, 0);
+                            tempL.rectTransform.localScale = Vector3.one;
+                            tempL.color = Color.gray;
+                        }
+                    }
+                    catch { }
+
                 }
             }
         }
