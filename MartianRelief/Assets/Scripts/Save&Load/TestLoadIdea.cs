@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class TestLoadIdea : MonoBehaviour {
@@ -129,6 +131,24 @@ public class TestLoadIdea : MonoBehaviour {
                 }
             }
         }
+		/*generator.rooms [generator.actX, generator.actY].vecItems = new List<Vector3> ();
+		Debug.Log ("size: "+allInfo.gameInfo.itemsGameObjects.GetLength (0));
+		for (int i = 0; i < allInfo.gameInfo.itemsGameObjects.GetLength (0); i++) {
+			generator.rooms [generator.actX, generator.actY].vecItems.Add(new Vector3(
+				allInfo.gameInfo.itemsGameObjects[i,0],
+				allInfo.gameInfo.itemsGameObjects[i,1],
+				allInfo.gameInfo.itemsGameObjects[i,2]
+			));
+		}*/
+		for (int i = 0; i < allInfo.gameInfo.itemsGameObjects.GetLength (0); i++) {
+			float x1 = allInfo.gameInfo.itemsGameObjects[i,0];
+			float y1 = allInfo.gameInfo.itemsGameObjects[i,1];
+			float x2 = allInfo.gameInfo.itemsGameObjects[i,2];
+			float y2 = allInfo.gameInfo.itemsGameObjects[i,3];
+			float id = allInfo.gameInfo.itemsGameObjects[i,4];
+			generator.rooms[(int)x1,(int)y1].vecItems.Add (new Vector3(x2, y2, id));
+		}
+
         Time.timeScale = 1;
         file.Close();
         Debug.Log("Zakończono ładowanie");

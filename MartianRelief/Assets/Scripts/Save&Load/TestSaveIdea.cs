@@ -12,7 +12,10 @@ public class TestSaveIdea : MonoBehaviour {
         FileStream file = File.Open(Application.persistentDataPath + name + ".dat", FileMode.OpenOrCreate);
         WorldGenerator realGenerator = GameObject.Find("RoomManager").GetComponent<WorldGenerator>();
 		Debug.Log ("Saving seed as " + Static.randomSeed);
-        BasicGameInfoSave gameInfo = new BasicGameInfoSave(Static.randomSeed,realGenerator.actX,realGenerator.actY, TableCreation(realGenerator.rooms).value);
+        BasicGameInfoSave gameInfo = new BasicGameInfoSave(Static.randomSeed,realGenerator.actX,realGenerator.actY,
+		     ArrayCreationVisited(realGenerator.rooms).value, 
+		     ArrayCreationItemsGO(realGenerator.rooms).value);
+
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerInfoSave playerInfo = new PlayerInfoSave(player.GetComponent<BasicStats>(), player.transform);
         MultipleInfoSave myInfo = new MultipleInfoSave(playerInfo, gameInfo);
@@ -21,8 +24,7 @@ public class TestSaveIdea : MonoBehaviour {
         file.Close();
     }
 
-    TableHolder TableCreation(Room[,] rooms)
-    {
+	ArrayHolder<bool[,]> ArrayCreationVisited(Room[,] rooms){
         bool[,] table = new bool[rooms.GetLength(0), rooms.GetLength(1)];
         for(int i=0; i<rooms.GetLength(0); i++)
         {
@@ -32,16 +34,55 @@ public class TestSaveIdea : MonoBehaviour {
             }
         }
 
-        TableHolder myTable = new TableHolder(table);
+		ArrayHolder<bool[,]> myTable = new ArrayHolder<bool[,]>(table);
         return myTable;
     }
+
+	ArrayHolder<float[,]> ArrayCreationItemsGO(Room[,] rooms){
+		int ctr = 0;
+		for (int i = 0; i < rooms.GetLength(0); i++) {
+			for(int j = 0; j < rooms.GetLength (1); j++){
+				ctr += rooms[i,j].vecItems.Count;
+			}
+		}
+
+
+		float[,] table = new float[ctr, 5];      //5 --> {(x,y)[na mapie]}+{(x,y)[w pokoju]}+{id itemka} 
+		int tmp = 0;
+		for (int i = 0; i < rooms.GetLength (0); i++) {
+			for(int j = 0; j < rooms.GetLength (1); j++){
+				for(int k = 0; k < rooms[i,j].vecItems.Count; k++){
+					table[tmp,0] = i;
+					table[tmp,1] = j;
+					table[tmp,2] = rooms[i,j].vecItems[k].x;
+					table[tmp,3] = rooms[i,j].vecItems[k].y;
+					table[tmp,4] = rooms[i,j].vecItems[k].z;
+					tmp++;
+				}
+			}
+		}
+		ArrayHolder<float[,]> myTable = new ArrayHolder<float[,]>(table);
+		return myTable;
+	}
+
+	/*ArrayHolder<float[,]> ArrayCreationItemsGO(Room actRoom){
+		float[,] table = new float[actRoom.vecItems.Count, 3];
+		for(int i = 0; i < actRoom.vecItems.Count; i++){
+			table[i,0] = actRoom.vecItems[i].x;
+			table[i,1] = actRoom.vecItems[i].y;
+			table[i,2] = actRoom.vecItems[i].z;
+		}
+		ArrayHolder<float[,]> myTable = new ArrayHolder<float[,]>(table);
+		return myTable;
+	}*/
 }
 
-public class TableHolder
+//DataType to typ tablicy, np bool[,]
+public class ArrayHolder<DataType>
 {
-    public bool[,] value;
+    public DataType value;
 
-    public TableHolder(bool[,] myValues)
+	public ArrayHolder(DataType myValues)
     {
         value = myValues;
     }
@@ -73,13 +114,15 @@ public class BasicGameInfoSave
     public int seed;
     public int actX, actY;
     public bool[,] wasVisited;
+	public float[,] itemsGameObjects;
 
-    public BasicGameInfoSave(int seeder, int activeX, int activeY, bool[,] visited)
+    public BasicGameInfoSave(int seeder, int activeX, int activeY, bool[,] visited, float[,] itemGO)
     {
         seed = seeder;
         actX = activeX;
         actY = activeY;
         wasVisited = visited;
+		itemsGameObjects = itemGO;
     }
 }
 

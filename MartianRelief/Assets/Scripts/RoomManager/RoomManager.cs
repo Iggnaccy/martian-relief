@@ -67,18 +67,21 @@ public class RoomManager : MonoBehaviour
 	
 	public void generateItem()
 	{
+		if (itemPool.Count == 0) {
+			return;
+		}
 		int rand = Static.randomIdxFromList<Item> (itemPool);
 		GameObject temp = (Instantiate(prefabHolder.GetComponent<PrefabHolder>().itemObject, new Vector3(Random.value * 4 - 2, Random.value * 4 - 2, 0), Quaternion.identity)) as GameObject;
 		temp.GetComponent<ItemBehaviour>().itemID = itemPool[rand].id;
 		temp.transform.parent = itemHolder;
-		addItemToRoom (temp.transform.position.x, temp.transform.position.y, itemPool[rand].id);
+		addItemPositionToRoom (temp.transform.position.x, temp.transform.position.y, itemPool[rand].id);
 
 		//koniecznie na koncu zeby nie zaburzac kolejnosci listy (inaczej kolejne 30 minut debugowania)
 		roomToLoad.itemPool.Remove (itemPool [rand].id);
 		itemPool.Remove (itemPool[rand]);
 	}
 
-	public void addItemToRoom(float x, float y, int id){
+	public void addItemPositionToRoom(float x, float y, int id){
 		roomToLoad.vecItems.Add (new Vector3 (x, y, id)); 
 	}
 

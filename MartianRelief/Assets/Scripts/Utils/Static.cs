@@ -23,8 +23,8 @@ public static class Static {
 	/*Itemy*/
 	public static List<int> itemPoolGlobal;			//itemy odblokowane przez gracza
 	public static int itemCount = 12;				//ile itemkow
-	public static List<Item> items;							//wszystkie istniejace itemy pula
-	public static int itemTypesCount = 4;      //opisane w 21 linijce Room.cs
+	public static List<Item> items;					//wszystkie istniejace itemy pula
+	public static int itemTypesCount = 4;      		//opisane w 21 linijce Room.cs
 
 	public static void generateGlobalItemPool(){
 		itemPoolGlobal = new List<int>();
@@ -156,15 +156,8 @@ public static class Static {
 	}
 
 	public static void setRoomItemPool(List<int> pool, int roomType /*od 1 do 4*/){
-		//Debug.Log (itemCount);
 		pool.Clear ();
-		/*for (int i = 0; i < itemCount/itemTypesCount; i++) {
-			pool.Add ((roomType-1)*(itemCount/itemTypesCount)+i);
-		}*/
 		for (int i = 0; i < itemCount; i++) {
-			/*if(items.IndexOf(roomType) != -1){
-				pool.Add(items[items.IndexOf(roomType)].id);
-			}*/
 			for(int j = 0; j < items[i].roomTypes.Count; j++){
 				if(items[i].roomTypes[j] == roomType){
 					pool.Add (i);
