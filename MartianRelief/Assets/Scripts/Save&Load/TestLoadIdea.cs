@@ -149,6 +149,15 @@ public class TestLoadIdea : MonoBehaviour {
 			generator.rooms[(int)x1,(int)y1].vecItems.Add (new Vector3(x2, y2, id));
 		}
 
+		Static.itemsSpawned.Clear ();
+		foreach (int x in allInfo.gameInfo.itemsSpawned) {
+			Static.itemsSpawned.Add(x);
+		}
+		Static.itemPoolGlobal.Clear ();
+		foreach (int x in allInfo.gameInfo.itemsGlobal) {
+			Static.itemPoolGlobal.Add(x);
+		}
+
         Time.timeScale = 1;
         file.Close();
         Debug.Log("Zakończono ładowanie");

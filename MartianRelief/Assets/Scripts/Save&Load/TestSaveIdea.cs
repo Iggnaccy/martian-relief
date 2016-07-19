@@ -64,17 +64,6 @@ public class TestSaveIdea : MonoBehaviour {
 		ArrayHolder<float[,]> myTable = new ArrayHolder<float[,]>(table);
 		return myTable;
 	}
-
-	/*ArrayHolder<float[,]> ArrayCreationItemsGO(Room actRoom){
-		float[,] table = new float[actRoom.vecItems.Count, 3];
-		for(int i = 0; i < actRoom.vecItems.Count; i++){
-			table[i,0] = actRoom.vecItems[i].x;
-			table[i,1] = actRoom.vecItems[i].y;
-			table[i,2] = actRoom.vecItems[i].z;
-		}
-		ArrayHolder<float[,]> myTable = new ArrayHolder<float[,]>(table);
-		return myTable;
-	}*/
 }
 
 //DataType to typ tablicy, np bool[,]
@@ -115,6 +104,8 @@ public class BasicGameInfoSave
     public int actX, actY;
     public bool[,] wasVisited;
 	public float[,] itemsGameObjects;
+	public int[] itemsSpawned;
+	public int[] itemsGlobal;
 
     public BasicGameInfoSave(int seeder, int activeX, int activeY, bool[,] visited, float[,] itemGO)
     {
@@ -123,6 +114,15 @@ public class BasicGameInfoSave
         actY = activeY;
         wasVisited = visited;
 		itemsGameObjects = itemGO;
+
+		itemsSpawned = new int[Static.itemsSpawned.Count];
+		for(int i = 0; i < Static.itemsSpawned.Count; i++){
+			itemsSpawned[i] = Static.itemsSpawned[i];
+		}
+		itemsGlobal = new int[Static.itemPoolGlobal.Count];
+		for(int i = 0; i < Static.itemPoolGlobal.Count; i++){
+			itemsGlobal[i] = Static.itemPoolGlobal[i];
+		}
     }
 }
 

@@ -24,6 +24,8 @@ public static class Static {
 	public static List<int> itemPoolGlobal;			//itemy odblokowane przez gracza
 	public static List<int> itemsSpawned;			//itemy ktore pojawily sie chociaz raz w trakcie gry
 													//zeby nie generowac powtorek
+													//itemPoolGlobal oraz itemsSpawned wymagaja zapisywania/odczytywania
+
 	public static int itemCount = 12;				//ile itemkow
 	public static List<Item> items;					//wszystkie istniejace itemy pula
 	public static int itemTypesCount = 4;      		//opisane w 21 linijce Room.cs
