@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -21,7 +22,9 @@ public class PositionDebugScript : MonoBehaviour {
 		text += "rt: " + worldGenerator.rooms[worldGenerator.actX,worldGenerator.actY].roomType.ToString();
 		text += "\n";
 		text += "item pool:\n";
-		foreach (int it in worldGenerator.rooms[worldGenerator.actX,worldGenerator.actY].itemPool) {
+		List<int> realItemPool = new List<int> ();
+		realItemPool = Static.listDifference (worldGenerator.rooms [worldGenerator.actX, worldGenerator.actY].itemPool, Static.itemsSpawned);
+		foreach (int it in realItemPool) {
 			text += it.ToString ();
 			text += " ";
 		} 

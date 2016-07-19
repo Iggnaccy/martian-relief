@@ -22,12 +22,15 @@ public static class Static {
 
 	/*Itemy*/
 	public static List<int> itemPoolGlobal;			//itemy odblokowane przez gracza
+	public static List<int> itemsSpawned;			//itemy ktore pojawily sie chociaz raz w trakcie gry
+													//zeby nie generowac powtorek
 	public static int itemCount = 12;				//ile itemkow
 	public static List<Item> items;					//wszystkie istniejace itemy pula
 	public static int itemTypesCount = 4;      		//opisane w 21 linijce Room.cs
 
 	public static void generateGlobalItemPool(){
 		itemPoolGlobal = new List<int>();
+		itemsSpawned = new List<int> ();
 		items = new List<Item>();
 		readItemsFromFile ();
 		itemCount = items.Count;
@@ -173,7 +176,8 @@ public static class Static {
 	
 	//template'y w c# są do bani więc na razie tylko na intach
 	//c# przekazuje obiekty utworzone poprzez new przez wartosc referencji (plot_twist: nie przez referencje!)
-	
+
+	//left ^ right
 	public static List<int> listIntersect(List<int> left, List<int> right){
 		int maxi = 0;
 		for (int i = 0; i < left.Count; i++) {
@@ -200,7 +204,17 @@ public static class Static {
 		}
 		return res;
 	}
-	
+
+	//let \ right, dla left={1,2,3,4}, right={2,4} zwroci {1,3}
+	public static List<int> listDifference(List<int> left, List<int> right){
+		List<int> result = new List<int>();
+		for(int i = 0; i < left.Count; i++){
+			if(!right.Contains(left[i]))
+				result.Add (left[i]);
+		}
+		return result;
+	}
+
 	public static int randomIdxFromList<T>(List<T> vec){
 		Debug.Log (UnityEngine.Random.value);
 		int valToReturn = (int)(UnityEngine.Random.value * vec.Count);
