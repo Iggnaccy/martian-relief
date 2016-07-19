@@ -12,8 +12,7 @@ public class RoomManager : MonoBehaviour
 	public Transform itemHolder;
 	public Transform prefabHolder;
 	public float minX, maxX, minY, maxY;
-	public List<Item> itemPool;
-	
+
 	enum RoomState{FIGHT,ROOM_CLEAR, LOAD_NEW_LEVEL};
 	
 	RoomState actualState = RoomState.LOAD_NEW_LEVEL;
@@ -25,7 +24,6 @@ public class RoomManager : MonoBehaviour
 	void Start ()
 	{
 		timeElapsed = new Timer ();
-		itemPool = new List<Item>();
 		prefabHolder = GameObject.Find("PrefabHolder").transform;
 	}
 	
@@ -67,18 +65,17 @@ public class RoomManager : MonoBehaviour
 	
 	public void generateItem()
 	{
-		if (itemPool.Count == 0) {
+		if (roomToLoad.itemPool.Count == 0) {
 			return;
 		}
-		int rand = Static.randomIdxFromList<Item> (itemPool);
+		int rand = Static.randomIdxFromList<int> (roomToLoad.itemPool);
 		GameObject temp = (Instantiate(prefabHolder.GetComponent<PrefabHolder>().itemObject, new Vector3(Random.value * 4 - 2, Random.value * 4 - 2, 0), Quaternion.identity)) as GameObject;
-		temp.GetComponent<ItemBehaviour>().itemID = itemPool[rand].id;
+		temp.GetComponent<ItemBehaviour>().itemID = roomToLoad.itemPool[rand];
 		temp.transform.parent = itemHolder;
-		addItemPositionToRoom (temp.transform.position.x, temp.transform.position.y, itemPool[rand].id);
+		addItemPositionToRoom (temp.transform.position.x, temp.transform.position.y,roomToLoad.itemPool[rand]);
 
 		//koniecznie na koncu zeby nie zaburzac kolejnosci listy (inaczej kolejne 30 minut debugowania)
-		roomToLoad.itemPool.Remove (itemPool [rand].id);
-		itemPool.Remove (itemPool[rand]);
+		roomToLoad.itemPool.Remove (roomToLoad.itemPool [rand]);
 	}
 
 	public void addItemPositionToRoom(float x, float y, int id){
@@ -90,10 +87,6 @@ public class RoomManager : MonoBehaviour
 			GameObject temp = (Instantiate(prefabHolder.GetComponent<PrefabHolder>().itemObject, new Vector3(v.x, v.y, 0), Quaternion.identity)) as GameObject;
 			temp.transform.parent = itemHolder.transform;
 			temp.GetComponent<ItemBehaviour>().itemID = (int)v.z;
-		}
-		itemPool.Clear ();
-		for (int i = 0; i < roomToLoad.itemPool.Count; i++) {
-			itemPool.Add (new Item(roomToLoad.itemPool[i]));
 		}
 	}
 	
