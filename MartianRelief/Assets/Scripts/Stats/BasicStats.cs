@@ -6,6 +6,8 @@ public class BasicStats : MonoBehaviour{
 
     public int hp;
 	public int maxHp;
+    public int cash;
+    public int bombs;
 	public Statistic moveSpeed;
 	public Statistic attackSpeed;     //ile razy na sekunde? [Hz]
 	public Statistic damage;

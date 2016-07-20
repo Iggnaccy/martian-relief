@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TestUserInput : MonoBehaviour {
 
-    public GameObject myPelletPrefab;
+    public PrefabHolder prefabHolder;
     public float speedStatMultiplier;
 
     private Rigidbody2D myBody;
@@ -11,6 +11,7 @@ public class TestUserInput : MonoBehaviour {
     void Start()
     {
         myBody = GetComponent<Rigidbody2D>();
+        prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
     }
 
     void Shoot(int direction) // 1 - prawo, 2 - lewo, 3 - góra, 4 - dół
@@ -18,7 +19,7 @@ public class TestUserInput : MonoBehaviour {
 		if (GetComponent<BasicStats> ().tryToShoot () == false)
 			return;
         GameObject clone;
-        clone = Instantiate(myPelletPrefab, new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z), Quaternion.Euler(0,0,0)) as GameObject;
+        clone = Instantiate(prefabHolder.pellet, new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z), Quaternion.Euler(0,0,0)) as GameObject;
         if (direction == 1) {
 			clone.GetComponent<PelletBehaviour> ().shotHorizontal = 1;
 			// ===> velocity fix
@@ -46,6 +47,14 @@ public class TestUserInput : MonoBehaviour {
 
     }
 
+    void PlaceBomb(float damage)
+    {
+        BombBehaviour temp;
+        temp = (Instantiate(prefabHolder.bomb, transform.position, Quaternion.Euler(0, 0, 0)) as GameObject).GetComponent<BombBehaviour>();
+        temp.damage = damage;
+        GetComponent<BasicStats>().bombs--;
+    }
+
     void Update()
     {
         if(Input.GetAxis("FireHorizontal") > 0)
@@ -63,6 +72,14 @@ public class TestUserInput : MonoBehaviour {
         if (Input.GetAxis("FireVertical") < 0)
         {
             Shoot(4);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (GetComponent<BasicStats>().bombs > 0)
+            {
+                PlaceBomb(GetComponent<BasicStats>().damage.GetValue());
+                GetComponent<BasicStats>().bombs--;
+            }
         }
     }
 

@@ -8,4 +8,8 @@ public class PrefabHolder : MonoBehaviour {
 	public GameObject testDoors;
     public GameObject minimapRoomImage;
     public GameObject itemObject;
+    public GameObject cashPickup;
+    public GameObject bombPickup;
+    public GameObject bomb;
+    public GameObject pellet;
 }
