@@ -11,7 +11,6 @@ public class BombPickupBehaviour : MonoBehaviour
         if(other.tag == "Player")
         {
             other.GetComponent<BasicStats>().bombs++;
-			Debug.Log ("[bomb] calling for remove of " + GetComponent<IDScript>().id);
 			Static.removeDrop(GetComponent<IDScript>().id);
             Destroy(gameObject);
         }

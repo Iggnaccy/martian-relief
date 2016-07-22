@@ -13,7 +13,6 @@ public class CashBehaviour : MonoBehaviour {
 		if(other.tag == "Player")
 		{
 			other.GetComponent<BasicStats>().cash += value;
-			Debug.Log ("[cash] calling for remove of " + GetComponent<IDScript>().id);
 			Static.removeDrop(GetComponent<IDScript>().id);
 			Destroy(gameObject);
 		}

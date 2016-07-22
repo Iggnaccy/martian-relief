@@ -18,7 +18,7 @@ public class TestSaveIdea : MonoBehaviour {
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerInfoSave playerInfo = new PlayerInfoSave(player.GetComponent<BasicStats>(), player.transform);
-        MultipleInfoSave myInfo = new MultipleInfoSave(playerInfo, gameInfo);
+        MultipleInfoSave myInfo = new MultipleInfoSave(playerInfo, gameInfo, new DropSaver());
         Debug.Log("Save zakończony");
         bf.Serialize(file, myInfo);
         file.Close();
@@ -127,12 +127,35 @@ public class BasicGameInfoSave
 }
 
 [Serializable]
+public class DropSaver{
+	public int dropCtr=0;
+	public int[,] spawnedDropInts;
+	public float[,] spawnedDropFloats;
+
+	public DropSaver(){
+		dropCtr = Static.actDrop;
+		spawnedDropInts = new int[Static.spawnedDrops.Count,4];
+		spawnedDropFloats = new float[Static.spawnedDrops.Count, 2];
+		for(int i = 0; i < Static.spawnedDrops.Count; i++){
+			spawnedDropFloats[i,0] = Static.spawnedDrops[i].x;
+			spawnedDropFloats[i,1] = Static.spawnedDrops[i].y;
+			spawnedDropInts[i,0] = Static.spawnedDrops[i].roomX;
+			spawnedDropInts[i,1] = Static.spawnedDrops[i].roomY;
+			spawnedDropInts[i,2] = Static.spawnedDrops[i].id;
+			spawnedDropInts[i,3] = Static.spawnedDrops[i].spawnedID;
+		}
+	}
+
+}
+
+[Serializable]
 public class PlayerInfoSave
 {
     public int hp, maxHp;
     public Statistic damage, attackSpeed, moveSpeed;
     public float invulnerabilityTime;
     public TransformSave transformSave;
+	public int cash, bombs;
 
     public PlayerInfoSave(BasicStats stats, Transform transform)
     {
@@ -143,6 +166,8 @@ public class PlayerInfoSave
         attackSpeed = stats.attackSpeed;
         moveSpeed = stats.moveSpeed;
         invulnerabilityTime = stats.invulnerabilityTime;
+		cash = stats.cash;
+		bombs = stats.bombs;
     }
 }
 
@@ -151,10 +176,12 @@ public class MultipleInfoSave
 {
     public PlayerInfoSave playerInfo;
     public BasicGameInfoSave gameInfo;
+	public DropSaver dropSaver;
 
-    public MultipleInfoSave(PlayerInfoSave playInfo, BasicGameInfoSave gameplayInfo)
+    public MultipleInfoSave(PlayerInfoSave playInfo, BasicGameInfoSave gameplayInfo, DropSaver dropsy)
     {
         playerInfo = playInfo;
         gameInfo = gameplayInfo;
+		dropSaver = dropsy;
     }
 }

@@ -41,6 +41,8 @@ public class TestLoadIdea : MonoBehaviour {
         player.moveSpeed = allInfo.playerInfo.moveSpeed;
         player.invulnerabilityTime = allInfo.playerInfo.invulnerabilityTime;
         player.attackSpeed = allInfo.playerInfo.attackSpeed;
+		player.cash = allInfo.playerInfo.cash;
+		player.bombs = allInfo.playerInfo.bombs;
         player.GetComponent<Transform>().position = new Vector3(allInfo.playerInfo.transformSave.x, allInfo.playerInfo.transformSave.y, allInfo.playerInfo.transformSave.z);
         player.GetComponent<Transform>().eulerAngles = new Vector3(allInfo.playerInfo.transformSave.rotX, allInfo.playerInfo.transformSave.rotY, allInfo.playerInfo.transformSave.rotZ);
         player.GetComponent<Transform>().localScale = new Vector3(allInfo.playerInfo.transformSave.sizeX, allInfo.playerInfo.transformSave.sizeY, allInfo.playerInfo.transformSave.sizeZ);
@@ -156,6 +158,16 @@ public class TestLoadIdea : MonoBehaviour {
 		Static.itemPoolGlobal.Clear ();
 		foreach (int x in allInfo.gameInfo.itemsGlobal) {
 			Static.itemPoolGlobal.Add(x);
+		}
+
+		Static.actDrop = allInfo.dropSaver.dropCtr;
+		Static.spawnedDrops.Clear ();
+		for (int i = 0; i < allInfo.dropSaver.spawnedDropFloats.GetLength(0); i++) {
+			Static.spawnedDrops.Add (new SpawnedDrop(allInfo.dropSaver.spawnedDropFloats[i,0],
+			                                         allInfo.dropSaver.spawnedDropFloats[i,1],
+			                                         allInfo.dropSaver.spawnedDropInts[i,0],
+			                                         allInfo.dropSaver.spawnedDropInts[i,1],
+			                                         allInfo.dropSaver.spawnedDropInts[i,2]));
 		}
 
         Time.timeScale = 1;
