@@ -1,26 +1,30 @@
 ﻿using UnityEngine;
+using System.Collections;
 
-public class BombPickupBehaviour : MonoBehaviour
-{
+public class CashBehaviour : MonoBehaviour {
+	
+	public int value;
 	float scale = 1.0f;
 	float scaleSpeed = 0.5f;
 	float scaleX, scaleY, scaleZ;
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.tag == "Player")
-        {
-            other.GetComponent<BasicStats>().bombs++;
-            Destroy(gameObject);
-        }
-    }
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if(other.tag == "Player")
+		{
+			other.GetComponent<BasicStats>().cash += value;
+			Debug.Log ("[cash] calling for remove of " + GetComponent<IDScript>().id);
+			Static.removeDrop(GetComponent<IDScript>().id);
+			Destroy(gameObject);
+		}
+	}
 
 	void Start(){
 		scaleX = transform.localScale.x;
 		scaleY = transform.localScale.y;
 		scaleZ = transform.localScale.z;
 	}
-	
+
 	void Update(){
 		scale += scaleSpeed * Time.deltaTime;
 		if (scale > 1.15f) {

@@ -109,11 +109,28 @@ public class RoomManager : MonoBehaviour
 		}
 		clearDoors();
 		clearItems ();
+		clearDrops ();
 		roomToLoad.spawnEnemies ();
 		roomToLoad.spawnDoors (GameObject.Find ("PrefabHolder").GetComponent<PrefabHolder>().testDoors);
+		buildDrops ();
 		buildItemsFromRoom (roomToLoad.vecItems);
 	}
-	
+
+	void buildDrops(){
+		foreach(SpawnedDrop drop in Static.spawnedDrops){
+			if(drop.roomX == roomToLoad.x && drop.roomY == roomToLoad.y){
+				GameObject spawnPrefab = prefabHolder.GetComponent<PrefabHolder>().cashPickup;
+				if(drop.id == 2){
+					spawnPrefab = prefabHolder.GetComponent<PrefabHolder>().bombPickup;
+				}
+				GameObject newDrop=Instantiate(spawnPrefab, new Vector3(drop.x, drop.y, 0), 
+				                               Quaternion.Euler(0,0,0)) as GameObject;
+				newDrop.transform.SetParent(GameObject.Find ("DropHolder").transform);
+				newDrop.GetComponent<IDScript>().id = drop.spawnedID;
+			}
+		}
+	}
+
 	void openTheGates()
 	{
 		for(int i = 0; i < doorsHolder.childCount; i++)
@@ -153,6 +170,13 @@ public class RoomManager : MonoBehaviour
 	void clearDoors()
 	{
 		foreach(Transform child in GameObject.Find ("DoorsHolder").transform)
+		{
+			Destroy(child.gameObject);
+		}
+	}
+
+	void clearDrops(){
+		foreach(Transform child in GameObject.Find ("DropHolder").transform)
 		{
 			Destroy(child.gameObject);
 		}

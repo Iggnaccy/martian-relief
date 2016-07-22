@@ -34,7 +34,7 @@ public class Item
         attackSpeed = AttackSpeed;
         moveSpeed = MoveSpeed;
 		roomTypes = RoomTypes;
-		IconFile = IconFile;
+		iconFile = IconFile;
     }
 
     public Item(int ID)

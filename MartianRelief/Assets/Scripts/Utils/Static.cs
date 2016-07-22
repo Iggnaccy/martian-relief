@@ -4,6 +4,22 @@ using System.Collections.Generic;
 using System;
 using System.Text.RegularExpressions;
 
+public class SpawnedDrop{
+	public float x, y;				//w przestrzeni pokoju
+	public int roomX, roomY;		//w przestrzeni mapy
+	public int id;
+	public int spawnedID=0;
+
+	public SpawnedDrop(float _x, float _y, int _roomX, int _roomY, int _id){
+		x = _x;
+		y = _y;
+		roomX = _roomX;
+		roomY = _roomY;
+		id = _id;
+		spawnedID = Static.actDrop;
+	}
+}
+
 public static class Static {
 	//wartości wziąłem z edytora, idk czemu enemyHp = 11.5, czy wy to z delty liczyliście? ;)
 	public static int playerHp = 4;
@@ -21,19 +37,32 @@ public static class Static {
 	public static int MINIMAP_WIDTH = 150;
 
 	/*Itemy*/
-	public static List<int> itemPoolGlobal;			//itemy odblokowane przez gracza
-	public static List<int> itemsSpawned;			//itemy ktore pojawily sie chociaz raz w trakcie gry
-													//zeby nie generowac powtorek
-													//itemPoolGlobal oraz itemsSpawned wymagaja zapisywania/odczytywania
+	public static List<int> itemPoolGlobal;				//itemy odblokowane przez gracza
+	public static List<int> itemsSpawned;				//itemy ktore pojawily sie chociaz raz w trakcie gry
+														//zeby nie generowac powtorek
+														//itemPoolGlobal oraz itemsSpawned wymagaja zapisywania/odczytywania
 
-	public static int itemCount = 12;				//ile itemkow
-	public static List<Item> items;					//wszystkie istniejace itemy pula
-	public static int itemTypesCount = 4;      		//opisane w 21 linijce Room.cs
+	public static List<SpawnedDrop> spawnedDrops;		//x,y,roomX,roomY,collectibleId{1->cash,2->bomb}
+	public static int actDrop = 0;
+
+	public static int itemCount = 12;					//ile itemkow
+	public static List<Item> items;						//wszystkie istniejace itemy pula
+	public static int itemTypesCount = 4;      			//opisane w 21 linijce Room.cs
+
+	public static void removeDrop(int id){
+		for(int i = 0; i < spawnedDrops.Count; i++){
+			if(spawnedDrops[i].spawnedID == id){
+				Debug.Log ("removing id="+spawnedDrops[i].spawnedID);
+				spawnedDrops.Remove(spawnedDrops[i]);
+			}
+		}
+	}
 
 	public static void generateGlobalItemPool(){
 		itemPoolGlobal = new List<int>();
 		itemsSpawned = new List<int> ();
 		items = new List<Item>();
+		spawnedDrops = new List<SpawnedDrop>();
 		readItemsFromFile ();
 		itemCount = items.Count;
 		Debug.Log("item size: " + items.Count);

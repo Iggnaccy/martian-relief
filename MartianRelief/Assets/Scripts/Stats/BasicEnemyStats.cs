@@ -52,22 +52,30 @@ public class BasicEnemyStats : MonoBehaviour {
 
 	public void trySpawningCollectible(){
 		float rand = Random.value;
-		//Debug.Log ("drop spawn! " + rand + "/" + dropChance);
 		if (rand < dropChance) {
 			float rand2 = Random.value;
 			GameObject toSpawn = prefabHolder.cashPickup;
+			int id=1;
 			if(rand2<= 0.75){
 				//cash
-				Debug.Log ("Drop cash");
 			}
 			else{
 				//bomb
 				toSpawn = prefabHolder.bombPickup;
-				Debug.Log ("Drop bomb");
+				id=2;
 			}
 			GameObject newDrop=Instantiate(toSpawn, new Vector3(transform.position.x, transform.position.y, transform.position.z), 
 			            Quaternion.Euler(0,0,0)) as GameObject;
-			Debug.Log (newDrop.transform.lossyScale);
+			newDrop.transform.SetParent(GameObject.Find("DropHolder").transform);
+			Static.spawnedDrops.Add (new SpawnedDrop(newDrop.transform.position.x, newDrop.transform.position.y,
+			       					GameObject.Find ("RoomManager").GetComponent<WorldGenerator>().actX,
+			                        GameObject.Find ("RoomManager").GetComponent<WorldGenerator>().actY,	id));
+			newDrop.GetComponent<IDScript>().id = Static.actDrop;    //id dla Static.spawnedDrops jest ustawiane w kontruktorze SpawnedDrop
+
+			Debug.Log ("tworze dropa dla idDrop="+newDrop.GetComponent<IDScript>().id+", vector="+
+			           Static.spawnedDrops[Static.spawnedDrops.Count-1].spawnedID);
+
+			Static.actDrop++;
 		}
 	}
 }
