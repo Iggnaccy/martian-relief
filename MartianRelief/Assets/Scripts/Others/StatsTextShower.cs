@@ -16,5 +16,6 @@ public class StatsTextShower : MonoBehaviour
 	void Update ()
     {
         text.text = "Damage: " + playerStats.damage.GetValue().ToString() + "\n\n Attack Speed: " + playerStats.attackSpeed.GetValue().ToString() + "\n\n Movement Speed: " + playerStats.moveSpeed.GetValue().ToString();
-    }
+		text.text += "\nCash: " + playerStats.cash + "\nbombs: " + playerStats.bombs;
+	}
 }

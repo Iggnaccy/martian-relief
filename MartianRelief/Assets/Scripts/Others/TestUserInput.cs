@@ -52,7 +52,6 @@ public class TestUserInput : MonoBehaviour {
         BombBehaviour temp;
         temp = (Instantiate(prefabHolder.bomb, transform.position, Quaternion.Euler(0, 0, 0)) as GameObject).GetComponent<BombBehaviour>();
         temp.damage = damage;
-        GetComponent<BasicStats>().bombs--;
     }
 
     void Update()

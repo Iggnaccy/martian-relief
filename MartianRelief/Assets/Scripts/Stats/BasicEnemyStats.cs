@@ -10,12 +10,16 @@ public class BasicEnemyStats : MonoBehaviour {
     public int damage;
     public int collisionDamage;
 	public Slider slider;
+	public float dropChance;        //in range [0,1]
+
+	PrefabHolder prefabHolder;
 
 	void Start ()
     {
 		loadStatsFromStatic ();
 		slider.maxValue = healthMax;
 		slider.value = health;
+		prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
 	}
 
     void Update ()
@@ -29,6 +33,7 @@ public class BasicEnemyStats : MonoBehaviour {
 
     public void OnDeath()
     {
+		trySpawningCollectible ();
         Destroy(this.gameObject);
     }
 
@@ -43,5 +48,26 @@ public class BasicEnemyStats : MonoBehaviour {
 	public void loadStatsFromStatic(){
 		health = Static.enemyHp;
 		healthMax = Static.enemyHp;
+	}
+
+	public void trySpawningCollectible(){
+		float rand = Random.value;
+		//Debug.Log ("drop spawn! " + rand + "/" + dropChance);
+		if (rand < dropChance) {
+			float rand2 = Random.value;
+			GameObject toSpawn = prefabHolder.cashPickup;
+			if(rand2<= 0.75){
+				//cash
+				Debug.Log ("Drop cash");
+			}
+			else{
+				//bomb
+				toSpawn = prefabHolder.bombPickup;
+				Debug.Log ("Drop bomb");
+			}
+			GameObject newDrop=Instantiate(toSpawn, new Vector3(transform.position.x, transform.position.y, transform.position.z), 
+			            Quaternion.Euler(0,0,0)) as GameObject;
+			Debug.Log (newDrop.transform.lossyScale);
+		}
 	}
 }

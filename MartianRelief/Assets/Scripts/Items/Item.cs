@@ -52,9 +52,9 @@ public class Item
 			str+=rt.ToString ();
 			str+=",";
 		} 
-		Debug.Log ("[item(" + id + ")]=> name=" + name + ",damage=" + damage.GetValue()
+		/*Debug.Log ("[item(" + id + ")]=> name=" + name + ",damage=" + damage.GetValue()
 		           + ",attackSpeed=" + attackSpeed.GetValue () + ",moveSpeed=" + moveSpeed.GetValue ()
-		           + ",icon="+iconFile+",roomTypes="+str);
+		           + ",icon="+iconFile+",roomTypes="+str);*/
 	}
 
 

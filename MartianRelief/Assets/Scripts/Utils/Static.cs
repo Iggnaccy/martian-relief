@@ -47,7 +47,7 @@ public static class Static {
 
 	static void readItemsFromFile(){
 		TextAsset txtAsset = Resources.Load("items") as TextAsset;
-		Debug.Log (txtAsset.text);
+		//Debug.Log (txtAsset.text);
 		string[] linesWithComments = txtAsset.text.Split('\n');
 		List<string> lines = new List<string>();
 		foreach(string str in linesWithComments){
