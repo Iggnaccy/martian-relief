@@ -39,6 +39,8 @@ public class Room{
 		maxY = (int)minmax.w;
 		doors [0] = doors [1] = doors [2] = doors [3] = -9000;
 		roomType = (int)(Random.value * 3.999)+1;
+		if (x == 5 && y == 5)
+			roomType = 2;
 		itemPool = new List<int> ();
 		Static.setRoomItemPool (itemPool, roomType);                        	  	//ogarnąć to jakoś sensowniej
 		itemPool = Static.listIntersect (itemPool, Static.itemPoolGlobal);				
@@ -46,6 +48,8 @@ public class Room{
 
 	public void Generate(bool [,] dfsArray){
 		isGenerated = true;
+		if (roomType == 2)
+			maxiEnemies = 0;
 		for (int i = vecEnemies.Count; i < maxiEnemies; i++) {
 			generateEnemy();
 		}

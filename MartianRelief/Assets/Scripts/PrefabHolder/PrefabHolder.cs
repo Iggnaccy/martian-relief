@@ -12,4 +12,5 @@ public class PrefabHolder : MonoBehaviour {
     public GameObject bombPickup;
     public GameObject bomb;
     public GameObject pellet;
+	public GameObject merchant;
 }

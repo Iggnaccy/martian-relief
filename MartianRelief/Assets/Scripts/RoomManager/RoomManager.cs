@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
-	
-	//public Transform enemyPrefab;
 	public Transform enemyHolder;
 	public Transform doorsHolder;
 	public Transform missileHolder;
@@ -17,7 +15,7 @@ public class RoomManager : MonoBehaviour
 	
 	RoomState actualState = RoomState.LOAD_NEW_LEVEL;
 	
-	Room roomToLoad;
+	public Room roomToLoad;
 
 	Timer timeElapsed;
 
@@ -32,6 +30,8 @@ public class RoomManager : MonoBehaviour
 		timeElapsed.update (Time.deltaTime);
 		if (actualState == RoomState.LOAD_NEW_LEVEL)
 		{
+			//Debug.Log ("wtf\n");  	//przy ladowaniu wczesniej wyczyszczonego pokoju wykonuje sie to kilkanascie razy
+										//przenioslem czesc rzeczy do laodNewRoom
 			GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 			foreach(GameObject obj in objs){
 				obj.GetComponent<BasicStats>().timerInvoulnerable.reset();
@@ -44,8 +44,6 @@ public class RoomManager : MonoBehaviour
 			else {
 				actualState = RoomState.FIGHT;
 			}
-			clearMissiles();
-			spawnObjectsFromVectors();
 		}
 		else if (actualState == RoomState.FIGHT)
 		{
@@ -100,6 +98,13 @@ public class RoomManager : MonoBehaviour
 		timeElapsed.reset ();
 		timeElapsed.start ();
 		actualState = RoomState.LOAD_NEW_LEVEL;
+
+
+		//rzeczy z LOAD_NEW_LEVEL które chcemy uruchomic tylko raz
+		Debug.Log("new level");
+		clearMissiles();
+		spawnObjectsFromVectors();
+		spawnRoomTypeSpecialObjects();
 	}
 	
 	void spawnObjectsFromVectors(){
@@ -186,6 +191,20 @@ public class RoomManager : MonoBehaviour
 		foreach(Transform child in GameObject.Find ("ItemHolder").transform)
 		{
 			Destroy(child.gameObject);
+		}
+	}
+
+	void spawnRoomTypeSpecialObjects() {
+		if (GameObject.FindGameObjectWithTag ("Merchant") != null) {
+			Destroy (GameObject.FindGameObjectWithTag ("Merchant"));
+		}
+		if (roomToLoad.roomType == 2) //sklep 
+		{
+			GameObject newObj = Instantiate(prefabHolder.GetComponent<PrefabHolder>().merchant, 
+			new Vector3(0.0f, 0.0f, transform.position.z), Quaternion.Euler(0,0,0)) as GameObject;
+			newObj.transform.SetParent(GameObject.Find ("RoomManager").transform);
+			newObj.tag = "Merchant";
+			Debug.Log ("spawn!");
 		}
 	}
 }

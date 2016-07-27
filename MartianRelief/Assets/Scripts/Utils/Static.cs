@@ -148,6 +148,9 @@ public static class Static {
 			else
 				item.iconFile = values[1];
 		}
+		if (type == "cost"){
+			item.cost = int.Parse(values[0]);
+		}
 		Statistic newStat = new Statistic (0, 0, 1, 0);
 		if ((type == "damage" || type == "attackSpeed" || type == "moveSpeed") && values.Count == 3) {
 			newStat = new Statistic(0, float.Parse (values[0]),float.Parse (values[1]),float.Parse (values[2]));

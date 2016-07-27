@@ -15,6 +15,7 @@ public class Item
     public Statistic moveSpeed;
 	public List<int> roomTypes;
 	public string iconFile;
+	public int cost;
 
 	public Item(){
 		name = "unknown";
@@ -22,11 +23,12 @@ public class Item
 		damage = new Statistic (0, 0, 0, 0);
 		attackSpeed = new Statistic (0, 0, 0, 0);
 		moveSpeed = new Statistic (0, 0, 0, 0);
+		cost = 0;
 		roomTypes = new List<int>();
 		iconFile = "unknown.png";
 	}
 
-    public Item(int ID, string Name, Statistic Damage, Statistic AttackSpeed, Statistic MoveSpeed, List<int> RoomTypes, string IconFile)
+    public Item(int ID, string Name, Statistic Damage, Statistic AttackSpeed, Statistic MoveSpeed, int Cost, List<int> RoomTypes, string IconFile)
     {
         id = ID;
 		name = Name;
@@ -34,6 +36,7 @@ public class Item
         attackSpeed = AttackSpeed;
         moveSpeed = MoveSpeed;
 		roomTypes = RoomTypes;
+		cost = Cost;
 		iconFile = IconFile;
     }
 
@@ -44,6 +47,7 @@ public class Item
 		damage = Static.items[ID].damage;
 		attackSpeed = Static.items[ID].attackSpeed;
 		moveSpeed = Static.items[ID].moveSpeed;
+		cost = Static.items [ID].cost;
     }
 
 	public void print(){
@@ -56,8 +60,7 @@ public class Item
 		           + ",attackSpeed=" + attackSpeed.GetValue () + ",moveSpeed=" + moveSpeed.GetValue ()
 		           + ",icon="+iconFile+",roomTypes="+str);*/
 	}
-
-
+	
 	//deep copy -> potrzebne w Static.cs
 	public Item deepClone(Item a)
 	{
