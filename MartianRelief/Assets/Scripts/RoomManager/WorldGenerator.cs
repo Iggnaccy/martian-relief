@@ -9,6 +9,7 @@ public class WorldGenerator : MonoBehaviour
 	public GameObject minimapPanel;
     public PrefabHolder prefabHolder;
 	public Room [,] rooms;
+	public List<int>[,] merchantItems;
 	bool [,] dfsArray;
 	public int width = 11;
 	public int height = 11;
@@ -25,6 +26,7 @@ public class WorldGenerator : MonoBehaviour
 		Static.generateGlobalItemPool ();
 		Random.seed = Static.randomSeed;
 		rooms = new Room[width,height];
+		merchantItems = new List<int>[width,height];
 		dfsArray = new bool[width, height];
 		dfsArray[width / 2, height / 2] = true;
 		edges = new List<Vector2>();

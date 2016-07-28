@@ -15,10 +15,12 @@ public class MerchantBehavoiur : MonoBehaviour{
 	BasicStats playerStats;
 	PrefabHolder prefabHolder;
 	GameObject itemHolder;
+	WorldGenerator worldGenerator;
 
 	int reloadCost=0;
 
 	void Start(){
+		Debug.Log ("START!");
 		canvas = GameObject.Find ("MerchantCanvas").GetComponent<Canvas> () as Canvas;
 		room = GameObject.Find ("RoomManager").GetComponent<RoomManager>().roomToLoad;
 		textButton1 = (Text)GameObject.Find ("TextItem1").GetComponent<Text>();
@@ -28,59 +30,86 @@ public class MerchantBehavoiur : MonoBehaviour{
 		playerStats = GameObject.Find ("Player").GetComponent<BasicStats>() as BasicStats;
 		prefabHolder = GameObject.Find ("PrefabHolder").GetComponent<PrefabHolder> ();
 		itemHolder = GameObject.Find ("ItemHolder");
+		worldGenerator = GameObject.Find ("RoomManager").GetComponent<WorldGenerator> ();
 
 		randItems = new int[3];
-
-		List<int> realItemPool = new List<int> ();
-		realItemPool = Static.listDifference (room.itemPool, Static.itemsSpawned);
-		for (int i = 0; i < randItems.GetLength(0); i++){
-			if(realItemPool.Count == 0) {
-				randItems[i] = -1;
-				continue;
+		if (worldGenerator.merchantItems [room.x, room.y] == null) {
+			Debug.Log ("nowy klient");
+			List<int> realItemPool = new List<int> ();
+			realItemPool = Static.listDifference (room.itemPool, Static.itemsSpawned);
+			for (int i = 0; i < randItems.GetLength(0); i++) {
+				if (realItemPool.Count == 0) {
+					randItems [i] = -1;
+					continue;
+				}
+				randItems [i] = realItemPool [Static.randomIdxFromList<int> (realItemPool)];
+				realItemPool.Remove (randItems [i]);
 			}
-			randItems[i] = realItemPool[Static.randomIdxFromList<int>(realItemPool)];
-			realItemPool.Remove(randItems[i]);
+			worldGenerator.merchantItems [room.x, room.y] = new List<int> ();
+			worldGenerator.merchantItems [room.x, room.y].Add (randItems [0]);
+			worldGenerator.merchantItems [room.x, room.y].Add (randItems [1]);
+			worldGenerator.merchantItems [room.x, room.y].Add (randItems [2]);
+			foreach(int x in worldGenerator.merchantItems[room.x, room.y]){
+				Debug.Log ("generated:" + x);
+			}
+		} 
+		else {
+			Debug.Log("staly klient");
+			List<int> realItemPool = new List<int> ();
+			realItemPool = Static.listDifference (room.itemPool, Static.itemsSpawned);
+			for(int i = 0; i < randItems.GetLength(0); i++) {
+				if(realItemPool.Contains(worldGenerator.merchantItems [room.x, room.y][i])){
+					randItems[i] = worldGenerator.merchantItems [room.x, room.y][i];
+					Debug.Log ("Contains: " + Static.items[randItems[i]].name);
+				}
+				else
+					randItems[i] = -1;
+			}
+			foreach(int x in randItems){
+				Debug.Log ("Contains2: " + x);
+			}
 		}
-		/*textButton1.text = "ASDAF";*/
-		Debug.Log ("wtf button names " + randItems[0]+" "+randItems[1]+" "+randItems[2]);
+		//Debug.Log ("wtf button names " + randItems[0]+" "+randItems[1]+" "+randItems[2]);
+		//Debug.Log (Static.items [randItems [0]].name + " " + Static.items [randItems [1]].name + " " + Static.items [randItems [2]].name);
+		//Debug.Log (Static.items [randItems [0]].cost + " " + Static.items [randItems [1]].cost + " " + Static.items [randItems [2]].cost);
+	}
+
+	void Update() {
+		textButton1 = (Text)GameObject.Find ("TextItem1").GetComponent<Text>();
+		textButton2 = GameObject.Find ("TextItem2").GetComponent<Text>();
+		textButton3 = GameObject.Find ("TextItem3").GetComponent<Text>();
+		textButtonReload = GameObject.Find ("TextReload").GetComponent<Text>();
+		if (textButton1 == null || textButton2 == null || textButton3 == null || textButtonReload == null)
+			return;
+		reloadCost = 0;
 		if (randItems[0] != -1) {
-			Debug.Log ("op 1");
 			textButton1.text = Static.items [randItems [0]].name.ToString() + " -> " + Static.items [randItems [0]].cost.ToString () + "$";
 			reloadCost += Static.items[randItems[0]].cost;
 		} else {
-			Debug.Log ("el 1");
 			textButton1.text = "EMPTY";
-			randItems[0]=-1;
 		}
 		if (randItems[1] != -1) {
-			Debug.Log ("op 2");
 			textButton2.text = Static.items [randItems [1]].name.ToString() + " -> " + Static.items [randItems [1]].cost.ToString () + "$";
 			reloadCost += Static.items[randItems[1]].cost;
 		} else {
-			Debug.Log ("el 2");
 			textButton2.text = "EMPTY";
-			randItems [1] = -1;
 		}
 		if (randItems[2] != -1) {
-			Debug.Log ("op 3");
 			textButton3.text = Static.items [randItems [2]].name.ToString() + " -> " + Static.items [randItems [2]].cost.ToString () + "$";
 			reloadCost += Static.items[randItems[2]].cost;
 		}
 		else{
-			Debug.Log ("el 3");
 			textButton3.text = "EMPTY";
-			randItems[2]=-1;
 		}
-
+		
 		textButtonReload.text = "Reload -> " + reloadCost.ToString();
-
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag == "Player")
 		{
 			Debug.Log ("Czego chciał?");
-			canvas = GameObject.Find ("MerchantCanvas").GetComponent<Canvas> () as Canvas; //idk czemu ale sa tu nulle czasami
+			canvas = GameObject.Find ("MerchantCanvas").GetComponent<Canvas> () as Canvas; //idk czemu ale tu jest canvas == null czasami
 			createShop ();
 		}
 	}
@@ -88,7 +117,7 @@ public class MerchantBehavoiur : MonoBehaviour{
 	void OnTriggerExit2D(Collider2D other){
 		if(other.tag == "Player")
 		{
-			canvas = GameObject.Find ("MerchantCanvas").GetComponent<Canvas> () as Canvas; //idk czemu ale sa tu nulle czasami
+			canvas = GameObject.Find ("MerchantCanvas").GetComponent<Canvas> () as Canvas; //idk czemu ale tu jest canvas == null czasami
 			canvas.enabled=false;
 			Debug.Log ("nq");
 		}
@@ -136,11 +165,33 @@ public class MerchantBehavoiur : MonoBehaviour{
 		
 		Static.itemsSpawned.Add (randItems[idx]);
 		
-		//koniecznie na koncu zeby nie zaburzac kolejnosci listy (inaczej kolejne 30 minut debugowania)
-		room.itemPool.Remove (room.itemPool [randItems[idx]]);
+		if(room.itemPool.Contains(randItems[idx]))
+			room.itemPool.Remove (randItems[idx]);
+		randItems [idx] = -1;
 	}
 
 	public void onItemReloadClick(){
 		Debug.Log ("item reload");
+		if (playerStats.cash >= reloadCost) {
+			playerStats.cash -= reloadCost;
+		} else
+			return;
+		List<int> realItemPool = new List<int> ();
+		realItemPool = Static.listDifference (room.itemPool, Static.itemsSpawned);
+		for (int i = 0; i < randItems.GetLength(0); i++) {
+			if (realItemPool.Count == 0) {
+				randItems [i] = -1;
+				continue;
+			}
+			randItems [i] = realItemPool [Static.randomIdxFromList<int> (realItemPool)];
+			realItemPool.Remove (randItems [i]);
+		}
+		worldGenerator.merchantItems [room.x, room.y] = new List<int> ();
+		worldGenerator.merchantItems [room.x, room.y].Add (randItems [0]);
+		worldGenerator.merchantItems [room.x, room.y].Add (randItems [1]);
+		worldGenerator.merchantItems [room.x, room.y].Add (randItems [2]);
+		foreach(int x in worldGenerator.merchantItems[room.x, room.y]){
+			Debug.Log ("generated: " + x);
+		} 
 	}
 }

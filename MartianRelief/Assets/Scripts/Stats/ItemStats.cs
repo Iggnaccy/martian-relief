@@ -20,7 +20,7 @@ public class ItemStats : MonoBehaviour
 
     public void PickUp(int itemID)
     {
-		Debug.Log ("pickup toyota P.S. comment");
+		Debug.Log ("pickup: " + Static.items[itemID].name);
 		Static.items [itemID].print ();
         myItems.Add(Static.items[itemID]);
 		//Debug.Log (myStats.damage.bonusValue + " && " + myItems[myItems.Count - 1].damage.bonusValue);

@@ -9,5 +9,7 @@ public class ItemIconPlaceholder : MonoBehaviour
     void Start()
     {
         GetComponent<Text>().text = myID.GetComponent<ItemBehaviour>().itemID.ToString();
+		GetComponent<Text> ().color = Color.red;
+		GetComponent<Text> ().fontSize = 100;
     }
 }
