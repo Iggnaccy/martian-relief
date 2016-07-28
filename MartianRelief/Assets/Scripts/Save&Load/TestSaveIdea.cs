@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -14,7 +15,8 @@ public class TestSaveIdea : MonoBehaviour {
 		Debug.Log ("Saving seed as " + Static.randomSeed);
         BasicGameInfoSave gameInfo = new BasicGameInfoSave(Static.randomSeed,realGenerator.actX,realGenerator.actY,
 		     ArrayCreationVisited(realGenerator.rooms).value, 
-		     ArrayCreationItemsGO(realGenerator.rooms).value);
+		     ArrayCreationItemsGO(realGenerator.rooms).value,
+		                                                   realGenerator.merchantItems);
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerInfoSave playerInfo = new PlayerInfoSave(player.GetComponent<BasicStats>(), player.transform);
@@ -106,8 +108,9 @@ public class BasicGameInfoSave
 	public float[,] itemsGameObjects;
 	public int[] itemsSpawned;
 	public int[] itemsGlobal;
+	public ShopItemsPOD[] shopItems;
 
-    public BasicGameInfoSave(int seeder, int activeX, int activeY, bool[,] visited, float[,] itemGO)
+    public BasicGameInfoSave(int seeder, int activeX, int activeY, bool[,] visited, float[,] itemGO, List<int>[,] shop)
     {
         seed = seeder;
         actX = activeX;
@@ -122,6 +125,24 @@ public class BasicGameInfoSave
 		itemsGlobal = new int[Static.itemPoolGlobal.Count];
 		for(int i = 0; i < Static.itemPoolGlobal.Count; i++){
 			itemsGlobal[i] = Static.itemPoolGlobal[i];
+		}
+		int shopCtr = 0;
+		for (int i = 0; i < shop.GetLength(0); i++) {
+			for(int j = 0; j < shop.GetLength (1); j++){
+				if(shop[i,j] != null)
+					shopCtr+=shop[i,j].Count;
+			}
+		}
+		shopItems = new ShopItemsPOD[shopCtr];
+		shopCtr = 0;
+		for (int i = 0; i < shop.GetLength(0); i++) {
+			for (int j = 0; j < shop.GetLength (1); j++) {
+				if(shop[i,j] != null){
+					for(int k = 0; k < shop[i,j].Count; k++){
+						shopItems[shopCtr++] = new ShopItemsPOD(i, j, shop[i,j][k], k);
+					}
+				}
+			}
 		}
     }
 }
@@ -146,6 +167,21 @@ public class DropSaver{
 		}
 	}
 
+}
+
+[Serializable]
+public class ShopItemsPOD{
+	public int x;
+	public int y;
+	public int id;
+	public int slot;
+
+	public ShopItemsPOD(int _x, int _y, int _id, int _slot){
+		x = _x;
+		y = _y;
+		id = _id;
+		slot = _slot;
+	}
 }
 
 [Serializable]

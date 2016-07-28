@@ -46,24 +46,19 @@ public class MerchantBehavoiur : MonoBehaviour{
 				realItemPool.Remove (randItems [i]);
 			}
 			worldGenerator.merchantItems [room.x, room.y] = new List<int> ();
-			worldGenerator.merchantItems [room.x, room.y].Add (randItems [0]);
-			worldGenerator.merchantItems [room.x, room.y].Add (randItems [1]);
-			worldGenerator.merchantItems [room.x, room.y].Add (randItems [2]);
+			for(int i = 0; i < randItems.GetLength(0); i++){
+				worldGenerator.merchantItems [room.x, room.y].Add (randItems [i]);
+				if(randItems[i] != -1)
+					Static.itemsSpawned.Add (randItems[i]);
+			}
 			foreach(int x in worldGenerator.merchantItems[room.x, room.y]){
 				Debug.Log ("generated:" + x);
 			}
 		} 
 		else {
 			Debug.Log("staly klient");
-			List<int> realItemPool = new List<int> ();
-			realItemPool = Static.listDifference (room.itemPool, Static.itemsSpawned);
 			for(int i = 0; i < randItems.GetLength(0); i++) {
-				if(realItemPool.Contains(worldGenerator.merchantItems [room.x, room.y][i])){
-					randItems[i] = worldGenerator.merchantItems [room.x, room.y][i];
-					Debug.Log ("Contains: " + Static.items[randItems[i]].name);
-				}
-				else
-					randItems[i] = -1;
+				randItems[i] = worldGenerator.merchantItems [room.x, room.y][i];
 			}
 			foreach(int x in randItems){
 				Debug.Log ("Contains2: " + x);
@@ -168,6 +163,7 @@ public class MerchantBehavoiur : MonoBehaviour{
 		if(room.itemPool.Contains(randItems[idx]))
 			room.itemPool.Remove (randItems[idx]);
 		randItems [idx] = -1;
+		worldGenerator.merchantItems [room.x, room.y] [idx] = -1;
 	}
 
 	public void onItemReloadClick(){
@@ -178,6 +174,12 @@ public class MerchantBehavoiur : MonoBehaviour{
 			return;
 		List<int> realItemPool = new List<int> ();
 		realItemPool = Static.listDifference (room.itemPool, Static.itemsSpawned);
+		for (int i = 0; i < randItems.GetLength(0); i++) {
+			if(randItems[i] != -1){
+				if(!realItemPool.Contains(randItems[i]))
+				realItemPool.Add(randItems[i]);
+			}
+		}
 		for (int i = 0; i < randItems.GetLength(0); i++) {
 			if (realItemPool.Count == 0) {
 				randItems [i] = -1;

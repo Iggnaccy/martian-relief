@@ -170,6 +170,15 @@ public class TestLoadIdea : MonoBehaviour {
 			                                         allInfo.dropSaver.spawnedDropInts[i,2]));
 		}
 
+		foreach (ShopItemsPOD pod in allInfo.gameInfo.shopItems) {
+			if(generator.merchantItems[pod.x,pod.y] == null){
+				generator.merchantItems[pod.x,pod.y] = new List<int>();
+				for(int i = 0; i < 3; i++)
+					generator.merchantItems[pod.x,pod.y].Add (-1);
+			}
+			generator.merchantItems[pod.x,pod.y][pod.slot]=pod.id;
+		}
+
         Time.timeScale = 1;
         file.Close();
         Debug.Log("Zakończono ładowanie");
