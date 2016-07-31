@@ -284,4 +284,52 @@ public class WorldGenerator : MonoBehaviour
 			}
 		}
 	}
+	public Vector2 addSpecialRoom(int edgesMin, int edgesMax, int roomId)
+	{
+		List<Vector2> candidates;
+		candidates=new List<Vector2>();
+		int tmp;
+		for(int i=0; i<width; i++)
+		{
+			for(int j=0; j<height; j++)
+			{
+				if(dfsArray[i, j]==true)
+				{
+					tmp=0;
+					if(i-1>-1)
+						if(dfsArray[i-1,j]==true)
+							tmp++;
+					if(j-1>-1)
+						if(dfsArray[i,j-1]==true)
+							tmp++;
+					if(i+1<width)
+						if(dfsArray[i+1,j]==true)
+							tmp++;
+					if(j+1<height)
+						if(dfsArray[i,j+1]==true)
+							tmp++;
+					if(tmp>=edgesMin&& tmp<=edgesMax)
+						candidates.Add(new Vector2(i, j));
+				}
+			}
+		}
+		tmp = candidates.Count;
+		tmp = Random.Range (0, tmp);
+		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].roomType = roomId;
+		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].vecEnemies.Clear();
+		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].maxiEnemies=0;
+		return candidates [tmp];
+	}
+	void addShop()
+	{
+		addSpecialRoom (2, 4, 0);
+	}
+	void addBoss(List<Vector2> bossPositions, int unnkownVariable, List<int> bossNumber, int numberOfBosses)
+	{
+		Vector2 bossRoom;
+		bossRoom = addSpecialRoom (1, 1, -1);
+		rooms [(int)bossRoom.x, (int)bossRoom.y].maxiEnemies = numberOfBosses;
+		for (int i=0; i<numberOfBosses; i++)
+			rooms [(int)bossRoom.x, (int)bossRoom.y].vecEnemies.Add (new Vector4(bossPositions [i].x, bossPositions [i].y, unnkownVariable, bossNumber [i]));
+	}
 }
