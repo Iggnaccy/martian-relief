@@ -273,6 +273,7 @@ public class WorldGenerator : MonoBehaviour
 			}
 		}
 		addShop ();
+		addBossTest ();
 		//addBoss();
 		didIGenerateYet = true;
 	}
@@ -328,6 +329,11 @@ public class WorldGenerator : MonoBehaviour
 	{
 		addSpecialRoom (2, 4, 2);
 	}
+
+	void addBossTest(){
+		addSpecialRoom (1, 1, 3);
+	}
+
 	void addBoss(List<Vector2> bossPositions, int unnkownVariable, List<int> bossNumber, int numberOfBosses)
 	{
 		Vector2 bossRoom;
