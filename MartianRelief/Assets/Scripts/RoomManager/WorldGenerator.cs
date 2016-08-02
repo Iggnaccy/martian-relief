@@ -10,7 +10,7 @@ public class WorldGenerator : MonoBehaviour
     public PrefabHolder prefabHolder;
 	public Room [,] rooms;
 	public List<int>[,] merchantItems;
-	bool [,] dfsArray;
+	public bool [,] dfsArray;
 	public int width = 11;
 	public int height = 11;
 	public int roomCount = 16;
