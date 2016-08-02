@@ -272,6 +272,8 @@ public class WorldGenerator : MonoBehaviour
 					rooms[i, j].Generate(dfsArray);
 			}
 		}
+		addShop ();
+		//addBoss();
 		didIGenerateYet = true;
 	}
 
@@ -313,8 +315,10 @@ public class WorldGenerator : MonoBehaviour
 				}
 			}
 		}
-		tmp = candidates.Count;
-		tmp = Random.Range (0, tmp);
+		tmp = (int)(UnityEngine.Random.value * candidates.Count);
+		if (tmp < 0 || tmp >= candidates.Count) {     //Random.value -> [0,1] inclusive!!
+			tmp= 0;
+		}
 		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].roomType = roomId;
 		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].vecEnemies.Clear();
 		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].maxiEnemies=0;
@@ -322,12 +326,12 @@ public class WorldGenerator : MonoBehaviour
 	}
 	void addShop()
 	{
-		addSpecialRoom (2, 4, 0);
+		addSpecialRoom (2, 4, 2);
 	}
 	void addBoss(List<Vector2> bossPositions, int unnkownVariable, List<int> bossNumber, int numberOfBosses)
 	{
 		Vector2 bossRoom;
-		bossRoom = addSpecialRoom (1, 1, -1);
+		bossRoom = addSpecialRoom (1, 1, 3);
 		rooms [(int)bossRoom.x, (int)bossRoom.y].maxiEnemies = numberOfBosses;
 		for (int i=0; i<numberOfBosses; i++)
 			rooms [(int)bossRoom.x, (int)bossRoom.y].vecEnemies.Add (new Vector4(bossPositions [i].x, bossPositions [i].y, unnkownVariable, bossNumber [i]));
