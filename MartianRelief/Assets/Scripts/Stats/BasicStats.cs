@@ -30,6 +30,7 @@ public class BasicStats : MonoBehaviour{
             attackSpeed = new Statistic(4f);
             damage = new Statistic(7.5f);
         }
+        DontDestroyOnLoad(gameObject);
 	}
 
 	void Update(){

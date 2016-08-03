@@ -16,6 +16,7 @@ public class WorldGenerator : MonoBehaviour
 	public int roomCount = 16;
 	public int actX;
 	public int actY;
+    public static int floor;
 	List<Vector2> edges;
 	bool didIGenerateYet = false;
 	
@@ -46,6 +47,7 @@ public class WorldGenerator : MonoBehaviour
 
 	void Start()
 	{
+        Debug.Log("World Start");
 		Random.seed = Static.randomSeed;
 		if (!didIGenerateYet)    //new game only
 		{
@@ -54,6 +56,7 @@ public class WorldGenerator : MonoBehaviour
 			actY = height / 2;
 			Generation();
 		}
+        didIGenerateYet = false;
 		//Random.seed = -1986870875;
 		Debug.Log ("WorldGenerator::Start() seed=" + Random.seed);
 		//load game & new game

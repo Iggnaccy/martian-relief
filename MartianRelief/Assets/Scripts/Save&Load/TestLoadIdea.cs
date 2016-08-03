@@ -15,6 +15,7 @@ public class TestLoadIdea : MonoBehaviour {
         if (NewGameOrLoad.LoadName != null)
         {
             Load(NewGameOrLoad.LoadName);
+            NewGameOrLoad.LoadName = null;
         }
     }
 
