@@ -17,20 +17,45 @@ public class BasicStats : MonoBehaviour{
 	public Timer timerAttack;
     public Timer timerInvoulnerable;
 
+	public static bool WeAreResponsibleToOurselvesForOurOwnExistence_ConsequentlyWeWantToBeTheTrueHelmsmanOfThisExistenceAndRefuseToAllowOurExistenceToResembleAMindlessActOfChance = false;
+
+	void Awake(){
+		timerInvoulnerable = new Timer ();
+		timerAttack = new Timer ();
+		if (WeAreResponsibleToOurselvesForOurOwnExistence_ConsequentlyWeWantToBeTheTrueHelmsmanOfThisExistenceAndRefuseToAllowOurExistenceToResembleAMindlessActOfChance) {
+			GameObject.Destroy (gameObject);
+		} 
+		else {
+			WeAreResponsibleToOurselvesForOurOwnExistence_ConsequentlyWeWantToBeTheTrueHelmsmanOfThisExistenceAndRefuseToAllowOurExistenceToResembleAMindlessActOfChance = true;
+		}
+	}
+
 	void Start()
 	{
-		timerAttack = new Timer ();
-        timerInvoulnerable = new Timer();
-        invulnerabilityTime = 1.5f;
-        healthSlider.maxValue = maxHp;
-        healthSlider.value = hp;
-        if (NewGameOrLoad.LoadName == null)
-        {
-            moveSpeed = new Statistic(350f);
-            attackSpeed = new Statistic(4f);
-            damage = new Statistic(7.5f);
-        }
-        DontDestroyOnLoad(gameObject);
+		invulnerabilityTime = 1.5f;
+		if (NewGameOrLoad.LoadName == null)
+		{
+			moveSpeed = new Statistic(350f);
+			attackSpeed = new Statistic(4f);
+			damage = new Statistic(7.5f);
+		}
+	}
+
+	public void StartCalledByWorldGenerator(){
+		if (timerInvoulnerable == null) {
+			Debug.Log ("!null 1");
+		}
+
+		/*if (timerInvoulnerable == null) {
+			Debug.Log ("!null 2");
+		}*/
+
+		healthSlider = GameObject.Find ("PlayerHealthBarSlider").GetComponent<Slider>();
+		healthSlider.maxValue = maxHp;
+		healthSlider.value = hp;
+
+		DontDestroyOnLoad(gameObject);
+		Debug.Log ("Koniec");
 	}
 
 	void Update(){

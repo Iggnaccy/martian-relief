@@ -62,9 +62,17 @@ public class WorldGenerator : MonoBehaviour
 		//load game & new game
 		mergeDoors();
 		loadRoom(0, 0);
-		
+		initializePlayersReferences ();
 	}
-	
+
+	public void initializePlayersReferences(){
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		foreach(GameObject obj in players){
+			obj.GetComponent<TestUserInput>().StartCalledByWorldGenerator();
+			obj.GetComponent<BasicStats> ().StartCalledByWorldGenerator ();
+		}
+	}
+
 	/*void Update ()
 	{
 		if (Input.GetKeyDown(KeyCode.Q)){
@@ -323,6 +331,8 @@ public class WorldGenerator : MonoBehaviour
 		if (tmp < 0 || tmp >= candidates.Count) {     //Random.value -> [0,1] inclusive!!
 			tmp= 0;
 		}
+		Debug.Log ("test: " + tmp + " " + candidates.Count);
+
 		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].roomType = roomId;
 		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].vecEnemies.Clear();
 		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].maxiEnemies=0;

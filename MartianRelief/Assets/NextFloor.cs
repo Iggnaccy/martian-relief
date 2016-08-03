@@ -7,9 +7,11 @@ public class NextFloor : MonoBehaviour {
     {
         if(other.tag == "Player")
         {
+			other.transform.position = new Vector3(0, 0, 0);
             WorldGenerator.floor++;
-            Random.seed++;
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
-        }
+            Static.randomSeed++;
+            //UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+			Application.LoadLevel(Application.loadedLevel);
+		}
     }
 }

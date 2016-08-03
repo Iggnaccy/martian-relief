@@ -10,9 +10,12 @@ public class TestUserInput : MonoBehaviour {
 
     void Start()
     {
-        myBody = GetComponent<Rigidbody2D>();
-        prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
+		myBody = GetComponent<Rigidbody2D>();
     }
+
+	public void StartCalledByWorldGenerator(){
+		prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();
+	}
 
     void Shoot(int direction) // 1 - prawo, 2 - lewo, 3 - góra, 4 - dół
     {

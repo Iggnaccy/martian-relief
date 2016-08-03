@@ -33,7 +33,17 @@ public class RoomManager : MonoBehaviour
 			//Debug.Log ("wtf\n");  	//przy ladowaniu wczesniej wyczyszczonego pokoju wykonuje sie to kilkanascie razy
 										//przenioslem czesc rzeczy do laodNewRoom
 			GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
+			Debug.Log ("size: " + objs.GetLength(0));
+
 			foreach(GameObject obj in objs){
+				if(obj.GetComponent<BasicStats>() == null){
+					Debug.Log ("get component == null");
+				}
+				else{
+					if(obj.GetComponent<BasicStats>().timerInvoulnerable == null){
+						Debug.Log ("timer invoulnerable == null");
+					}
+				}
 				obj.GetComponent<BasicStats>().timerInvoulnerable.reset();
 			}
 			if(roomToLoad.wasCleared){

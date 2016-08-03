@@ -13,9 +13,8 @@ public class ItemStats : MonoBehaviour
 
     void Awake()
     {
-        myItems = new List<Item>();
-        //Static.items = new Item[12];
-        myStats = GetComponent<BasicStats>();
+		myItems = new List<Item>();
+		myStats = GetComponent<BasicStats>();
     }
 
     public void PickUp(int itemID)
