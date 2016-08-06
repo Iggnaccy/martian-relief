@@ -327,16 +327,43 @@ public class WorldGenerator : MonoBehaviour
 				}
 			}
 		}
-		tmp = (int)(UnityEngine.Random.value * candidates.Count);
-		if (tmp < 0 || tmp >= candidates.Count) {     //Random.value -> [0,1] inclusive!!
-			tmp= 0;
-		}
-		Debug.Log ("test: " + tmp + " " + candidates.Count);
+        if (candidates.Count > 0)
+        {
+            tmp = (int)(UnityEngine.Random.value * candidates.Count);
+            if (tmp < 0 || tmp >= candidates.Count)
+            {     //Random.value -> [0,1] inclusive!!
+                tmp = 0;
+            }
 
-		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].roomType = roomId;
-		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].vecEnemies.Clear();
-		rooms [(int)candidates [tmp].x, (int)candidates [tmp].y].maxiEnemies=0;
-		return candidates [tmp];
+            Debug.Log("test: " + tmp + " " + candidates.Count);
+
+            rooms[(int)candidates[tmp].x, (int)candidates[tmp].y].roomType = roomId;
+            rooms[(int)candidates[tmp].x, (int)candidates[tmp].y].vecEnemies.Clear();
+            rooms[(int)candidates[tmp].x, (int)candidates[tmp].y].maxiEnemies = 0;
+            return candidates[tmp];
+        }
+        else
+        {
+            int i = 0;
+            int j = 0;
+            while (rooms[i, j].roomType != 1 || (i == 5 && j == 5))
+            {
+                i = (int)(UnityEngine.Random.value * width);
+                if (i < 0 || i >= width)
+                {     //Random.value -> [0,1] inclusive!!
+                    i = 0;
+                }
+                j = (int)(UnityEngine.Random.value * height);
+                if (j < 0 || j >= height)
+                {     //Random.value -> [0,1] inclusive!!
+                    j = 0;
+                }
+            }
+            rooms[i, j].roomType = roomId;
+            rooms[i, j].vecEnemies.Clear();
+            rooms[i, j].maxiEnemies = 0;
+            return new Vector2(i, j);
+        }
 	}
 	void addShop()
 	{
