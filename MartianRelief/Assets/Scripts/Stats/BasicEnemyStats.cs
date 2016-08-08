@@ -16,7 +16,7 @@ public class BasicEnemyStats : MonoBehaviour {
 
 	void Start ()
     {
-		loadStatsFromStatic ();
+		//loadStatsFromStatic ();
 		slider.maxValue = healthMax;
 		slider.value = health;
 		prefabHolder = GameObject.Find("PrefabHolder").GetComponent<PrefabHolder>();

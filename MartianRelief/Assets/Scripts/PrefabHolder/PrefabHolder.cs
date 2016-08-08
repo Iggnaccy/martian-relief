@@ -5,7 +5,10 @@ using UnityEngine.UI;
 public class PrefabHolder : MonoBehaviour {
     
     public GameObject[] enemies;
-	public GameObject testDoors;
+    public GameObject[] bossEnemies;
+    public GameObject[] bossAttacks;
+    public GameObject[] enemyShots;
+    public GameObject testDoors;
     public GameObject minimapRoomImage;
     public GameObject itemObject;
     public GameObject cashPickup;
@@ -13,4 +16,5 @@ public class PrefabHolder : MonoBehaviour {
     public GameObject bomb;
     public GameObject pellet;
 	public GameObject merchant;
+    public GameObject passageToNextFloor;
 }

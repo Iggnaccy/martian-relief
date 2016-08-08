@@ -16,9 +16,13 @@ public class PelletBehaviour : MonoBehaviour {
         if (other.tag == "Enemy")
         {
             other.GetComponent<BasicEnemyStats>().health -= damage;
-			// ==> velocity fix
-			other.attachedRigidbody.velocity+=GetComponent<Rigidbody2D>().velocity*2;
-			Destroy(this.gameObject);
+            // ==> velocity fix
+            try
+            {
+                other.attachedRigidbody.velocity += GetComponent<Rigidbody2D>().velocity * 2;
+            }
+            catch { }
+			Destroy(gameObject);
         }
     }
 }
