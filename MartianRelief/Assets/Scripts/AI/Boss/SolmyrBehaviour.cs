@@ -26,6 +26,12 @@ public class SolmyrBehaviour : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        if(GetComponent<BasicEnemyStats>().health <= 0)
+            Instantiate(prefabHolder.passageToNextFloor);
+    }
+
     void RingAttack()
     {
         float angle = Mathf.PI/8;
