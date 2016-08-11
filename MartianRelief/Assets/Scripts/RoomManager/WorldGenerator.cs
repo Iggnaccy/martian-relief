@@ -19,6 +19,7 @@ public class WorldGenerator : MonoBehaviour
     public static int floor;
 	List<Vector2> edges;
 	bool didIGenerateYet = false;
+    public bool bossDefeated = false;
 	
 	public float minX, maxX, minY, maxY;
 	
@@ -107,9 +108,22 @@ public class WorldGenerator : MonoBehaviour
 	}
 	
 	void loadRoom(int deltaX, int deltaY){
-		if (rooms [actX, actY].vecEnemies.Count == 0) {
-			rooms[actX,actY].wasCleared=true;
-		}
+        if (rooms[actX, actY].roomType == 3)
+        {
+            if (bossDefeated)
+            {
+                if (rooms[actX, actY].vecEnemies.Count == 0)
+                {
+                    rooms[actX, actY].wasCleared = true;
+                }
+            }
+        }
+        else {
+            if (rooms[actX, actY].vecEnemies.Count == 0)
+            {
+                rooms[actX, actY].wasCleared = true;
+            }
+        }
 		GetComponent<RoomManager> ().loadNewRoom (rooms[actX, actY]);
 		MinimapManagement(deltaX, deltaY);
 		

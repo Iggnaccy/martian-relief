@@ -16,7 +16,8 @@ public class TestSaveIdea : MonoBehaviour {
         BasicGameInfoSave gameInfo = new BasicGameInfoSave(Static.randomSeed,realGenerator.actX,realGenerator.actY,
 		     ArrayCreationVisited(realGenerator.rooms).value, 
 		     ArrayCreationItemsGO(realGenerator.rooms).value,
-		                                                   realGenerator.merchantItems);
+		     realGenerator.merchantItems,
+             realGenerator.bossDefeated);
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerInfoSave playerInfo = new PlayerInfoSave(player.GetComponent<BasicStats>(), player.transform);
@@ -109,14 +110,17 @@ public class BasicGameInfoSave
 	public int[] itemsSpawned;
 	public int[] itemsGlobal;
 	public ShopItemsPOD[] shopItems;
+    public bool bossDefeated = false;
 
-    public BasicGameInfoSave(int seeder, int activeX, int activeY, bool[,] visited, float[,] itemGO, List<int>[,] shop)
+    public BasicGameInfoSave(int seeder, int activeX, int activeY, bool[,] visited, float[,] itemGO, List<int>[,] shop,
+        bool _bossDefeated)
     {
         seed = seeder;
         actX = activeX;
         actY = activeY;
         wasVisited = visited;
 		itemsGameObjects = itemGO;
+        bossDefeated = _bossDefeated;
 
 		itemsSpawned = new int[Static.itemsSpawned.Count];
 		for(int i = 0; i < Static.itemsSpawned.Count; i++){

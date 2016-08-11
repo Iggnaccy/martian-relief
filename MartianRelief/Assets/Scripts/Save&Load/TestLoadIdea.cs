@@ -134,15 +134,6 @@ public class TestLoadIdea : MonoBehaviour {
                 }
             }
         }
-		/*generator.rooms [generator.actX, generator.actY].vecItems = new List<Vector3> ();
-		Debug.Log ("size: "+allInfo.gameInfo.itemsGameObjects.GetLength (0));
-		for (int i = 0; i < allInfo.gameInfo.itemsGameObjects.GetLength (0); i++) {
-			generator.rooms [generator.actX, generator.actY].vecItems.Add(new Vector3(
-				allInfo.gameInfo.itemsGameObjects[i,0],
-				allInfo.gameInfo.itemsGameObjects[i,1],
-				allInfo.gameInfo.itemsGameObjects[i,2]
-			));
-		}*/
 		for (int i = 0; i < allInfo.gameInfo.itemsGameObjects.GetLength (0); i++) {
 			float x1 = allInfo.gameInfo.itemsGameObjects[i,0];
 			float y1 = allInfo.gameInfo.itemsGameObjects[i,1];
@@ -179,6 +170,7 @@ public class TestLoadIdea : MonoBehaviour {
 			}
 			generator.merchantItems[pod.x,pod.y][pod.slot]=pod.id;
 		}
+        generator.bossDefeated = allInfo.gameInfo.bossDefeated;
 
         Time.timeScale = 1;
         file.Close();
