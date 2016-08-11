@@ -28,8 +28,12 @@ public class SolmyrBehaviour : MonoBehaviour
 
     void OnDestroy()
     {
-        if(GetComponent<BasicEnemyStats>().health <= 0)
-            Instantiate(prefabHolder.passageToNextFloor);
+        if (GetComponent<BasicEnemyStats>().health <= 0)
+        {
+            GameObject newDoors = Instantiate(prefabHolder.passageToNextFloor);
+            newDoors.transform.SetParent(GameObject.Find("DoorsHolder").transform);
+            GameObject.Find("RoomManager").GetComponent<WorldGenerator>().bossDefeated = true;
+        }
     }
 
     void RingAttack()

@@ -30,10 +30,10 @@ public class RoomManager : MonoBehaviour
 		timeElapsed.update (Time.deltaTime);
 		if (actualState == RoomState.LOAD_NEW_LEVEL)
 		{
-			//Debug.Log ("wtf\n");  	//przy ladowaniu wczesniej wyczyszczonego pokoju wykonuje sie to kilkanascie razy
+		    //Debug.Log ("wtf\n");  	//przy ladowaniu wczesniej wyczyszczonego pokoju wykonuje sie to kilkanascie razy
 										//przenioslem czesc rzeczy do laodNewRoom
 			GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
-			Debug.Log ("size: " + objs.GetLength(0));
+			//Debug.Log ("size: " + objs.GetLength(0));
 
 			foreach(GameObject obj in objs){
 				if(obj.GetComponent<BasicStats>() == null){
@@ -57,9 +57,8 @@ public class RoomManager : MonoBehaviour
 		}
 		else if (actualState == RoomState.FIGHT)
 		{
-			if (enemyHolder.transform.childCount == 0)
+            if (enemyHolder.transform.childCount == 0)
 			{
-				//Debug.Log ("roomstate->fight, time=" + timeElapsed.getTime());
 				roomToLoad.vecEnemies.Clear();
 				generateItem();
 				actualState = RoomState.ROOM_CLEAR;
@@ -67,6 +66,7 @@ public class RoomManager : MonoBehaviour
 		}
 		else if (actualState == RoomState.ROOM_CLEAR)
 		{
+            
 			openTheGates();
 		}
 	}
@@ -150,6 +150,7 @@ public class RoomManager : MonoBehaviour
 	{
 		for(int i = 0; i < doorsHolder.childCount; i++)
 		{
+            if(doorsHolder.GetChild(i).tag != "PortalToNextFloor")
 			doorsHolder.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(0f,1f,0f);
 		}
 	}
@@ -204,6 +205,16 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
+    GameObject getBossGameObject() {
+        //tu ifowanie po floor na bossy fabularne
+        int valToReturn = (int)(UnityEngine.Random.value * prefabHolder.GetComponent<PrefabHolder>().bossEnemies.GetLength(0) );
+        if (valToReturn < 0 || valToReturn >= prefabHolder.GetComponent<PrefabHolder>().bossEnemies.GetLength(0))
+        {     //Random.value -> [0,1] inclusive!!
+            return prefabHolder.GetComponent<PrefabHolder>().bossEnemies[0];
+        }
+        return prefabHolder.GetComponent<PrefabHolder>().bossEnemies[valToReturn];
+    }
+
 	void spawnRoomTypeSpecialObjects() {
 		if (GameObject.FindGameObjectWithTag ("Merchant") != null) {
 			Destroy (GameObject.FindGameObjectWithTag ("Merchant"));
@@ -216,5 +227,18 @@ public class RoomManager : MonoBehaviour
 			newObj.tag = "Merchant";
 			Debug.Log ("spawn!");
 		}
+        if (roomToLoad.roomType == 3) //boss
+        {
+            if (GetComponent<WorldGenerator>().bossDefeated == false)
+            {
+                GameObject newObj = Instantiate(getBossGameObject(),
+                new Vector3(0.0f, 0.0f, transform.position.z), Quaternion.Euler(0, 0, 0)) as GameObject;
+                newObj.transform.SetParent(GameObject.Find("EnemyHolder").transform);
+            }
+            else {
+                GameObject newDoors = Instantiate(prefabHolder.GetComponent<PrefabHolder>().passageToNextFloor);
+                newDoors.transform.SetParent(GameObject.Find("DoorsHolder").transform);
+            }
+        }
 	}
 }
