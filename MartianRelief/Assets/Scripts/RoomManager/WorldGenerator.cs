@@ -289,6 +289,9 @@ public class WorldGenerator : MonoBehaviour
 				else edges.RemoveAt(z);
 			}
 		}
+		addShop ();
+		addBossTest ();
+		//addBoss();
 		for (int i = 0; i < width; i++)
 		{
 			for (int j = 0; j < height; j++)
@@ -297,9 +300,6 @@ public class WorldGenerator : MonoBehaviour
 					rooms[i, j].Generate(dfsArray);
 			}
 		}
-		addShop ();
-		addBossTest ();
-		//addBoss();
 		didIGenerateYet = true;
 	}
 
@@ -321,7 +321,7 @@ public class WorldGenerator : MonoBehaviour
 		{
 			for(int j=0; j<height; j++)
 			{
-				if(dfsArray[i, j]==true)
+				if(dfsArray[i, j]==false)
 				{
 					tmp=0;
 					if(i-1>-1)
@@ -350,17 +350,18 @@ public class WorldGenerator : MonoBehaviour
             }
 
             Debug.Log("test: " + tmp + " " + candidates.Count);
-
+			dfsArray[(int)candidates[tmp].x,(int)candidates[tmp].y]=true;
             rooms[(int)candidates[tmp].x, (int)candidates[tmp].y].roomType = roomId;
             rooms[(int)candidates[tmp].x, (int)candidates[tmp].y].vecEnemies.Clear();
             rooms[(int)candidates[tmp].x, (int)candidates[tmp].y].maxiEnemies = 0;
+			//makeDoors(new myVector((int)candidates[tmp].x, (int)candidates[tmp].y));
             return candidates[tmp];
         }
         else
         {
             int i = 0;
             int j = 0;
-            while (rooms[i, j].roomType != 1 || (i == 5 && j == 5))
+            while (rooms[i, j].roomType == 1 || (i == 5 && j == 5))
             {
                 i = (int)(UnityEngine.Random.value * width);
                 if (i < 0 || i >= width)
@@ -373,6 +374,8 @@ public class WorldGenerator : MonoBehaviour
                     j = 0;
                 }
             }
+			Debug.Log("i:"+i+" "+"j:"+j);
+			dfsArray[i,j]=true;
             rooms[i, j].roomType = roomId;
             rooms[i, j].vecEnemies.Clear();
             rooms[i, j].maxiEnemies = 0;
@@ -396,4 +399,57 @@ public class WorldGenerator : MonoBehaviour
 		for (int i=0; i<numberOfBosses; i++)
 			rooms [(int)bossRoom.x, (int)bossRoom.y].vecEnemies.Add (new Vector4(bossPositions [i].x, bossPositions [i].y, unnkownVariable, bossNumber [i]));
 	}
+	/*
+	class myVector{
+		public int x;
+		public int y;
+		public myVector(int a, int b)
+		{
+			x = a;
+			y = b;
+		}
+	}*/
+	/*void makeDoors(myVector pos)
+	{
+		if(pos.y > 0){
+			if(rooms[pos.x,pos.y-1].isGenerated){
+				rooms[pos.x,pos.y-1].doors[1] = rooms[pos.x,pos.y].doors[3];
+				rooms[pos.x,pos.y-1].vecDoors[1] = new Vector3(rooms[pos.x,pos.y].doors[3], rooms[pos.x,pos.y-1].vecDoors[1].y, 0);
+			}
+			else{
+				rooms[pos.x,pos.y].doors[3]=-90000;
+				rooms[pos.x,pos.y-1].doors[1]=-90000;
+			}
+		}
+		if(pos.x > 0){
+			if(rooms[pos.x-1,pos.y].isGenerated){
+				rooms[pos.x-1,pos.y].doors[2] = rooms[pos.x,pos.y].doors[0];
+				rooms[pos.x-1,pos.y].vecDoors[2] = new Vector3(rooms[pos.x,pos.y].doors[2], rooms[pos.x-1,pos.y].vecDoors[0].y, 0);
+			}
+			else{
+				rooms[pos.x,pos.y].doors[0]=-90000;
+				rooms[pos.x-1,pos.y].doors[2]=-90000;
+			}
+		}
+		if(pos.x < width-1){
+			if(rooms[pos.x+1,pos.y].isGenerated){
+				rooms[pos.x+1,pos.y].doors[0] = rooms[pos.x,pos.y].doors[2];
+				rooms[pos.x+1,pos.y].vecDoors[0] = new Vector3(rooms[pos.x+1,pos.y].vecDoors[0].x, rooms[pos.x,pos.y].doors[2], 0);
+			}
+			else{
+				rooms[pos.x,pos.y].doors[2]=-90000;
+				rooms[pos.x+1,pos.y].doors[0]=-90000;
+			}
+		}
+			if(pos.y < height-1){
+				if(rooms[pos.x,pos.y+1].isGenerated){
+					rooms[pos.x,pos.y+1].doors[3] = rooms[pos.x,pos.y].doors[1];
+					rooms[pos.x,pos.y+1].vecDoors[3] = new Vector3(rooms[pos.x,pos.y+1].vecDoors[1].x, rooms[pos.x,pos.y].doors[3], 0);
+				}
+				else{
+					rooms[pos.x,pos.y].doors[3]=-90000;
+					rooms[pos.x,pos.y+1].doors[1]=-90000;
+			}
+		}
+	}*/
 }
