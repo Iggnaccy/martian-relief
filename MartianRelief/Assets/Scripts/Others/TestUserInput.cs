@@ -129,14 +129,15 @@ public class TestUserInput : MonoBehaviour
         {
             clones[i] = Instantiate(prefabHolder.pellets[myStats.shootType], new Vector3(transform.position.x + 0.1f * Mathf.Cos((angles[i] + sider)), transform.position.y + 0.1f * Mathf.Sin((angles[i] + sider)), 0f), Quaternion.Euler(0, 0, 0)) as GameObject;
             clones[i].transform.parent = missileHolder;
-            if(myStats.shootType == 0)
+            if(myStats.shootType == 0)      //normal
                 clones[i].GetComponent<PelletBehaviour>().damage = myStats.damage.GetValue();
-            if (myStats.shootType == 1)
+            if (myStats.shootType == 1)     //shell
                 clones[i].GetComponent<ShellBehaviour>().damage = myStats.damage.GetValue();
-            if (myStats.shootType == 2) ;
-            if (myStats.shootType == 3) ;
-            if (myStats.shootType == 4) ;
-            if (myStats.shootType == 5) ;
+            if (myStats.shootType == 2)    //explosive
+                clones[i].GetComponent<ExplosiveBehaviour>().damage = myStats.damage.GetValue();
+            if (myStats.shootType == 3) ;   //laser
+            if (myStats.shootType == 4) ;   //penetrating laser 
+            if (myStats.shootType == 5) ;   //airstrike
             clones[i].GetComponent<Rigidbody2D>().velocity = new Vector2(clones[i].transform.position.x - transform.position.x, clones[i].transform.position.y - transform.position.y).normalized * myStats.shotSpeed * Time.deltaTime;
         }
     }
