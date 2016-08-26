@@ -14,7 +14,7 @@ public class PrefabHolder : MonoBehaviour {
     public GameObject cashPickup;
     public GameObject bombPickup;
     public GameObject bomb;
-    public GameObject pellet;
+    public GameObject[] pellets;
 	public GameObject merchant;
     public GameObject passageToNextFloor;
 }

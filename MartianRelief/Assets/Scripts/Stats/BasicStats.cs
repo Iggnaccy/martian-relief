@@ -8,6 +8,9 @@ public class BasicStats : MonoBehaviour{
 	public int maxHp;
     public int cash;
     public int bombs;
+    public int shootType;
+    public int shootAmount;
+    public float shotSpeed;
 	public Statistic moveSpeed;
 	public Statistic attackSpeed;     //ile razy na sekunde? [Hz]
 	public Statistic damage;
@@ -38,6 +41,8 @@ public class BasicStats : MonoBehaviour{
 			moveSpeed = new Statistic(350f);
 			attackSpeed = new Statistic(4f);
 			damage = new Statistic(7.5f);
+            //shootType = 0;
+            //shootAmount = 1;
 		}
 	}
 
