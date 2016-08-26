@@ -138,7 +138,7 @@ public class TestUserInput : MonoBehaviour
             if (myStats.shootType == 3) ;   //laser
             if (myStats.shootType == 4) ;   //penetrating laser 
             if (myStats.shootType == 5) ;   //airstrike
-            clones[i].GetComponent<Rigidbody2D>().velocity = new Vector2(clones[i].transform.position.x - transform.position.x, clones[i].transform.position.y - transform.position.y).normalized * myStats.shotSpeed * Time.deltaTime;
+            clones[i].GetComponent<Rigidbody2D>().velocity = new Vector2(clones[i].transform.position.x - transform.position.x, clones[i].transform.position.y - transform.position.y).normalized * myStats.shotSpeed;
         }
     }
 }
