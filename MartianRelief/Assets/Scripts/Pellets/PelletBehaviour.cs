@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PelletBehaviour : MonoBehaviour {
+public class PelletBehaviour : MonoBehaviour
+{
     
-    public float missileSpeed, damage, knockback;
+    public float damage, knockback;
     
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -11,12 +12,9 @@ public class PelletBehaviour : MonoBehaviour {
         {
             other.GetComponent<BasicEnemyStats>().health -= damage;
             // ==> velocity fix
-            try
-            {
+            if (other.attachedRigidbody)
                 other.attachedRigidbody.velocity += GetComponent<Rigidbody2D>().velocity * 2;
-            }
-            catch { }
-			Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }

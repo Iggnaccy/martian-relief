@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ExplosiveBehaviour : MonoBehaviour {
 
-    public float missileSpeed, damage, knockback;
+    public float damage, knockback;
     public float range = 2.5f;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -12,11 +12,8 @@ public class ExplosiveBehaviour : MonoBehaviour {
         {
             other.GetComponent<BasicEnemyStats>().health -= damage;
             // ==> velocity fix
-            try
-            {
+            if (other.attachedRigidbody)
                 other.attachedRigidbody.velocity += GetComponent<Rigidbody2D>().velocity * 2;
-            }
-            catch { }
             Collider2D[] objectsHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), range);
             foreach (Collider2D hit in objectsHit)
             {

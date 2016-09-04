@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ShellBehaviour : MonoBehaviour
 {
-    public float missileSpeed, damage, knockback;
+    public float damage, knockback;
     public GameObject shellFragment;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -12,11 +12,8 @@ public class ShellBehaviour : MonoBehaviour
         {
             other.GetComponent<BasicEnemyStats>().health -= damage;
             // ==> velocity fix
-            try
-            {
+            if (other.attachedRigidbody)
                 other.attachedRigidbody.velocity += GetComponent<Rigidbody2D>().velocity * 2;
-            }
-            catch { }
             GameObject temp = Instantiate(shellFragment, transform.position, Quaternion.identity) as GameObject;
             GameObject temp2 = Instantiate(shellFragment, transform.position, Quaternion.identity) as GameObject;
             temp.transform.localScale = temp2.transform.localScale = new Vector3(1.5f, 1.5f);
