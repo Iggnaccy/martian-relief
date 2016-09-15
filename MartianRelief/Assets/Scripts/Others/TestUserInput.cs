@@ -137,17 +137,27 @@ public class TestUserInput : MonoBehaviour
 
     void ShootLaser(int side, bool isPenetrative)
     {
+		line.SetVertexCount (myStats.shootAmount*2);
         line.enabled = true;
         List<float> angles = GenerateAngles(myStats.shootAmount, side);
+		float range = 50.0f;
         for (int i = 0; i < angles.Count; i++) 
         {
-            Ray2D ray = new Ray2D(transform.position, new Vector2(transform.position.x + 0.1f * Mathf.Cos((angles[i])), transform.position.y + 0.1f * Mathf.Sin((angles[i]))));
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(transform.position.x + 0.1f * Mathf.Cos((angles[i])), transform.position.y + 0.1f * Mathf.Sin((angles[i]))));
-            line.SetPosition(0, ray.origin);
-            line.SetPosition(1, hit.point);
-            Debug.Log(ray.origin);
-            Debug.Log(hit.point);
-            Debug.Log(hit.collider.name);
+			Vector2 direction = new Vector2(0.1f * Mathf.Cos((angles[i])), 0.1f * Mathf.Sin((angles[i])));
+			RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Raycastable"));
+			line.SetPosition(i*2, transform.position);
+			if(hit.collider == null)
+				line.SetPosition(i*2+1, new Vector2(transform.position.x, transform.position.y) + direction * range);
+			else
+				line.SetPosition(i*2+1, hit.point);
+			if(hit.collider != null)
+				Debug.Log(hit.collider.name);
+
+			/*line.SetVertexCount (4);
+			line.SetPosition (0, transform.position);
+			line.SetPosition (1, transform.position + new Vector3(0, 1, 0));
+			line.SetPosition (2, transform.position);
+			line.SetPosition (3, transform.position + new Vector3(1, 0, 0));*/
         }
     }
 
