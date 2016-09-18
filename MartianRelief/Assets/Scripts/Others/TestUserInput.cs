@@ -74,6 +74,7 @@ public class TestUserInput : MonoBehaviour
 
     void Update()
     {
+        myStats.timerAttack.update(Time.deltaTime);
         if (Input.GetAxis("FireHorizontal") > 0)
         {
             ShootMany(1);
@@ -98,6 +99,8 @@ public class TestUserInput : MonoBehaviour
                 GetComponent<BasicStats>().bombs--;
             }
         }
+        if (Input.GetAxis("FireVertical") == 0 && Input.GetAxis("FireHorizontal") == 0)
+            line.enabled = false;
     }
 
     void FixedUpdate()
@@ -110,14 +113,16 @@ public class TestUserInput : MonoBehaviour
 
     void ShootMany(int side)
     {
-        if (GetComponent<BasicStats>().tryToShoot() == false)
-            return;
-        if(myStats.shootType > 2)
+        if (myStats.shootType > 2)
         {
-            
-            ShootLaser(side, false);
+            if(myStats.shootType == 3)
+                ShootLaser(side, false);
+            if (myStats.shootType == 4)
+                ShootLaser(side, true);
             return;
         }
+        if (GetComponent<BasicStats>().tryToShoot() == false)
+            return;
         GameObject[] clones = new GameObject[myStats.shootAmount];
         Transform missileHolder = GameObject.Find("MissileHolder").transform;
         List<float> angles = GenerateAngles(myStats.shootAmount, side);
@@ -137,27 +142,49 @@ public class TestUserInput : MonoBehaviour
 
     void ShootLaser(int side, bool isPenetrative)
     {
-		line.SetVertexCount (myStats.shootAmount*2);
+        line.SetVertexCount (myStats.shootAmount*2);
         line.enabled = true;
         List<float> angles = GenerateAngles(myStats.shootAmount, side);
-		float range = 50.0f;
+		float range = 120.0f;
         for (int i = 0; i < angles.Count; i++) 
         {
 			Vector2 direction = new Vector2(0.1f * Mathf.Cos((angles[i])), 0.1f * Mathf.Sin((angles[i])));
-			RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Raycastable"));
-			line.SetPosition(i*2, transform.position);
-			if(hit.collider == null)
-				line.SetPosition(i*2+1, new Vector2(transform.position.x, transform.position.y) + direction * range);
-			else
-				line.SetPosition(i*2+1, hit.point);
-			if(hit.collider != null)
-				Debug.Log(hit.collider.name);
-
-			/*line.SetVertexCount (4);
-			line.SetPosition (0, transform.position);
-			line.SetPosition (1, transform.position + new Vector3(0, 1, 0));
-			line.SetPosition (2, transform.position);
-			line.SetPosition (3, transform.position + new Vector3(1, 0, 0));*/
+            //if(isPenetrative == false){
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 150f, LayerMask.GetMask("Raycastable"));
+                line.SetPosition(i * 2, transform.position);
+                if (hit.collider == null)
+                    line.SetPosition(i * 2 + 1, new Vector2(transform.position.x, transform.position.y) + direction * range);
+                else
+                {
+                    line.SetPosition(i * 2 + 1, hit.point);
+                    if (hit.collider.tag == "Enemy")
+                    {
+                        if (myStats.tryToShoot())
+                            hit.collider.GetComponent<BasicEnemyStats>().health -= myStats.damage.GetValue() * Time.deltaTime * myStats.attackSpeed.GetValue();
+                        Debug.Log(myStats.timerAttack.getTime());
+                    }
+                }
+                /*line.SetVertexCount (4);
+                line.SetPosition (0, transform.position);
+                line.SetPosition (1, transform.position + new Vector3(0, 1, 0));
+                line.SetPosition (2, transform.position);
+                line.SetPosition (3, transform.position + new Vector3(1, 0, 0));*/
+            /*}
+            else {
+                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, 150f, LayerMask.GetMask("Raycastable"));
+                line.SetPosition(i * 2, transform.position);
+                for(int j = 0; j < hits.Length; j++)
+                {
+                    line.SetPosition(i * 2 + 1, hits[j].point);
+                    if (hits[j].collider.tag == "Enemy")
+                    {
+                        hits[j].collider.transform.position += new Vector3(hits[j].collider.transform.position.x - transform.position.x, hits[j].collider.transform.position.y - transform.position.y, 0).normalized / 10;
+                        if (myStats.tryToShoot())
+                            hits[j].collider.GetComponent<BasicEnemyStats>().health -= myStats.damage.GetValue() * Time.deltaTime * myStats.attackSpeed.GetValue();
+                        
+                    }
+                }
+            }*/
         }
     }
 

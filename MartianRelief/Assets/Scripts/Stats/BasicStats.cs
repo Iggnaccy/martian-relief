@@ -63,16 +63,19 @@ public class BasicStats : MonoBehaviour{
 		Debug.Log ("Koniec");
 	}
 
-	void Update(){
-		timerAttack.update (Time.deltaTime);
+	void Update()
+    {
+		//timerAttack.update (Time.deltaTime);
 		timerInvoulnerable.update (Time.deltaTime);
         if (hp <= 0) OnDeath();
 	}
 
-	public bool tryToShoot(){
-		if (timerAttack.getTime () >= (1f / attackSpeed.GetValue()) ) {
-			timerAttack.reset();
-			return true;
+	public bool tryToShoot()
+    {
+		if (timerAttack.getTime () >= (1f / attackSpeed.GetValue()) )
+        {
+            timerAttack.reset();
+            return true;
 		}
 		return false;
 	}
