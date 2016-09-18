@@ -147,9 +147,6 @@ public class TestUserInput : MonoBehaviour
         List<float> angles = GenerateAngles(myStats.shootAmount, side);
 		float lineDrawRange = 150.0f;
 		float raycastRange = 200.0f;
-		bool takeDamage = true;
-		if (!myStats.tryToShoot ())
-			takeDamage = false;
 		for (int i = 0; i < angles.Count; i++) 
         {
 			Vector2 direction = new Vector2(0.1f * Mathf.Cos((angles[i])), 0.1f * Mathf.Sin((angles[i])));
@@ -161,7 +158,7 @@ public class TestUserInput : MonoBehaviour
 				else {
 					line.SetPosition (i * 2 + 1, hit.point);
 					if (hit.collider.tag == "Enemy") {
-						if(takeDamage)
+						
 							hit.collider.GetComponent<BasicEnemyStats> ().health -= myStats.damage.GetValue () * Time.deltaTime * myStats.attackSpeed.GetValue ();
 						//Debug.Log (myStats.timerAttack.getTime ());
 					}
@@ -174,14 +171,11 @@ public class TestUserInput : MonoBehaviour
 				//Debug.Log (hits.GetLength(0));
 				//for (int j = 0; j < hits.Length; j++) {
 				//	Debug.Log (hits[j].collider.name);
-				//}
-				if (takeDamage) {
-					Debug.Log ("shoooooot");
-					for (int j = 0; j < hits.Length; j++) {
-						if (hits [j].collider.tag == "Enemy") {
-							hits[j].collider.GetComponent<BasicEnemyStats> ().health -= myStats.damage.GetValue () * Time.deltaTime * myStats.attackSpeed.GetValue ();
-							//Debug.Log (myStats.timerAttack.getTime ());
-						}
+			    //}
+				for (int j = 0; j < hits.Length; j++) {
+					if (hits [j].collider.tag == "Enemy") {
+						hits[j].collider.GetComponent<BasicEnemyStats> ().health -= myStats.damage.GetValue () * Time.deltaTime * myStats.attackSpeed.GetValue ();
+						//Debug.Log (myStats.timerAttack.getTime ());
 					}
 				}
             }
