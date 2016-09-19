@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class TestUserInput : MonoBehaviour
 {
@@ -75,40 +76,77 @@ public class TestUserInput : MonoBehaviour
     void Update()
     {
         myStats.timerAttack.update(Time.deltaTime);
-        if (Input.GetAxis("FireHorizontal") > 0)
-        {
-            ShootMany(1);
-        }
-        if (Input.GetAxis("FireHorizontal") < 0)
-        {
-            ShootMany(2);
-        }
-        if (Input.GetAxis("FireVertical") > 0)
-        {
-            ShootMany(3);
-        }
-        if (Input.GetAxis("FireVertical") < 0)
-        {
-            ShootMany(4);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (GetComponent<BasicStats>().bombs > 0)
-            {
-                PlaceBomb(GetComponent<BasicStats>().damage.GetValue());
-                GetComponent<BasicStats>().bombs--;
-            }
-        }
-        if (Input.GetAxis("FireVertical") == 0 && Input.GetAxis("FireHorizontal") == 0)
-            line.enabled = false;
+
+		#if UNITY_ANDROID || UNITY_IPHONE
+		crossPlatformUpdate();
+		#else
+		normalInputUpdate();
+		#endif
     }
+
+	void crossPlatformUpdate(){
+		if (CrossPlatformInputManager.GetButtonDown("Bombs")){
+			Debug.Log ("ka-boom");
+			if (GetComponent<BasicStats>().bombs > 0)
+			{
+				PlaceBomb(GetComponent<BasicStats>().damage.GetValue());
+				GetComponent<BasicStats>().bombs--;
+			}
+		}
+		if (CrossPlatformInputManager.GetAxis ("FireVertical") == 0
+		    && CrossPlatformInputManager.GetAxis ("FireHorizontal") == 0) {
+			line.enabled = false;
+			return;
+		}
+
+		float x = CrossPlatformInputManager.GetAxis ("FireHorizontal");
+		float y = CrossPlatformInputManager.GetAxis ("FireVertical");
+
+		if (x > y && x > 0)
+			ShootMany (1);
+		if (x < y && x < 0)
+			ShootMany (2);
+		if (x < y && y > 0)
+			ShootMany (3);
+		if (x > y && y < 0)
+			ShootMany (4);
+	}
+
+	void normalInputUpdate(){
+		if (Input.GetAxis("FireHorizontal") > 0){
+			ShootMany(1);
+		}
+		if (Input.GetAxis("FireHorizontal") < 0){
+			ShootMany(2);
+		}
+		if (Input.GetAxis("FireVertical") > 0){
+			ShootMany(3);
+		}
+		if (Input.GetAxis("FireVertical") < 0){
+			ShootMany(4);
+		}
+		if (Input.GetKeyDown(KeyCode.E)){
+			if (GetComponent<BasicStats>().bombs > 0)
+			{
+				PlaceBomb(GetComponent<BasicStats>().damage.GetValue());
+				GetComponent<BasicStats>().bombs--;
+			}
+		}
+		if (Input.GetAxis("FireVertical") == 0 
+			&& Input.GetAxis("FireHorizontal") == 0)
+			line.enabled = false;
+	}
 
     void FixedUpdate()
     {
         //myBody.velocity = new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier);
         // ===> velocity fix
-        myBody.velocity = myBody.velocity + new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier * 0.25f, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier * 0.25f);
+		#if UNITY_ANDROID || UNITY_IPHONE
+		myBody.velocity = myBody.velocity + new Vector2(CrossPlatformInputManager.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier * 0.25f, CrossPlatformInputManager.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier * 0.25f);
 
+		#else
+		myBody.velocity = myBody.velocity + new Vector2(Input.GetAxis("Horizontal") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier * 0.25f, Input.GetAxis("Vertical") * Time.deltaTime * GetComponent<BasicStats>().moveSpeed.GetValue() * speedStatMultiplier * 0.25f);
+		#endif
     }
 
     void ShootMany(int side)
