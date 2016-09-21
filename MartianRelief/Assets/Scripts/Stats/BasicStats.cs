@@ -98,4 +98,9 @@ public class BasicStats : MonoBehaviour{
             healthSlider.value = hp;
         }
     }
+
+    public void ChangeShootType(int newType)
+    {
+        shootType = Mathf.Min(4, newType);
+    }
 }
