@@ -5,10 +5,11 @@ public class PelletBehaviour : MonoBehaviour
 {
     
     public float damage, knockback;
+    public string targetTag;
     
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Enemy")
+        if (other.tag == targetTag)
         {
             other.GetComponent<BasicEnemyStats>().health -= damage;
             // ==> velocity fix
