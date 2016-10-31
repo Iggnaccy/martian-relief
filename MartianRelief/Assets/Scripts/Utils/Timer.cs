@@ -1,42 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Timer {
+public class Timer
+{
 
 	float actTime;
 	bool isActive;
 
-	public void update(float deltaTime){
-		if(isActive)
-		actTime += deltaTime;
+	public void update (float deltaTime)
+	{
+		if (isActive) {
+			actTime += deltaTime;
+		}
 	}
 
-	public void start(){
+	public void start ()
+	{
 		isActive = true;
 	}
 
-	public void stop(){
+	public void stop ()
+	{
 		isActive = false;
 	}
 
-	public Timer(){
+	public Timer ()
+	{
 		isActive = true;
 		actTime = 0;
 	}
 
-	public float getTime(){
+	public float getTime ()
+	{
 		return actTime;
 	}
 
-	public void setTime(float newTime){
+	public void setTime (float newTime)
+	{
 		actTime = newTime;
 	}
 
-	public bool getIsActive(){
+	public bool getIsActive ()
+	{
 		return isActive;
 	}
 
-	public void reset(){
+	public void reset ()
+	{
 		actTime = 0f;
 	}
 }
