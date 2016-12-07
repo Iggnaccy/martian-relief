@@ -170,6 +170,16 @@ public static class Static {
 				item.roomTypes.Add (Int32.Parse(values[i]));
 			}
 		}
+		if (type == "effects") {
+			item.effects = SpecialItemEffects.Effects.NONE;
+			if (values.Count  == 0) {
+				item.effects = SpecialItemEffects.Effects.NONE;
+			}
+			for (int i = 0; i < values.Count; i++) {
+				item.effects |= (SpecialItemEffects.Effects)System.Enum.Parse (typeof(SpecialItemEffects.Effects), values[i]);
+				Debug.Log (item.effects);
+			}
+		}
 	}
 
 	static string stripSpaces(string str){

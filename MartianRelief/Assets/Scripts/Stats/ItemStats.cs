@@ -28,5 +28,6 @@ public class ItemStats : MonoBehaviour
         myStats.damage = myStats.damage + myItems[myItems.Count - 1].damage;
         myStats.attackSpeed = myStats.attackSpeed + myItems[myItems.Count - 1].attackSpeed;
         myStats.moveSpeed = myStats.moveSpeed + myItems[myItems.Count - 1].moveSpeed;
+		GetComponent<SpecialItemEffects>().myEffects |= myItems [myItems.Count - 1].effects;
     }
 }

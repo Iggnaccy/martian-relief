@@ -3,7 +3,16 @@ using System.Collections;
 
 public class PelletBehaviour : MonoBehaviour
 {
-    
+	public enum Effects
+	{
+		NONE = 0,
+		FIERY = 1,
+		PENETRATIVE = 2,
+		POISON = 4,
+		KNOCKBACK = 8,
+		LIGHTNING_BOLT = 16
+	}
+
     public float damage, knockback;
     public string targetTag;
     public SpecialItemEffects myEffects;

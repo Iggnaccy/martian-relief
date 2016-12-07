@@ -16,6 +16,7 @@ public class Item
 	public List<int> roomTypes;
 	public string iconFile;
 	public int cost;
+	public SpecialItemEffects.Effects effects;
 
 	public Item(){
 		name = "unknown";
@@ -26,9 +27,10 @@ public class Item
 		cost = 0;
 		roomTypes = new List<int>();
 		iconFile = "unknown.png";
+		effects = SpecialItemEffects.Effects.NONE;
 	}
 
-    public Item(int ID, string Name, Statistic Damage, Statistic AttackSpeed, Statistic MoveSpeed, int Cost, List<int> RoomTypes, string IconFile)
+	public Item(int ID, string Name, Statistic Damage, Statistic AttackSpeed, Statistic MoveSpeed, int Cost, List<int> RoomTypes, string IconFile, SpecialItemEffects.Effects Effect)
     {
         id = ID;
 		name = Name;
@@ -38,6 +40,7 @@ public class Item
 		roomTypes = RoomTypes;
 		cost = Cost;
 		iconFile = IconFile;
+		effects = Effect;
     }
 
     public Item(int ID)
@@ -48,6 +51,7 @@ public class Item
 		attackSpeed = Static.items[ID].attackSpeed;
 		moveSpeed = Static.items[ID].moveSpeed;
 		cost = Static.items [ID].cost;
+		effects = Static.items [ID].effects;
     }
 
 	public void print(){
