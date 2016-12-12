@@ -36,8 +36,11 @@ public class SpecialItemEffects : MonoBehaviour
         Timer timer = new Timer();
         while(timer.getTime() < 1.5f)
         {
+			if (hit == null)
+				break;
             hit.GetComponent<BasicEnemyStats>().health -= 7.5f * Time.deltaTime;
-            yield return null;
+			timer.update (0.05f);
+			yield return new WaitForSeconds(.05f);
         }
     }
 
@@ -46,8 +49,11 @@ public class SpecialItemEffects : MonoBehaviour
         Timer timer = new Timer();
         while (timer.getTime() < 2.5f)
         {
+			if (hit == null)
+				break;
             hit.GetComponent<BasicEnemyStats>().health -= 9f * Time.deltaTime;
-            yield return null;
+			timer.update (0.05f);
+			yield return new WaitForSeconds(.05f);
         }
     }
 }

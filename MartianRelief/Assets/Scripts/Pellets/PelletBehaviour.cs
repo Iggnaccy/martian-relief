@@ -39,24 +39,26 @@ public class PelletBehaviour : MonoBehaviour
         }
     }
 
-    IEnumerator Lightning()
+	IEnumerator Lightning()
     {
         Timer timer = new Timer();
         while(true)    
         {
+			Debug.Log (timer.getTime ());
             if (timer.getTime() > 0.5f)
             {
-                Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f);
-                foreach (Collider2D hit in hits)
-                {
-                    if (hit.CompareTag(targetTag))
-                    {
-                        hit.GetComponent<BasicEnemyStats>().health -= damage / 4;
-                    }
-                }
-                timer.reset();
+				if (transform != null) {
+					Collider2D[] hits = Physics2D.OverlapCircleAll (transform.position, 2f);
+					foreach (Collider2D hit in hits) {
+						if (hit.CompareTag (targetTag)) {
+							hit.GetComponent<BasicEnemyStats> ().health -= damage / 4;
+						}
+					}
+				}
+				break;
             }
-            yield return null;
+			timer.update (0.05f);
+			yield return new WaitForSeconds(.05f);
         }
     }
 }
