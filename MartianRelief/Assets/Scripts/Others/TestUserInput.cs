@@ -172,6 +172,7 @@ public class TestUserInput : MonoBehaviour
             {
                 clones[i].GetComponent<PelletBehaviour>().damage = myStats.damage.GetValue();
                 clones[i].GetComponent<PelletBehaviour>().targetTag = "Enemy";
+                clones[i].GetComponent<PelletBehaviour>().myEffects = GetComponent<SpecialItemEffects>();
             }
             if (myStats.shootType == 1)     //shell
                 clones[i].GetComponent<ShellBehaviour>().damage = myStats.damage.GetValue();

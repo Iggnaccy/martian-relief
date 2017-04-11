@@ -13,6 +13,7 @@ attackSpeed: 0.25, 1.01, 0
 moveSpeed: *
 roomType: 1,2
 cost: 2
+effects: NONE
 
 item:"Shotgun","shotgun.png"
 damage: 0.75, 1.02, 0
@@ -20,6 +21,7 @@ attackSpeed: 0.1, 1.01, 0
 moveSpeed: *
 roomType: 2,3
 cost: 3
+effects: PENETRATIVE,KNOCKBACK
 
 item:"Pistol","pistol.png"
 damage: 0.15, 1.001, 0
@@ -27,6 +29,7 @@ attackSpeed: *
 moveSpeed: *
 roomType: 1,2
 cost: 1
+effects: NONE
 
 item:"Rocket launcher","rocketlauncher.png"
 damage: 0.5, 1.05, 0
@@ -34,6 +37,7 @@ attackSpeed: *
 moveSpeed: *
 roomType: 2,3,4
 cost: 4
+effects: NONE
 
 item:"Flame thrower","flamethrower.png"
 damage: 0.2, 1.02, 0
@@ -41,6 +45,7 @@ attackSpeed: *
 moveSpeed: *
 roomType: 3,4
 cost: 4
+effects: FIERY
 
 item:"Adihash","adihash.png"
 damage: *
@@ -48,6 +53,7 @@ attackSpeed: 0.5, 1.05, 0
 moveSpeed: 1, 1.1, 0
 roomType: 4
 cost: 5
+effects: LIGHTNING_BOLT
 
 item:"trainers +30","trainers.png"
 damage: *
@@ -55,3 +61,4 @@ attackSpeed: *
 moveSpeed: 0.3, 1.03, 0
 roomType: 1,2,4
 cost: 2
+effects: POISON

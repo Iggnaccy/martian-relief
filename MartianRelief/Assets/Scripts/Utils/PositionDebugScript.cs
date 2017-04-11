@@ -31,6 +31,8 @@ public class PositionDebugScript : MonoBehaviour {
 		text += "\n";
 		text += "roomType: " + worldGenerator.rooms [worldGenerator.actX, worldGenerator.actY].roomType.ToString ();
 
+		text += "\n";
+		text += getEffectsString ();
 		text += "\n\n";
 		text += getDebugMiniMapString ();
 		//Debug.Log(text);
@@ -52,5 +54,22 @@ public class PositionDebugScript : MonoBehaviour {
 		}
 		toRender += "pos = (" + worldGenerator.actX.ToString() + "," + worldGenerator.actY.ToString () + ")\n";
 		return toRender;
+	}
+
+	string getEffectsString(){
+		string toRenderer="Effects: ";
+		SpecialItemEffects.Effects e = GameObject.Find ("Player").GetComponent<SpecialItemEffects> ().myEffects;
+		if((e & SpecialItemEffects.Effects.FIERY) == SpecialItemEffects.Effects.FIERY)
+			toRenderer += "FIERY,";
+		if((e & SpecialItemEffects.Effects.KNOCKBACK) == SpecialItemEffects.Effects.KNOCKBACK)
+			toRenderer += "KNOCKBACK,";
+		if((e & SpecialItemEffects.Effects.PENETRATIVE) == SpecialItemEffects.Effects.PENETRATIVE)
+			toRenderer += "PENETRATIVE,";
+		if((e & SpecialItemEffects.Effects.POISON) == SpecialItemEffects.Effects.POISON)
+			toRenderer += "POISON,";
+		if((e & SpecialItemEffects.Effects.LIGHTNING_BOLT) == SpecialItemEffects.Effects.LIGHTNING_BOLT)
+			toRenderer += "LIGHTNING_BOLT,";
+		
+		return toRenderer;
 	}
 }
